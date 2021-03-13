@@ -174,6 +174,9 @@ sudo /usr/sbin/kmodgenca -a
 sudo dnf config-manager --set-enabled rpmfusion-nonfree-nvidia-driver -y
 sudo dnf install akmod-nvidia xorg-x11-drv-nvidia-cuda -y
 
+#Reenable Wayland... They are working to support it, and if you aren't gaming you shouldn't stay on x11 anyways
+sudo sed -i 's^DRIVER=="nvidia", RUN+="/usr/libexec/gdm-disable-wayland"^#DRIVER=="nvidia", RUN+="/usr/libexec/gdm-disable-wayland"^g' /usr/lib/udev/rules.d/61-gdm.rules
+
 #Setup BTRFS layout and Timeshift
 sudo mkdir /btrfs_pool
 sudo mount -o subvolid=5 /dev/mapper/${PARTITIONID} /btrfs_pool
