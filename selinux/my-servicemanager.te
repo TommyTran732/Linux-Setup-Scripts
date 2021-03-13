@@ -1,0 +1,10 @@
+
+module my-servicemanager 1.0;
+
+require {
+	type unconfined_service_t;
+	class binder set_context_mgr;
+}
+
+#============= unconfined_service_t ==============
+allow unconfined_service_t self:binder set_context_mgr;
