@@ -1,0 +1,10 @@
+
+module my-ndroidsettings 1.0;
+
+require {
+	type unconfined_service_t;
+	class binder transfer;
+}
+
+#============= unconfined_service_t ==============
+allow unconfined_service_t self:binder transfer;
