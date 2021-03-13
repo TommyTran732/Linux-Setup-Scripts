@@ -10,7 +10,7 @@ It removes some ~800 useless packages from the default installation. A lot of th
 
 2. Setup basic privacy and security (Setting umask to 077, closing open ports on firewalld, randomizing mac address, disabling ptrace, install openSnitch as an outbound firewall, ...) <br />
 3. Setup a BTRFS layout compatible with Timeshift. Credits to https://mutschler.eu/linux/install-guides/fedora-btrfs/ <br />
-4. Install proprietary Nvidia Drivers and sign them (yes, you don't have to sacrifice Secure Boot for these proprietary drivers. The drivers will be automatically built and signed every kernel update as well. It was honestly a headache to get it working, and it seems to only work on Workstaion... I don't know how to get it to work on Silverblue yet.) <br >
+4. Install proprietary Nvidia Drivers and sign them (yes, you don't have to sacrifice Secure Boot for these proprietary drivers. The drivers will be automatically built and signed every kernel update as well. It was honestly a headache to get it working, and it seems to only work on Workstation... I don't know how to get it to work on Silverblue yet.) <br >
 5. Setup Flathub <br >
 6. Quality of life stuff (Installing some packages that I use, enabling autotrim, setting up a nice GNOME, GTK, and icon theme, speeding up DNF, ...) <br />
 7. Fix broken audio with Steam
