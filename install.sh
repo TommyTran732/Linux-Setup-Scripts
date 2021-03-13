@@ -11,6 +11,10 @@ USER=$(whoami)
 PARTITIONID=$(sudo cat /etc/crypttab | awk '{print $1}')
 PARTITIONUUID=$(sudo blkid -s UUID -o value /dev/mapper/${PARTITIONID}) 
 
+output(){
+    echo -e '\e[36m'$1'\e[0m';
+}
+
 #Moving to the home directory
 #Note that I always use /home/${USER} because gnome-terminal is wacky and sometimes doesn't load the environment variables in correctly (Right click somewhere in nautilus, click on open in terminal, then hit create new tab and you will see.)
 cd /home/${USER} || exit
@@ -177,6 +181,36 @@ sudo dnf install akmod-nvidia xorg-x11-drv-nvidia-cuda -y
 #Reenable Wayland... They are working to support it, and if you aren't gaming you shouldn't stay on x11 anyways
 sudo sed -i 's^DRIVER=="nvidia", RUN+="/usr/libexec/gdm-disable-wayland"^#DRIVER=="nvidia", RUN+="/usr/libexec/gdm-disable-wayland"^g' /usr/lib/udev/rules.d/61-gdm.rules
 
+#Install Snap, Anbox, Ashmem, Binder, and autosign DKMS modules
+#Keep in mind that the use of snap is highly discouraged due to its reliance on AppArmor for sandboxing, which is not present on Fedora.
+#Please only use Snap for Anbox and nothing else. FlatHub and RPMFusion exist.
+#We clone a third party repo with patches for kernel >=5.7 for now. You can track the issue at https://github.com/anbox/anbox-modules/pull/76
+sudo dnf -y install snapd dkms
+sudo ln -s /var/lib/snapd/snap /snap
+sudo service snapd start
+sudo snap install --devmode --beta anbox
+git clone https://github.com/choff/anbox-modules.git
+cd /home/${USER}/anbox-modules
+sudo cp anbox.conf /etc/modules-load.d/
+sudo cp 99-anbox.rules /lib/udev/rules.d/
+sudo cp -rT ashmem /usr/src/anbox-ashmem-1
+sudo cp -rT binder /usr/src/anbox-binder-1
+cd /home/${USER}
+sudo openssl req -new -x509 \
+    -newkey rsa:4096 -keyout /root/mok.priv \
+    -outform DER -out /root/mok.priv \
+    -nodes -days 36500 -subj "/CN=DKMS Automatic Module Signer"
+
+sudo bash -c 'cat > /etc/dkms/anbox-ashmem.conf' <<-'EOF'
+sign_tool="/etc/dkms/sign_helper.sh"
+EOF
+
+sudo cp /etc/dkms/anbox-ashmem.conf /etc/dkms/anbox-binder.conf
+sudo chmod 644 /etc/dkms/anbox-*
+
+sudo dkms install anbox-ashmem/1
+sudo dkms install anbox-binder/1
+
 #Setup BTRFS layout and Timeshift
 sudo mkdir /btrfs_pool
 sudo mount -o subvolid=5 /dev/mapper/${PARTITIONID} /btrfs_pool
@@ -203,4 +237,7 @@ EOF
 sudo systemctl restart NetworkManager
 
 #Last step, import key to MOK
+output "Just to avoid confusion, we are importing Akmods's key"
 sudo mokutil --import /etc/pki/akmods/certs/public_key.der
+output "Now we import DKMS's key"
+sudo mokutil --import /root/mok.der
