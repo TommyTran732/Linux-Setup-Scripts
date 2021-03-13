@@ -1,6 +1,7 @@
 # Fedora-Workstation-Setup
 My setup script for Fedora Workstation edition. You should edit the script to your liking before running it. <br />
 The script is tested on Fedora Workstation 33. <br />
+Please run the script as your actual user and not root. Provide sudo password when it asks you to. Flatpak and themes/icons are only installed for your user and not system wide.
 
 
 # Notable Features
