@@ -201,15 +201,28 @@ sudo openssl req -new -x509 \
     -outform DER -out /root/mok.priv \
     -nodes -days 36500 -subj "/CN=DKMS Automatic Module Signer"
 
-sudo bash -c 'cat > /etc/dkms/anbox-ashmem.conf' <<-'EOF'
-sign_tool="/etc/dkms/sign_helper.sh"
-EOF
+sudo sed -i 's^# sign_tool="/etc/dkms/sign_helper.sh"^sign_tool="/etc/dkms/sign_helper.sh"^g' /etc/dkms/framework.conf
 
-sudo cp /etc/dkms/anbox-ashmem.conf /etc/dkms/anbox-binder.conf
-sudo chmod 644 /etc/dkms/anbox-*
-
+output "It's gonna fail to load in the kernel modules here... and that's okay. We haven't imported the MOK yet :)"
 sudo dkms install anbox-ashmem/1
 sudo dkms install anbox-binder/1
+
+#Add SELinux Policies for anbox
+wget https://raw.githubusercontent.com/tommytran732/Fedora-Workstation-Setup/main/selinux/my-gatekeeperd.te
+wget https://raw.githubusercontent.com/tommytran732/Fedora-Workstation-Setup/main/selinux/my-ndroidsettings.te
+wget https://raw.githubusercontent.com/tommytran732/Fedora-Workstation-Setup/main/selinux/my-servicemanager.te
+
+checkmodule -M -m -o my-gatekeeperd.mod my-gatekeeperd.te
+checkmodule -M -m -o my-ndroidsettings.mod my-ndroidsettings.te
+checkmodule -M -m -o my-servicemanager.mod my-servicemanager.te
+
+semodule_package -o my-gatekeeperd.pp -m my-gatekeeperd.mod
+semodule_package -o my-ndroidsettings.pp -m my-ndroidsettings.mod
+semodule_package -o my-servicemanager -m my-servicemanager.mod
+
+sudo semodule -i my-gatekeeperd.pp
+sudo semodule -i my-ndroidsettings.pp
+sudo semodule -i my-servicemanager.pp
 
 #Setup BTRFS layout and Timeshift
 sudo mkdir /btrfs_pool
@@ -241,3 +254,4 @@ output "Just to avoid confusion, we are importing Akmods's key"
 sudo mokutil --import /etc/pki/akmods/certs/public_key.der
 output "Now we import DKMS's key"
 sudo mokutil --import /root/mok.der
+output "All done! You have to reboot now."
