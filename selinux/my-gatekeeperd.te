@@ -1,0 +1,10 @@
+
+module my-gatekeeperd 1.0;
+
+require {
+	type unconfined_service_t;
+	class binder call;
+}
+
+#============= unconfined_service_t ==============
+allow unconfined_service_t self:binder call;
