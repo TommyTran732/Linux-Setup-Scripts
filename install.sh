@@ -9,7 +9,7 @@
 #Variables
 USER=$(whoami)
 PARTITIONID=$(sudo cat /etc/crypttab | awk '{print $1}')
-PARTITIONUUID=$(sudo blkid -s UUID -o value /dev/mapper/${PARTITIONID}) 
+PARTITIONUUID=$(sudo blkid -s UUID -o value /dev/mapper/${PARTITIONID})
 
 output(){
     echo -e '\e[36m'$1'\e[0m';
@@ -47,7 +47,7 @@ sudo dnf upgrade -y
 sudo fwupdmgr get-devices
 sudo fwupdmgr refresh --force
 sudo fwupdmgr get-updates
-sudo fwupdmgr update
+sudo fwupdmgr update -y
 
 #Remove unneeded packages
 sudo dnf -y remove abrt f33-backgrounds-gnome nm-connection-editor mozilla-filesystem chrome-gnome-shell quota* nmap-ncat virtualbox-guest-additions spice-vdagent nfs-utils teamd tcpdump sgpio ImageMagick* adcli libreoffice* lvm2 qemu-guest-agent hyperv* gnome-classic* baobab *kkc* *zhuyin* *pinyin* *evince* *yelp* ModemManager fedora-bookmarks fedora-chromium-config fedora-workstation-backgrounds gnome-tour gnome-themes-extra gnome-shell-extension-background-logo gnome-screenshot gnome-remote-desktop gnome-font-viewer gnome-calculator gnome-backgrounds NetworkManager-pptp-gnome NetworkManager-ssh-gnome NetworkManager-openconnect-gnome NetworkManager-openvpn-gnome NetworkManager-vpnc-gnome podman*  *libvirt* open-vm* *speech* sos totem gnome-characters firefox eog openssh-server dmidecode xorg-x11-drv-vmware xorg-x11-drv-amdgpu yajl words ibus-hangui vino openh264 twolame-libs realmd rsync net-snmp-libs net-tools traceroute mtr geolite2* gnome-boxes gnome-disk-utility gedit gnome-calendar cheese gnome-contacts rythmbox gnome-screenshot gnome-maps gnome-weather gnome-logs ibus-typing-booster *m17n* gnome-clocks gnome-color-manager mlocate cups cups-filesystem cyrus-sasl-plain cyrus-sasl-gssapi sssd* gnome-user* dos2unix kpartx rng-tools ppp* ntfs* xfs* tracker* thermald *perl* gnome-shell-extension-apps-menu gnome-shell-extension-horizontal-workspaces gnome-shell-extension-launch-new-instance gnome-shell-extension-places-menu gnome-shell-extension-window-list
@@ -66,16 +66,22 @@ mkdir -p /home/${USER}/.config/Yubico
 sudo dnf config-manager --add-repo https://repo.ivpn.net/stable/fedora/generic/ivpn.repo -y
 sudo dnf -y install ivpn-ui 
 
-#Install openSnitch
+#Install OpenSnitch
 sudo dnf install -y https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/opensnitch-1.3.6-1.x86_64.rpm
 sudo dnf install -y https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/opensnitch-ui-1.3.6-1.f29.noarch.rpm
 
+#Setup VSCodium
+sudo rpm --import https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg 
+printf "[gitlab.com_paulcarroty_vscodium_repo]\nname=gitlab.com_paulcarroty_vscodium_repo\nbaseurl=https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/rpms/\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg" |sudo tee -a /etc/yum.repos.d/vscodium.repo 
+sudo dnf install -y codium
+sudo cp /etc/fiejail/vscodium.profile /etc/firejail/codium.profile
+
 #Setting up Flatpak
-flatpak remote-add --user flathub https://flathub.org/repo/flathub.flapakrepo
+flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak remove --unused
 
 #Install default applications
-flatpak install flathub com.github.tchx84.Flatseal org.videolan.VLC org.gnome.eog com.vscodium.codium org.gnome.Calendar org.gnome.Contacts -y 
+flatpak install flathub com.github.tchx84.Flatseal org.mozilla.firefox org.videolan.VLC org.gnome.eog org.gnome.Calendar org.gnome.Contacts -y 
 
 #Enable auto TRIM
 sudo systemctl enable fstrim.timer
@@ -206,14 +212,12 @@ sudo cp -rT binder /usr/src/anbox-binder-1
 cd /home/${USER}
 sudo openssl req -new -x509 \
     -newkey rsa:4096 -keyout /root/mok.priv \
-    -outform DER -out /root/mok.priv \
+    -outform DER -out /root/mok.der \
     -nodes -days 36500 -subj "/CN=DKMS Automatic Module Signer"
 
 sudo sed -i 's^# sign_tool="/etc/dkms/sign_helper.sh"^sign_tool="/etc/dkms/sign_helper.sh"^g' /etc/dkms/framework.conf
-
-output "It's gonna fail to load in the kernel modules here... and that's okay. We haven't imported the MOK yet :)"
-sudo dkms install anbox-ashmem/1
-sudo dkms install anbox-binder/1
+sudo dkms add anbox-ashmem/1
+sudo dkms add anbox-binder/1
 sudo firewall-cmd --add-masquerade --permanent
 sudo firewall-cmd --reload
 
