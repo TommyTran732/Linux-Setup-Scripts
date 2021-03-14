@@ -114,6 +114,14 @@ flatpak upgrade -y
 #Set Fedora 29 Animated Wallpaper
 gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/f29/default/f29.xml'
 
+#Set Black GDM background
+mkdir -P /home/${USER}/Pictures/Wallpapers/
+wget https://wallpaperaccess.com/full/512679.jpg -O /home/${USER}/Pictures/Wallpapers/Black.png
+sudo dnf -y copr enable zirix/gdm-wallpaper 
+sudo dnf -y install gdm-wallpaper
+sudo set-gdm-wallpaper /home/${USER}/Pictures/Wallpapers/Black.png
+(sudo crontab -l ; echo "@reboot /usr/bin/set-gdm-wallpaper /home/${USER}/Pictures/Wallpapers/Black.png >> /dev/null 2>&1")| sudo crontab -
+
 #Enable Titlebar buttons
 gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
 
@@ -206,6 +214,8 @@ sudo sed -i 's^# sign_tool="/etc/dkms/sign_helper.sh"^sign_tool="/etc/dkms/sign_
 output "It's gonna fail to load in the kernel modules here... and that's okay. We haven't imported the MOK yet :)"
 sudo dkms install anbox-ashmem/1
 sudo dkms install anbox-binder/1
+sudo firewall-cmd --add-masquerade --permanent
+sudo firewall-cmd --reload
 
 #Add SELinux Policies for anbox
 wget https://raw.githubusercontent.com/tommytran732/Fedora-Workstation-Setup/main/selinux/my-gatekeeperd.te
