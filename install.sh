@@ -56,7 +56,7 @@ sudo dnf -y remove abrt f33-backgrounds-gnome nm-connection-editor mozilla-files
 sudo dnf config-manager --set-disabled fedora-cisco-openh264 -y
 
 #Install packages that I use
-sudo dnf -y install neofetch git-core flat-remix-gtk3-theme libappindicator-gtk3 gnome-shell-extension-appindicator gnome-shell-extension-system-monitor-applet gnome-shell-extension-dash-to-dock gnome-shell-extension-freon gnome-shell-extension-openweather gnome-shell-extension-user-theme gnome-tweak-tool f29-backgrounds-gnome gnome-system-monitor nautilus gvfs-mtp gvfs-goa git-core firejail setroubleshoot gnome-software PackageKit PackageKit-command-not-found fedora-workstation-repositories openssl
+sudo dnf -y install neofetch git-core flat-remix-gtk3-theme libappindicator-gtk3 gnome-shell-extension-appindicator gnome-shell-extension-system-monitor-applet gnome-shell-extension-dash-to-dock gnome-shell-extension-freon gnome-shell-extension-openweather gnome-shell-extension-user-theme gnome-tweak-tool f29-backgrounds-gnome gnome-system-monitor nautilus gvfs-mtp gvfs-goa git-core firejail setroubleshoot gnome-software PackageKit PackageKit-command-not-found fedora-workstation-repositories openssl android-tools
 
 #Install Yubico Stuff
 sudo dnf -y install yubikey-manager pam-u2f pamu2fcfg
@@ -74,7 +74,8 @@ sudo dnf install -y https://github.com/evilsocket/opensnitch/releases/download/v
 sudo rpm --import https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg 
 printf "[gitlab.com_paulcarroty_vscodium_repo]\nname=gitlab.com_paulcarroty_vscodium_repo\nbaseurl=https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/rpms/\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg" |sudo tee -a /etc/yum.repos.d/vscodium.repo 
 sudo dnf install -y codium
-sudo cp /etc/fiejail/vscodium.profile /etc/firejail/codium.profile
+sudo cp /etc/firejail/vscodium.profile /etc/firejail/codium.profile
+sudo chmod 644 /etc/firejail/codium.profile
 
 #Setting up Flatpak
 flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -111,6 +112,7 @@ find /home/${USER}/Mojave-CT -name '*[Gg]nome.[Bb]oxes*' -exec rm {} \;
 find /home/${USER}/Mojave-CT -name '*[Ss]team*' -exec rm {} \;
 find /home/${USER}/Mojave-CT -name '*[Tt]hunderbird*' -exec rm {} \;
 find /home/${USER}/Mojave-CT -name '*[Mm]inecraft*' -exec rm {} \;
+find /home/${USER}/Mojave-CT -name '*[Ee]piphany*' -exec rm {} \;
 gsettings set org.gnome.desktop.interface icon-theme "Arc"
 
 #Set GTK theme
@@ -269,3 +271,5 @@ sudo mokutil --import /etc/pki/akmods/certs/public_key.der
 output "Now we import DKMS's key"
 sudo mokutil --import /root/mok.der
 output "All done! You have to reboot now."
+
+
