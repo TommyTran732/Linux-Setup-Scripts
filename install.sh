@@ -50,7 +50,7 @@ sudo fwupdmgr get-updates
 sudo fwupdmgr update -y
 
 #Remove unneeded packages
-sudo dnf -y remove abrt f33-backgrounds-gnome nm-connection-editor mozilla-filesystem chrome-gnome-shell quota* nmap-ncat virtualbox-guest-additions spice-vdagent nfs-utils teamd tcpdump sgpio ImageMagick* adcli libreoffice* lvm2 qemu-guest-agent hyperv* gnome-classic* baobab *kkc* *zhuyin* *pinyin* *evince* *yelp* ModemManager fedora-bookmarks fedora-chromium-config fedora-workstation-backgrounds gnome-tour gnome-themes-extra gnome-shell-extension-background-logo gnome-screenshot gnome-remote-desktop gnome-font-viewer gnome-calculator gnome-backgrounds NetworkManager-pptp-gnome NetworkManager-ssh-gnome NetworkManager-openconnect-gnome NetworkManager-openvpn-gnome NetworkManager-vpnc-gnome podman*  *libvirt* open-vm* *speech* sos totem gnome-characters firefox eog openssh-server dmidecode xorg-x11-drv-vmware xorg-x11-drv-amdgpu yajl words ibus-hangui vino openh264 twolame-libs realmd rsync net-snmp-libs net-tools traceroute mtr geolite2* gnome-boxes gnome-disk-utility gedit gnome-calendar cheese gnome-contacts rythmbox gnome-screenshot gnome-maps gnome-weather gnome-logs ibus-typing-booster *m17n* gnome-clocks gnome-color-manager mlocate cups cups-filesystem cyrus-sasl-plain cyrus-sasl-gssapi sssd* gnome-user* dos2unix kpartx rng-tools ppp* ntfs* xfs* tracker* thermald *perl* gnome-shell-extension-apps-menu gnome-shell-extension-horizontal-workspaces gnome-shell-extension-launch-new-instance gnome-shell-extension-places-menu gnome-shell-extension-window-list
+sudo dnf -y remove abrt f33-backgrounds-gnome nm-connection-editor mozilla-filesystem chrome-gnome-shell quota* nmap-ncat virtualbox-guest-additions spice-vdagent nfs-utils teamd tcpdump sgpio ImageMagick* adcli libreoffice* lvm2 qemu-guest-agent hyperv* gnome-classic* baobab *kkc* *zhuyin* *pinyin* *evince* *yelp* ModemManager fedora-bookmarks fedora-chromium-config fedora-workstation-backgrounds gnome-tour gnome-themes-extra gnome-shell-extension-background-logo gnome-screenshot gnome-remote-desktop gnome-font-viewer gnome-calculator gnome-backgrounds NetworkManager-pptp-gnome NetworkManager-ssh-gnome NetworkManager-openconnect-gnome NetworkManager-openvpn-gnome NetworkManager-vpnc-gnome podman*  *libvirt* open-vm* *speech* sos totem gnome-characters firefox eog openssh-server dmidecode xorg-x11-drv-vmware xorg-x11-drv-amdgpu yajl words ibus-hangui vino openh264 twolame-libs realmd rsync net-snmp-libs net-tools traceroute mtr geolite2* gnome-boxes gnome-disk-utility gedit gnome-calendar cheese gnome-contacts rythmbox gnome-screenshot gnome-maps gnome-weather gnome-logs ibus-typing-booster *m17n* gnome-clocks gnome-color-manager mlocate cups cups-filesystem cyrus-sasl-plain cyrus-sasl-gssapi sssd* gnome-user* dos2unix kpartx rng-tools ppp* ntfs* xfs* tracker* thermald *perl* gnome-shell-extension-apps-menu gnome-shell-extension-horizontal-workspaces gnome-shell-extension-launch-new-instance gnome-shell-extension-places-menu gnome-shell-extension-window-list file-roller* sane* simple-scan *hangul*
 
 #Disable openh264 repo
 sudo dnf config-manager --set-disabled fedora-cisco-openh264 -y
@@ -81,7 +81,7 @@ flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak remove --unused
 
 #Install default applications
-flatpak install flathub com.github.tchx84.Flatseal org.mozilla.firefox org.videolan.VLC org.gnome.eog org.gnome.Calendar org.gnome.Contacts -y 
+flatpak install flathub com.github.tchx84.Flatseal org.mozilla.firefox org.videolan.VLC org.gnome.eog org.gnome.Calendar org.gnome.Contacts org.gnome.FileRoller com.yubico.yubioath -y
 
 #Enable auto TRIM
 sudo systemctl enable fstrim.timer
@@ -121,9 +121,9 @@ flatpak upgrade -y
 gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/f29/default/f29.xml'
 
 #Set Black GDM background
-mkdir -P /home/${USER}/Pictures/Wallpapers/
+mkdir -p /home/${USER}/Pictures/Wallpapers/
 wget https://wallpaperaccess.com/full/512679.jpg -O /home/${USER}/Pictures/Wallpapers/Black.png
-sudo dnf -y copr enable zirix/gdm-wallpaper 
+sudo dnf -y copr enable zirix/gdm-wallpaper
 sudo dnf -y install gdm-wallpaper
 sudo set-gdm-wallpaper /home/${USER}/Pictures/Wallpapers/Black.png
 (sudo crontab -l ; echo "@reboot /usr/bin/set-gdm-wallpaper /home/${USER}/Pictures/Wallpapers/Black.png >> /dev/null 2>&1")| sudo crontab -
@@ -202,6 +202,23 @@ sudo sed -i 's^DRIVER=="nvidia", RUN+="/usr/libexec/gdm-disable-wayland"^#DRIVER
 sudo dnf -y install snapd dkms
 sudo ln -s /var/lib/snapd/snap /snap
 sudo service snapd start
+
+wget https://raw.githubusercontent.com/tommytran732/Fedora-Workstation-Setup/main/selinux/my-gatekeeperd.te
+wget https://raw.githubusercontent.com/tommytran732/Fedora-Workstation-Setup/main/selinux/my-ndroidsettings.te
+wget https://raw.githubusercontent.com/tommytran732/Fedora-Workstation-Setup/main/selinux/my-servicemanager.te
+
+checkmodule -M -m -o my-gatekeeperd.mod my-gatekeeperd.te
+checkmodule -M -m -o my-ndroidsettings.mod my-ndroidsettings.te
+checkmodule -M -m -o my-servicemanager.mod my-servicemanager.te
+
+semodule_package -o my-gatekeeperd.pp -m my-gatekeeperd.mod
+semodule_package -o my-ndroidsettings.pp -m my-ndroidsettings.mod
+semodule_package -o my-servicemanager.pp -m my-servicemanager.mod
+
+sudo semodule -i my-gatekeeperd.pp
+sudo semodule -i my-ndroidsettings.pp
+sudo semodule -i my-servicemanager.pp
+
 sudo snap install --devmode --beta anbox
 git clone https://github.com/choff/anbox-modules.git
 cd /home/${USER}/anbox-modules
@@ -220,23 +237,6 @@ sudo dkms add anbox-ashmem/1
 sudo dkms add anbox-binder/1
 sudo firewall-cmd --add-masquerade --permanent
 sudo firewall-cmd --reload
-
-#Add SELinux Policies for anbox
-wget https://raw.githubusercontent.com/tommytran732/Fedora-Workstation-Setup/main/selinux/my-gatekeeperd.te
-wget https://raw.githubusercontent.com/tommytran732/Fedora-Workstation-Setup/main/selinux/my-ndroidsettings.te
-wget https://raw.githubusercontent.com/tommytran732/Fedora-Workstation-Setup/main/selinux/my-servicemanager.te
-
-checkmodule -M -m -o my-gatekeeperd.mod my-gatekeeperd.te
-checkmodule -M -m -o my-ndroidsettings.mod my-ndroidsettings.te
-checkmodule -M -m -o my-servicemanager.mod my-servicemanager.te
-
-semodule_package -o my-gatekeeperd.pp -m my-gatekeeperd.mod
-semodule_package -o my-ndroidsettings.pp -m my-ndroidsettings.mod
-semodule_package -o my-servicemanager -m my-servicemanager.mod
-
-sudo semodule -i my-gatekeeperd.pp
-sudo semodule -i my-ndroidsettings.pp
-sudo semodule -i my-servicemanager.pp
 
 #Setup BTRFS layout and Timeshift
 sudo mkdir /btrfs_pool
