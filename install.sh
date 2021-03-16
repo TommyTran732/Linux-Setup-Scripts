@@ -69,6 +69,7 @@ sudo dnf -y install ivpn-ui
 #Install OpenSnitch
 sudo dnf install -y https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/opensnitch-1.3.6-1.x86_64.rpm
 sudo dnf install -y https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/opensnitch-ui-1.3.6-1.f29.noarch.rpm
+sudo chmod -R $USER:USER /home/${USER}/.config/autostart
 
 #Setup VSCodium
 sudo rpm --import https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg 
