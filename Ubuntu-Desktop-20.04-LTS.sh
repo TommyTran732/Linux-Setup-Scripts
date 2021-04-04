@@ -84,6 +84,13 @@ sudo apt update
 sudo apt upgrade -y
 sudo apt install ivpn-ui -y
 
+#Install OpenSnitch
+wget https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/opensnitch_1.3.6-1_amd64.deb
+wget https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/python3-opensnitch-ui_1.3.6-1_all.deb
+sudp dpkg -i opensnitch*.deb python3-opensnitch-ui*.deb
+sudo apt -f install
+rm -rf *opensnitch*
+
 #Setup VSCodium
 wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/vscodium.gpg
 sudo chmod 644 /etc/apt/trusted.gpg.d/vscodium.gpg
