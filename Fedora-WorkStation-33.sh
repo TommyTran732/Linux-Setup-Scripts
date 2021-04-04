@@ -15,6 +15,29 @@ output(){
     echo -e '\e[36m'$1'\e[0m';
 }
 
+promptPassphrase() {
+	PASS=""
+	PASSCONF=""
+	while [ -z "$PASS" ]; do
+		read -s -p "Passphrase: " PASS
+		echo ""
+	done
+	
+	while [ -z "$PASSCONF" ]; do
+		read -s -p "Confirm passphrase: " PASSCONF
+		echo ""
+	done
+	echo ""
+}
+
+getPassphrase() {
+	promptPassphrase
+	while [ "$PASS" != "$PASSCONF" ]; do
+		output "Passphrases did not match, try again..."
+		promptPassphrase
+	done
+}
+
 #Moving to the home directory
 #Note that I always use /home/${USER} because gnome-terminal is wacky and sometimes doesn't load the environment variables in correctly (Right click somewhere in nautilus, click on open in terminal, then hit create new tab and you will see.)
 cd /home/${USER} || exit
