@@ -40,6 +40,9 @@ ubuntu-report -f send no
 echo "kernel.yama.ptrace_scope = 3" | sudo tee /etc/sysctl.d/10-default-yama-scope.conf
 sudo sysctl --load=/etc/sysctl.d/10-default-yama-scope.conf
 
+#Blacklist Firewire SBP2
+echo "blacklist firewire-sbp2" | sudo tee /etc/modprobe.d/blacklist.conf
+
 #Enable UFW
 sudo ufw enable
 
