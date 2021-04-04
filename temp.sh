@@ -39,7 +39,7 @@ sudo fwupdmgr get-updates
 sudo fwupdmgr update -y
 
 #Remove unneeded packages
-sudo apt purge gnome-calculator *evince* *seahorse* *gedit* *yelp* gnome-screenshot gnome-power-manager eog gnome-logs gnome-characters gnome-shell-extension-desktop-icons gnome-font-viewer *file-roller* cups* printer-driver* network-manager-pptp* network-manager-openvpn* *nfs* aaport* telnet *spice* tcpdump -y
+sudo apt purge gnome-calculator *evince* *seahorse* *gedit* *yelp* gnome-screenshot gnome-power-manager eog gnome-logs gnome-characters gnome-shell-extension-desktop-icons gnome-font-viewer *file-roller* cups* printer-driver* network-manager-pptp* network-manager-openvpn* *nfs* aaport* telnet *spice* tcpdump firefox* gnome-disk* -y
 sudo apt autoremove -y
 sudo snap remove snap-store
 
@@ -48,7 +48,7 @@ sudo dnf -y install neofetch git-core flat-remix-gtk3-theme libappindicator-gtk3
 sudo add-apt-repository ppa:alexlarsson/flatpak -y
 sudo apt update
 sudo apt upgrade -y
-sudo apt -y install neofetch gnome-software flatpak gnome-software-plugin-flatpak
+sudo apt -y install neofetch gnome-software flatpak gnome-software-plugin-flatpak firejail
 
 #Install Yubico StuffNetworkManager-config-connectivity-fedora
 sudo dnf -y install yubikey-manager pam-u2f pamu2fcfg
@@ -72,6 +72,7 @@ sudo chmod 644 /etc/firejail/codium.profile
 
 #Setting up Flatpak
 flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak remote-add --user flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
 flatpak remove --unused
 
 #Install default applications
