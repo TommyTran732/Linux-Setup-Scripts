@@ -35,6 +35,12 @@ sudo chmod o-w /var/tmp
 #Disable crash reports
 gsettings set com.ubuntu.update-notifier show-apport-crashes false
 ubuntu-report -f send no
+sudo systemctl stop apport.service
+sudo systemctl disable apport.service
+sudo systemctl mask apport.service
+sudo systemctl stop whoopsie.service
+sudo systemctl disable whoopsie.service
+sudo systemctl mask whoopsie.service
 
 #Disable ptrace
 echo "kernel.yama.ptrace_scope = 3" | sudo tee /etc/sysctl.d/10-default-yama-scope.conf
