@@ -26,8 +26,7 @@ sudo sed -ie '/^UMASK\s\+/ s/022/077/' /etc/login.defs
 echo "umask 077" | sudo tee --append /etc/profile
 
 #Make home directory private
-chmod -R o-rwx /home/${USER}
-chmod -R g-rwx /home/${USER}
+sudo chmod 700 /home/*
 
 #Disable crash reports
 gsettings set com.ubuntu.update-notifier show-apport-crashes false
@@ -84,11 +83,6 @@ sudo chmod 644 /etc/apt/sources.list.d/ivpn.list
 sudo apt update
 sudo apt upgrade -y
 sudo apt install ivpn-ui -y
-
-#Install OpenSnitch
-sudo apt install -y https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/opensnitch_1.3.6-1_amd64.deb
-sudo apt install -y https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/python3-opensnitch-ui_1.3.6-1_all.deb
-sudo chmod -R $USER:USER /home/${USER}/.config/autostart
 
 #Setup VSCodium
 wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/vscodium.gpg
