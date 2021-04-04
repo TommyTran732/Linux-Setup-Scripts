@@ -198,48 +198,51 @@ sudo dnf install akmod-nvidia xorg-x11-drv-nvidia-cuda -y
 #Reenable Wayland... They are working to support it, and if you aren't gaming you shouldn't stay on x11 anyways
 sudo sed -i 's^DRIVER=="nvidia", RUN+="/usr/libexec/gdm-disable-wayland"^#DRIVER=="nvidia", RUN+="/usr/libexec/gdm-disable-wayland"^g' /usr/lib/udev/rules.d/61-gdm.rules
 
+#UPDATE: This is currently borked with Kernel 5.11, therefore I am commenting it out.
+
 #Install Snap, Anbox, Ashmem, Binder, and autosign DKMS modules
 #Keep in mind that the use of snap is highly discouraged due to its reliance on AppArmor for sandboxing, which is not present on Fedora.
 #Please only use Snap for Anbox and nothing else. FlatHub and RPMFusion exist.
 #We clone a third party repo with patches for kernel >=5.7 for now. You can track the issue at https://github.com/anbox/anbox-modules/pull/76
-sudo dnf -y install snapd dkms
-sudo ln -s /var/lib/snapd/snap /snap
-sudo service snapd start
 
-wget https://raw.githubusercontent.com/tommytran732/Fedora-Workstation-Setup/main/selinux/my-gatekeeperd.te
-wget https://raw.githubusercontent.com/tommytran732/Fedora-Workstation-Setup/main/selinux/my-ndroidsettings.te
-wget https://raw.githubusercontent.com/tommytran732/Fedora-Workstation-Setup/main/selinux/my-servicemanager.te
+#sudo dnf -y install snapd dkms
+#sudo ln -s /var/lib/snapd/snap /snap
+#sudo service snapd start
 
-checkmodule -M -m -o my-gatekeeperd.mod my-gatekeeperd.te
-checkmodule -M -m -o my-ndroidsettings.mod my-ndroidsettings.te
-checkmodule -M -m -o my-servicemanager.mod my-servicemanager.te
+#wget https://raw.githubusercontent.com/tommytran732/Fedora-Workstation-Setup/main/selinux/my-gatekeeperd.te
+#wget https://raw.githubusercontent.com/tommytran732/Fedora-Workstation-Setup/main/selinux/my-ndroidsettings.te
+#wget https://raw.githubusercontent.com/tommytran732/Fedora-Workstation-Setup/main/selinux/my-servicemanager.te
 
-semodule_package -o my-gatekeeperd.pp -m my-gatekeeperd.mod
-semodule_package -o my-ndroidsettings.pp -m my-ndroidsettings.mod
-semodule_package -o my-servicemanager.pp -m my-servicemanager.mod
+#checkmodule -M -m -o my-gatekeeperd.mod my-gatekeeperd.te
+#checkmodule -M -m -o my-ndroidsettings.mod my-ndroidsettings.te
+#checkmodule -M -m -o my-servicemanager.mod my-servicemanager.te
 
-sudo semodule -i my-gatekeeperd.pp
-sudo semodule -i my-ndroidsettings.pp
-sudo semodule -i my-servicemanager.pp
+#semodule_package -o my-gatekeeperd.pp -m my-gatekeeperd.mod
+#semodule_package -o my-ndroidsettings.pp -m my-ndroidsettings.mod
+#semodule_package -o my-servicemanager.pp -m my-servicemanager.mod
 
-sudo snap install --devmode --beta anbox
-git clone https://github.com/choff/anbox-modules.git
-cd /home/${USER}/anbox-modules
-sudo cp anbox.conf /etc/modules-load.d/
-sudo cp 99-anbox.rules /lib/udev/rules.d/
-sudo cp -rT ashmem /usr/src/anbox-ashmem-1
-sudo cp -rT binder /usr/src/anbox-binder-1
-cd /home/${USER}
-sudo openssl req -new -x509 \
-    -newkey rsa:4096 -keyout /root/mok.priv \
-    -outform DER -out /root/mok.der \
-    -nodes -days 36500 -subj "/CN=DKMS Automatic Module Signer"
+#sudo semodule -i my-gatekeeperd.pp
+#sudo semodule -i my-ndroidsettings.pp
+#sudo semodule -i my-servicemanager.pp
 
-sudo sed -i 's^# sign_tool="/etc/dkms/sign_helper.sh"^sign_tool="/etc/dkms/sign_helper.sh"^g' /etc/dkms/framework.conf
-sudo dkms add anbox-ashmem/1
-sudo dkms add anbox-binder/1
-sudo firewall-cmd --add-masquerade --permanent
-sudo firewall-cmd --reload
+#sudo snap install --devmode --beta anbox
+#git clone https://github.com/choff/anbox-modules.git
+#cd /home/${USER}/anbox-modules
+#sudo cp anbox.conf /etc/modules-load.d/
+#sudo cp 99-anbox.rules /lib/udev/rules.d/
+#sudo cp -rT ashmem /usr/src/anbox-ashmem-1
+#sudo cp -rT binder /usr/src/anbox-binder-1
+#cd /home/${USER}
+#sudo openssl req -new -x509 \
+#    -newkey rsa:4096 -keyout /root/mok.priv \
+#    -outform DER -out /root/mok.der \
+#    -nodes -days 36500 -subj "/CN=DKMS Automatic Module Signer"
+
+#sudo sed -i 's^# sign_tool="/etc/dkms/sign_helper.sh"^sign_tool="/etc/dkms/sign_helper.sh"^g' /etc/dkms/framework.conf
+#sudo dkms add anbox-ashmem/1
+#sudo dkms add anbox-binder/1
+#sudo firewall-cmd --add-masquerade --permanent
+#sudo firewall-cmd --reload
 
 #Setup BTRFS layout and Timeshift
 sudo mkdir /btrfs_pool
@@ -247,9 +250,9 @@ sudo mount -o subvolid=5 /dev/mapper/${PARTITIONID} /btrfs_pool
 sudo mv /btrfs_pool/root /btrfs_pool/@
 sudo mv /btrfs_pool/home /btrfs_pool/@home
 sudo btrfs subvolume list /btrfs_pool
-sudo sed -i 's/subvol=root/subvol=@,ssd,noatime,space_cache,commit=120,compress=zstd,discard=async/' /etc/fstab
-sudo sed -i 's/subvol=home/subvol=@home,ssd,noatime,space_cache,commit=120,compress=zstd,discard=async/' /etc/fstab
-sudo echo "UUID=${PARTITIONUUID} /btrfs_pool             btrfs   subvolid=5,ssd,noatime,space_cache,commit=120,compress=zstd,discard=async,x-systemd.device-timeout=0   0 0" | sudo tee -a /etc/fstab
+sudo sed -i 's/subvol=root/subvol=@,ssd,noatime,space_cache,commit=120,compress=zstd:1,discard=async/' /etc/fstab
+sudo sed -i 's/subvol=home/subvol=@home,ssd,noatime,space_cache,commit=120,compress=zstd:1,discard=async/' /etc/fstab
+sudo echo "UUID=${PARTITIONUUID} /btrfs_pool             btrfs   subvolid=5,ssd,noatime,space_cache,commit=120,compress=zstd:1,discard=async,x-systemd.device-timeout=0   0 0" | sudo tee -a /etc/fstab
 sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
 sudo dnf -y install timeshift
 
@@ -269,8 +272,8 @@ sudo systemctl restart NetworkManager
 #Last step, import key to MOK
 output "Just to avoid confusion, we are importing Akmods's key"
 sudo mokutil --import /etc/pki/akmods/certs/public_key.der
-output "Now we import DKMS's key"
-sudo mokutil --import /root/mok.der
+#output "Now we import DKMS's key"
+#sudo mokutil --import /root/mok.der
 output "All done! You have to reboot now."
 
 
