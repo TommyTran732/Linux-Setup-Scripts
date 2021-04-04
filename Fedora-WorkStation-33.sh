@@ -32,6 +32,9 @@ sudo cp /usr/lib/sysctl.d/10-default-yama-scope.conf /etc/sysctl.d/
 sudo sed -i 's/kernel.yama.ptrace_scope = 0/kernel.yama.ptrace_scope = 3/g' /etc/sysctl.d/10-default-yama-scope.conf
 sudo sysctl --load=/etc/sysctl.d/10-default-yama-scope.conf
 
+#Blacklist Firewire SBP2
+echo "blacklist firewire-sbp2" | sudo tee /etc/modprobe.d/blacklist.conf
+
 #Setup Firewalld
 sudo firewall-cmd --permanent --remove-port=1025-65535/udp
 sudo firewall-cmd --permanent --remove-port=1025-65535/tcp
