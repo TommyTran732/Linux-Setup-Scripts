@@ -80,7 +80,7 @@ sudo snap remove snap-store
 sudo add-apt-repository ppa:alexlarsson/flatpak -y
 sudo apt update
 sudo apt upgrade -y
-sudo apt -y install neofetch gnome-software flatpak gnome-software-plugin-flatpak firejail apparmor-profiles apparmor-profiles-extra apparmor-utils gnome-tweak-tool git-core gnome-session-wayland libpam-pwquality python3-pip curl arc-theme nautilus
+sudo apt -y install neofetch gnome-software flatpak gnome-software-plugin-flatpak firejail apparmor-profiles apparmor-profiles-extra apparmor-utils gnome-tweak-tool git-core gnome-session-wayland libpam-pwquality python3-pip curl arc-theme nautilus lm-sensors
 
 #Put all AppArmor profiles into enforcing mode
 sudo aa-enforce /etc/apparmor.d/*
