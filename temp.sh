@@ -26,16 +26,13 @@ sudo cp /usr/lib/sysctl.d/10-default-yama-scope.conf /etc/sysctl.d/
 sudo sed -i 's/kernel.yama.ptrace_scope = 0/kernel.yama.ptrace_scope = 3/g' /etc/sysctl.d/10-default-yama-scope.conf
 sudo sysctl --load=/etc/sysctl.d/10-default-yama-scope.conf
 
-#Setup Firewalld
+#Enable UFW
 sudo ufw enable
 
-#Speed up DNF
-sudo echo 'fastestmirror=1' | sudo tee -a /etc/dnf/dnf.conf
-sudo echo 'max_parallel_downloads=10' | sudo tee -a /etc/dnf/dnf.conf
-sudo echo 'deltarpm=true' | sudo tee -a /etc/dnf/dnf.conf
-
 #Update packages and firmware
-sudo dnf upgrade -y
+sudo apt update
+sudo apt upgrade -y
+sudp apt autoremove -y
 sudo fwupdmgr get-devices
 sudo fwupdmgr refresh --force
 sudo fwupdmgr get-updates
