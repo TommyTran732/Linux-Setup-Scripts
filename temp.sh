@@ -72,6 +72,8 @@ wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.g
 sudo chmod 644 /etc/apt/trusted.gpg.d/vscodium.gpg
 echo 'deb https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/debs/ vscodium main' | sudo tee --append /etc/apt/sources.list.d/vscodium.list 
 sudo chmod 644 /etc/apt/sources.list.d/vscodium.list
+sudo apt update 
+sudo apt upgrade -y
 sudo apt install -y codium
 sudo cp /etc/firejail/vscodium.profile /etc/firejail/codium.profile
 sudo chmod 644 /etc/firejail/codium.profile
@@ -89,12 +91,6 @@ sudo systemctl enable fstrim.timer
 
 #Enable Firejail
 sudo firecfg
-
-#Download and set GNOME shell theme
-git clone https://github.com/i-mint/midnight.git
-mkdir /home/${USER}/.themes
-ln -s /home/${USER}/midnight/Midnight-* /home/${USER}/.themes/
-gsettings set org.gnome.shell.extensions.user-theme name "Midnight-Blue"
 
 #Download and set icon theme
 git clone https://github.com/NicoHood/arc-icon-theme.git
