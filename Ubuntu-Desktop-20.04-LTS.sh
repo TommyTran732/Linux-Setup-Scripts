@@ -15,29 +15,6 @@ output(){
     echo -e '\e[36m'$1'\e[0m';
 }
 
-promptPassphrase() {
-	PASS=""
-	PASSCONF=""
-	while [ -z "$PASS" ]; do
-		read -s -p "Passphrase: " PASS
-		echo ""
-	done
-
-	while [ -z "$PASSCONF" ]; do
-		read -s -p "Confirm passphrase: " PASSCONF
-		echo ""
-	done
-	echo ""
-}
-
-getPassphrase() {
-	promptPassphrase
-	while [ "$PASS" != "$PASSCONF" ]; do
-		output "Passphrases did not match, try again..."
-		promptPassphrase
-	done
-}
-
 #Moving to the home directory
 #Note that I always use /home/${USER} because gnome-terminal is wacky and sometimes doesn't load the environment variables in correctly (Right click somewhere in nautilus, click on open in terminal, then hit create new tab and you will see.)
 cd /home/${USER} || exit
@@ -48,22 +25,9 @@ sudo sed -ie '/^DIR_MODE=/ s/=[0-9]*\+/=0700/' /etc/adduser.conf
 sudo sed -ie '/^UMASK\s\+/ s/022/077/' /etc/login.defs
 echo "umask 077" | sudo tee --append /etc/profile
 
-#Disabling shell access for new users
-sudo sed -ie '/^SHELL=/ s/=.*\+/=\/usr\/sbin\/nologin/' /etc/default/useradd
-sudo sed -ie '/^DSHELL=/ s/=.*\+/=\/usr\/sbin\/nologin/' /etc/adduser.conf
-
-#Disabling su for normal users
-sudo dpkg-statoverride --update --add root adm 4750 /bin/su
-
 #Make home directory private
 chmod -R o-rwx /home/${USER}
 chmod -R g-rwx /home/${USER}
-
-
-#Remove unnecessary permissions
-sudo chmod o-w /var/crash
-sudo chmod o-w /var/metrics
-sudo chmod o-w /var/tmp
 
 #Disable crash reports
 gsettings set com.ubuntu.update-notifier show-apport-crashes false
@@ -76,24 +40,11 @@ sudo systemctl disable whoopsie.service
 sudo systemctl mask whoopsie.service
 
 #Disable ptrace
-sudo sed -i `s/kernel.yama.ptrace_scope = 1/kernel.yama.ptrace_scope = 3/g` /etc/sysctl.d/10-ptrace.conf
+sudo sed -i 's/kernel.yama.ptrace_scope = 1/kernel.yama.ptrace_scope = 3/g' /etc/sysctl.d/10-ptrace.conf
 sudo sysctl --load=/etc/sysctl.d/10-ptrace.conf
 
 #Blacklist Firewire SBP2
 echo "blacklist firewire-sbp2" | sudo tee /etc/modprobe.d/blacklist.conf
-
-#GRUB hardening (Thanks to https://www.ncsc.gov.uk/collection/end-user-device-security/platform-specific-guidance/ubuntu-18-04-lts)
-echo -e "${HIGHLIGHT}Configuring grub...${NC}"
-output "Please enter a grub sysadmin passphrase..."
-getPassphrase
-
-echo "set superusers=\"sysadmin\"" | sudo tee --append /etc/grub.d/40_custom
-echo -e "$PASS\n$PASS" | grub-mkpasswd-pbkdf2 | tail -n1 | awk -F" " '{print "password_pbkdf2 sysadmin " $7}' | sudo tee --append /etc/grub.d/40_custom
-sudo sed -ie '/echo "menuentry / s/echo "menuentry /echo "menuentry --unrestricted /' /etc/grub.d/10_linux
-sudo sed -ie '/^GRUB_CMDLINE_LINUX_DEFAULT=/ s/"$/ module.sig_enforce=yes"/' /etc/default/grub
-echo "GRUB_SAVEDEFAULT=false" | sudo tee --append /etc/default/grub
-sudo update-grub
-
 
 #Enable UFW
 sudo ufw enable
@@ -104,7 +55,7 @@ sudo apt upgrade -y
 sudp apt autoremove -y
 sudo fwupdmgr get-devices
 sudo fwupdmgr refresh --force
-sudo fwupdmgr get-updates
+sudo fwupdmgr get-updates -y
 sudo fwupdmgr update -y
 
 #Remove unneeded packages
@@ -117,7 +68,7 @@ sudo snap remove snap-store
 sudo add-apt-repository ppa:alexlarsson/flatpak -y
 sudo apt update
 sudo apt upgrade -y
-sudo apt -y install neofetch gnome-software flatpak gnome-software-plugin-flatpak firejail apparmor-profiles apparmor-profiles-extra apparmor-utils gnome-tweak-tool git-core gnome-session-wayland libpam-pwquality
+sudo apt -y install neofetch gnome-software flatpak gnome-software-plugin-flatpak firejail apparmor-profiles apparmor-profiles-extra apparmor-utils gnome-tweak-tool git-core gnome-session-wayland libpam-pwquality python3-pip
 
 #Put all AppArmor profiles into enforcing mode
 sudo aa-enforce /etc/apparmor. d/*
@@ -140,9 +91,9 @@ sudo apt install -y https://github.com/evilsocket/opensnitch/releases/download/v
 sudo chmod -R $USER:USER /home/${USER}/.config/autostart
 
 #Setup VSCodium
-wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/vscodium.gpg 
+wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/vscodium.gpg
 sudo chmod 644 /etc/apt/trusted.gpg.d/vscodium.gpg
-echo 'deb https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/debs/ vscodium main' | sudo tee --append /etc/apt/sources.list.d/vscodium.list 
+echo 'deb https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/debs/ vscodium main' | sudo tee --append /etc/apt/sources.list.d/vscodium.list
 sudo chmod 644 /etc/apt/sources.list.d/vscodium.list
 sudo apt update
 sudo apt upgrade -y
@@ -184,7 +135,7 @@ find /home/${USER}/Mojave-CT -name '*[Ee]piphany*' -exec rm {} \;
 gsettings set org.gnome.desktop.interface icon-theme "Arc"
 
 #Set GTK theme
-gsettings set org.gnome.desktop.interface gtk-theme "Yaru-Dark"
+gsettings set org.gnome.desktop.interface gtk-theme "Yaru-dark"
 flatpak upgrade -y
 
 #Set Ubuntu 20.04 LTS Wallpaper
@@ -204,7 +155,7 @@ git clone https://github.com/ekistece/GetExtensions.git
 pip3 install ./GetExtensions --user
 
 #Reenable Wayland... They are working to support it, and if you aren't gaming you shouldn't stay on x11 anyways
-sudo sed -i 's^DRIVER=="nvidia", RUN+="/usr/libexec/gdm-disable-wayland"^#DRIVER=="nvidia", RUN+="/usr/libexec/gdm-disable-wayland"^g' /usr/lib/udev/rules.d/61-gdm.rules
+sudo sed -i 's^DRIVER=="nvidia", RUN+="/usr/lib/gdm3/gdm-disable-wayland"^#DRIVER=="nvidia", RUN+="/usr/lib/gdm3/gdm-disable-wayland"^g' /usr/lib/udev/rules.d/61-gdm.rules
 
 #Randomize MAC address
 sudo bash -c 'cat > /etc/NetworkManager/conf.d/00-macrandomize.conf' <<-'EOF'
