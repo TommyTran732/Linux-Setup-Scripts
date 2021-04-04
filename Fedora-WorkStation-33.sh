@@ -15,29 +15,6 @@ output(){
     echo -e '\e[36m'$1'\e[0m';
 }
 
-promptPassphrase() {
-	PASS=""
-	PASSCONF=""
-	while [ -z "$PASS" ]; do
-		read -s -p "Passphrase: " PASS
-		echo ""
-	done
-	
-	while [ -z "$PASSCONF" ]; do
-		read -s -p "Confirm passphrase: " PASSCONF
-		echo ""
-	done
-	echo ""
-}
-
-getPassphrase() {
-	promptPassphrase
-	while [ "$PASS" != "$PASSCONF" ]; do
-		output "Passphrases did not match, try again..."
-		promptPassphrase
-	done
-}
-
 #Moving to the home directory
 #Note that I always use /home/${USER} because gnome-terminal is wacky and sometimes doesn't load the environment variables in correctly (Right click somewhere in nautilus, click on open in terminal, then hit create new tab and you will see.)
 cd /home/${USER} || exit
@@ -58,18 +35,6 @@ sudo sysctl --load=/etc/sysctl.d/10-default-yama-scope.conf
 
 #Blacklist Firewire SBP2
 echo "blacklist firewire-sbp2" | sudo tee /etc/modprobe.d/blacklist.conf
-
-#GRUB hardening (Thanks to https://www.ncsc.gov.uk/collection/end-user-device-security/platform-specific-guidance/ubuntu-18-04-lts)
-echo -e "${HIGHLIGHT}Configuring grub...${NC}"
-output "Please enter a grub sysadmin passphrase..."
-getPassphrase
-
-echo "set superusers=\"sysadmin\"" | sudo tee --append /etc/grub.d/40_custom
-echo -e "$PASS\n$PASS" | grub-mkpasswd-pbkdf2 | tail -n1 | awk -F" " '{print "password_pbkdf2 sysadmin " $7}' | sudo tee --append /etc/grub.d/40_custom
-sudo sed -ie '/echo "menuentry / s/echo "menuentry /echo "menuentry --unrestricted /' /etc/grub.d/10_linux
-sudo sed -ie '/^GRUB_CMDLINE_LINUX_DEFAULT=/ s/"$/ module.sig_enforce=yes"/' /etc/default/grub
-echo "GRUB_SAVEDEFAULT=false" | sudo tee --append /etc/default/grub
-sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
 
 #Setup Firewalld
 sudo firewall-cmd --permanent --remove-port=1025-65535/udp
