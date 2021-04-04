@@ -25,6 +25,11 @@ sudo sed -ie '/^DIR_MODE=/ s/=[0-9]*\+/=0700/' /etc/adduser.conf
 sudo sed -ie '/^UMASK\s\+/ s/022/077/' /etc/login.defs
 echo "umask 077" | sudo tee --append /etc/profile
 
+#Remove unnecessary permissions
+sudo chmod o-w /var/cache
+sudo chmod o-w /var/metrics
+sudo chmod o-w /var/tmp
+
 #Make home directory private
 sudo chmod 700 /home/*
 
