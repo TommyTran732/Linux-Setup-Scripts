@@ -139,6 +139,13 @@ gsettings set org.gnome.desktop.interface icon-theme "Arc"
 gsettings set org.gnome.desktop.interface gtk-theme "Yaru-dark"
 flatpak upgrade -y
 
+#Set Black GDM background
+mkdir -p /home/${USER}/Pictures/Wallpapers/
+wget https://wallpaperaccess.com/full/512679.jpg -O /home/${USER}/Pictures/Wallpapers/Black.png
+wget github.com/thiggy01/change-gdm-background/raw/master/change-gdm-background
+sudo chmod u+x /home/${USER}/change-gdm-background 
+sudo /home/${USER}/change-gdm-background /home/${USER}/Pictures/Wallpapers/Black.png
+
 #Set Ubuntu 20.04 LTS Wallpaper
 gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/matt-mcnulty-nyc-2nd-ave.jpg'
 
