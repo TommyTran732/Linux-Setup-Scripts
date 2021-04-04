@@ -1,5 +1,5 @@
 # Linux Setup Scripts
-My setup scripts for my workstations. You should edit the scripts to your liking before running it. I remove all of the stuff I don't use like Bluetooth (bluez), Printing system (cups) and libvirt (Since I can use GNOME Boxes Flatpak). <br />
+My setup scripts for my workstations. You should edit the scripts to your liking before running it. I remove all of the stuff I don't use like Bluetooth (bluez), Printing system (cups) and libvirt (since I can use GNOME Boxes Flatpak). <br />
 Please run the scripts as your actual user and not root. Provide sudo password when it asks you to. Flatpak packages and themes/icons are only installed for your user and not system wide. <br />
 
 
@@ -27,7 +27,7 @@ Similar to the Fedora script, this script <br >
 1. Debloat Ubuntu <br />
 The script removes some ~150 useless packages from the minimal installation.  
 
-2. Setup basic privacy and security (Setting umask to 077, enabling ufw, randomizing mac address, disabling ptrace, install openSnitch as an outbound firewall, ...) <br />
+2. Setup basic privacy and security (Setting umask to 077, enabling ufw, randomizing mac address, disabling ptrace, install openSnitch as an outbound firewall, removing unnecessary permissions...) <br />
 
 3. Install and set AppArmor profiles to enforcing mode
 
@@ -36,6 +36,8 @@ The script removes some ~150 useless packages from the minimal installation.
 5. Quality of life stuff (Installing some packages that I use, enabling autotrim, setting up a nice GNOME, GTK, and icon theme, ...) <br />
 
 I would recommend that you follow this guide and setup Encrypted ZFS instead of BTRFS with Timeshift on Ubuntu: https://linsomniac.gitlab.io/post/2020-04-09-ubuntu-2004-encrypted-zfs/
+
+6. Remove telemetry (apports, popularity contest, whoopsie) - Keep in mind Snapd still phones home with your unique ID and installed snap packages list. Remove snapd if you don't need it.
 
 ![image](https://user-images.githubusercontent.com/57488583/113504635-e0f03080-9528-11eb-8ce4-faeda3520e8c.png)
 
