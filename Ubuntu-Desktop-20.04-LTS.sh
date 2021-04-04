@@ -44,16 +44,21 @@ cd /home/${USER} || exit
 
 #Setting umask to 077
 umask 077
-sed -ie '/^DIR_MODE=/ s/=[0-9]*\+/=0700/' /etc/adduser.conf
-sed -ie '/^UMASK\s\+/ s/022/077/' /etc/login.defs
+sudo sed -ie '/^DIR_MODE=/ s/=[0-9]*\+/=0700/' /etc/adduser.conf
+sudo sed -ie '/^UMASK\s\+/ s/022/077/' /etc/login.defs
 echo "umask 077" | sudo tee --append /etc/profile
 
 #Disabling shell access for new users
-sed -ie '/^SHELL=/ s/=.*\+/=\/usr\/sbin\/nologin/' /etc/default/useradd
-sed -ie '/^DSHELL=/ s/=.*\+/=\/usr\/sbin\/nologin/' /etc/adduser.conf
+sudo sed -ie '/^SHELL=/ s/=.*\+/=\/usr\/sbin\/nologin/' /etc/default/useradd
+sudo sed -ie '/^DSHELL=/ s/=.*\+/=\/usr\/sbin\/nologin/' /etc/adduser.conf
+
+#Disabling su for normal users
+sudo dpkg-statoverride --update --add root adm 4750 /bin/su
 
 #Make home directory private
 chmod -R o-rwx /home/${USER}
+chmod -R g-rwx /home/${USER}
+
 
 #Remove unnecessary permissions
 sudo chmod o-w /var/crash
