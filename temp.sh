@@ -45,7 +45,7 @@ sudo apt autoremove -y
 sudo snap remove snap-store
 
 #Install packages that I use
-sudo dnf -y install neofetch git-core flat-remix-gtk3-theme libappindicator-gtk3 gnome-shell-extension-appindicator gnome-shell-extension-system-monitor-applet gnome-shell-extension-dash-to-dock gnome-shell-extension-freon gnome-shell-extension-openweather gnome-shell-extension-user-theme gnome-tweak-tool f29-backgrounds-gnome gnome-system-monitor nautilus gvfs-mtp gvfs-goa git-core fireja tuned-gtk
+sudo dnf -y install neofetch git-core flat-remix-gtk3-theme libappindicator-gtk3 gnome-shell-extension-appindicator gnome-shell-extension-system-monitor-applet gnome-shell-extension-dash-to-dock gnome-shell-extension-freon gnome-shell-extension-openweather gnome-shell-extension-user-theme gnome-tweak-tool f29-backgrounds-gnome gnome-system-monitor nautilus gvfs-mtp gvfs-goa git-core fireja tuned-gtk git-core
 sudo add-apt-repository ppa:alexlarsson/flatpak -y
 sudo apt update
 sudo apt upgrade -y
@@ -56,8 +56,11 @@ sudo apt -y install yubikey-manager pam-u2f pamu2fcfg
 mkdir -p /home/${USER}/.config/Yubico
 
 #Install IVPN
-sudo dnf config-manager --add-repo https://repo.ivpn.net/stable/fedora/generic/ivpn.repo -y
-sudo dnf -y install ivpn-ui 
+curl -fsSL https://repo.ivpn.net/stable/ubuntu/generic.gpg | sudo apt-key add - 
+curl -fsSL https://repo.ivpn.net/stable/ubuntu/generic.list | sudo tee /etc/apt/sources.list.d/ivpn.list 
+sudo apt update
+sudo apt upgrade -y
+sudo apt install ivpn-ui -y
 
 #Install OpenSnitch
 sudo dnf install -y https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/opensnitch-1.3.6-1.x86_64.rpm
