@@ -27,6 +27,11 @@ echo "umask 077" | sudo tee --append /etc/profile
 #Make home directory private
 chmod -R o-rwx /home/${USER}
 
+#Remove unnecessary permissions
+chmod o-w /var/crash
+chmod o-w /var/metrics
+chmod o-w /var/tmp
+
 #Disable ptrace
 echo "kernel.yama.ptrace_scope = 3" | sudo tee /etc/sysctl.d/10-default-yama-scope.conf
 sudo sysctl --load=/etc/sysctl.d/10-default-yama-scope.conf
