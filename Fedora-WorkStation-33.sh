@@ -25,8 +25,7 @@ sudo sed -i 's/umask 002/umask 077/g' /etc/bashrc
 sudo sed -i 's/umask 022/umask 077/g' /etc/bashrc
 
 #Make home directory private
-chmod -R o-rwx /home/${USER}
-chmod -R g-rwx /home/${USER}
+chmod 700 /home/*
 
 #Disable ptrace
 sudo cp /usr/lib/sysctl.d/10-default-yama-scope.conf /etc/sysctl.d/
