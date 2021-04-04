@@ -4,6 +4,8 @@
 #Customize it to your liking
 #Run this script as your user, NOT root
 
+#Note: BTRFS Setup is not included in this script. I highly recommend using encrypted ZFS instead: https://linsomniac.gitlab.io/post/2020-04-09-ubuntu-2004-encrypted-zfs/
+
 #Written by yours truly, Tomster
 
 #Variables
