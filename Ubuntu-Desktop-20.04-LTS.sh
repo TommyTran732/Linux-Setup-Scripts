@@ -139,6 +139,9 @@ gsettings set org.gnome.shell disable-user-extensions false
 #Enable tap to click
 gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
 
+#Disable crash reports (even tho we have already removed the package)
+gsettings set com.ubuntu.update-notifier show-apport-crashes false
+
 #Reenable Wayland... They are working to support it, and if you aren't gaming you shouldn't stay on x11 anyways
 sudo sed -i 's^DRIVER=="nvidia", RUN+="/usr/libexec/gdm-disable-wayland"^#DRIVER=="nvidia", RUN+="/usr/libexec/gdm-disable-wayland"^g' /usr/lib/udev/rules.d/61-gdm.rules
 
