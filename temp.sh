@@ -45,7 +45,6 @@ sudo apt autoremove -y
 sudo snap remove snap-store
 
 #Install packages that I use
-sudo dnf -y install neofetch git-core flat-remix-gtk3-theme libappindicator-gtk3 gnome-shell-extension-appindicator gnome-shell-extension-system-monitor-applet gnome-shell-extension-dash-to-dock gnome-shell-extension-freon gnome-shell-extension-openweather gnome-shell-extension-user-theme gnome-tweak-tool f29-backgrounds-gnome gnome-system-monitor nautilus gvfs-mtp gvfs-goa git-core fireja tuned-gtk git-core
 sudo add-apt-repository ppa:alexlarsson/flatpak -y
 sudo apt update
 sudo apt upgrade -y
@@ -114,19 +113,11 @@ find /home/${USER}/Mojave-CT -name '*[Ee]piphany*' -exec rm {} \;
 gsettings set org.gnome.desktop.interface icon-theme "Arc"
 
 #Set GTK theme
-gsettings set org.gnome.desktop.interface gtk-theme "Flat-Remix-GTK-Blue-Dark"
+gsettings set org.gnome.desktop.interface gtk-theme "Arc-Dark"
 flatpak upgrade -y
 
-#Set Fedora 29 Animated Wallpaper
-gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/f29/default/f29.xml'
-
-#Set Black GDM background
-mkdir -p /home/${USER}/Pictures/Wallpapers/
-wget https://wallpaperaccess.com/full/512679.jpg -O /home/${USER}/Pictures/Wallpapers/Black.png
-sudo dnf -y copr enable zirix/gdm-wallpaper
-sudo dnf -y install gdm-wallpaper
-sudo set-gdm-wallpaper /home/${USER}/Pictures/Wallpapers/Black.png
-(sudo crontab -l ; echo "@reboot /usr/bin/set-gdm-wallpaper /home/${USER}/Pictures/Wallpapers/Black.png >> /dev/null 2>&1")| sudo crontab -
+#Set Ubuntu 20.04 LTS Wallpaper
+gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/matt-mcnulty-nyc-2nd-ave.jpg'
 
 #Enable Titlebar buttons
 gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
