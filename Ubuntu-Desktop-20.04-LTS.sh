@@ -21,7 +21,8 @@ cd /home/${USER} || exit
 
 #Setting umask to 077
 umask 077
-sudo sed -i 's/UMASK		022/UMASK		077/g' /etc/login.defs
+sed -ie '/^DIR_MODE=/ s/=[0-9]*\+/=0700/' /etc/adduser.conf
+sed -ie '/^UMASK\s\+/ s/022/077/' /etc/login.defs
 echo "umask 077" | sudo tee --append /etc/profile
 
 #Make home directory private
