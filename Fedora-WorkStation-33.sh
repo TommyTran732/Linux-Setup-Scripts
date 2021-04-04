@@ -52,7 +52,7 @@ sudo echo 'deltarpm=true' | sudo tee -a /etc/dnf/dnf.conf
 sudo dnf upgrade -y
 sudo fwupdmgr get-devices
 sudo fwupdmgr refresh --force
-sudo fwupdmgr get-updates
+sudo fwupdmgr get-updates -y
 sudo fwupdmgr update -y
 
 #Remove unneeded packages
