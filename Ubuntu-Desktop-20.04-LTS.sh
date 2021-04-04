@@ -22,7 +22,7 @@ promptPassphrase() {
 		read -s -p "Passphrase: " PASS
 		echo ""
 	done
-	
+
 	while [ -z "$PASSCONF" ]; do
 		read -s -p "Confirm passphrase: " PASSCONF
 		echo ""
@@ -76,8 +76,8 @@ sudo systemctl disable whoopsie.service
 sudo systemctl mask whoopsie.service
 
 #Disable ptrace
-echo "kernel.yama.ptrace_scope = 3" | sudo tee /etc/sysctl.d/10-default-yama-scope.conf
-sudo sysctl --load=/etc/sysctl.d/10-default-yama-scope.conf
+sudo sed -i `s/kernel.yama.ptrace_scope = 1/kernel.yama.ptrace_scope = 3/g` /etc/sysctl.d/10-ptrace.conf
+sudo sysctl --load=/etc/sysctl.d/10-ptrace.conf
 
 #Blacklist Firewire SBP2
 echo "blacklist firewire-sbp2" | sudo tee /etc/modprobe.d/blacklist.conf
@@ -87,12 +87,12 @@ echo -e "${HIGHLIGHT}Configuring grub...${NC}"
 output "Please enter a grub sysadmin passphrase..."
 getPassphrase
 
-echo "set superusers=\"sysadmin\"" >> /etc/grub.d/40_custom
-echo -e "$PASS\n$PASS" | grub-mkpasswd-pbkdf2 | tail -n1 | awk -F" " '{print "password_pbkdf2 sysadmin " $7}' >> /etc/grub.d/40_custom
-sed -ie '/echo "menuentry / s/echo "menuentry /echo "menuentry --unrestricted /' /etc/grub.d/10_linux
-sed -ie '/^GRUB_CMDLINE_LINUX_DEFAULT=/ s/"$/ module.sig_enforce=yes"/' /etc/default/grub
-echo "GRUB_SAVEDEFAULT=false" >> /etc/default/grub
-update-grub
+echo "set superusers=\"sysadmin\"" | sudo tee --append /etc/grub.d/40_custom
+echo -e "$PASS\n$PASS" | grub-mkpasswd-pbkdf2 | tail -n1 | awk -F" " '{print "password_pbkdf2 sysadmin " $7}' | sudo tee --append /etc/grub.d/40_custom
+sudo sed -ie '/echo "menuentry / s/echo "menuentry /echo "menuentry --unrestricted /' /etc/grub.d/10_linux
+sudo sed -ie '/^GRUB_CMDLINE_LINUX_DEFAULT=/ s/"$/ module.sig_enforce=yes"/' /etc/default/grub
+echo "GRUB_SAVEDEFAULT=false" | sudo tee --append /etc/default/grub
+sudo update-grub
 
 
 #Enable UFW
@@ -109,7 +109,7 @@ sudo fwupdmgr update -y
 
 #Remove unneeded packages
 #Note that I remove unattended upgrades because GNOME Software will be handling auto updates
-sudo apt purge gnome-calculator *evince* *seahorse* *gedit* *yelp* gnome-screenshot gnome-power-manager eog gnome-logs gnome-characters gnome-shell-extension-desktop-icons gnome-font-viewer *file-roller* cups* printer-driver* network-manager-pptp* network-manager-openvpn* *nfs* aaport* telnet *spice* tcpdump firefox* gnome-disk* gnome-initial-setup ubuntu-report popularity-contest whoopsie speech-dispatcher modemmanager avahi* gnome-shell-extension-ubuntu-dock mobile-broadband-provider-info ImageMagick* adcli libreoffice* ntfs* xfs* tracker* thermald sane* simple-scan *hangul* unattended-upgrades -y
+sudo apt purge gnome-calculator *evince* *seahorse* *gedit* *yelp* gnome-screenshot gnome-power-manager eog gnome-logs gnome-characters gnome-shell-extension-desktop-icons gnome-font-viewer *file-roller* cups* printer-driver* network-manager-pptp* network-manager-openvpn* *nfs* apport* telnet *spice* tcpdump firefox* gnome-disk* gnome-initial-setup ubuntu-report popularity-contest whoopsie speech-dispatcher modemmanager avahi* gnome-shell-extension-ubuntu-dock mobile-broadband-provider-info ImageMagick* adcli libreoffice* ntfs* xfs* tracker* thermald sane* simple-scan *hangul* unattended-upgrades -y
 sudo apt autoremove -y
 sudo snap remove snap-store
 
@@ -117,7 +117,7 @@ sudo snap remove snap-store
 sudo add-apt-repository ppa:alexlarsson/flatpak -y
 sudo apt update
 sudo apt upgrade -y
-sudo apt -y install neofetch gnome-software flatpak gnome-software-plugin-flatpak firejail apparmor-profiles apparmor-profiles-extra apparmor-utils gnome-tweak-tool git-core sudo apt install gnome-session-wayland libpam-pwquality
+sudo apt -y install neofetch gnome-software flatpak gnome-software-plugin-flatpak firejail apparmor-profiles apparmor-profiles-extra apparmor-utils gnome-tweak-tool git-core gnome-session-wayland libpam-pwquality
 
 #Put all AppArmor profiles into enforcing mode
 sudo aa-enforce /etc/apparmor. d/*
@@ -127,8 +127,8 @@ sudo apt -y install libpam-u2f
 mkdir -p /home/${USER}/.config/Yubico
 
 #Install IVPN
-curl -fsSL https://repo.ivpn.net/stable/ubuntu/generic.gpg | sudo apt-key add - 
-curl -fsSL https://repo.ivpn.net/stable/ubuntu/generic.list | sudo tee /etc/apt/sources.list.d/ivpn.list 
+curl -fsSL https://repo.ivpn.net/stable/ubuntu/generic.gpg | sudo apt-key add -
+curl -fsSL https://repo.ivpn.net/stable/ubuntu/generic.list | sudo tee /etc/apt/sources.list.d/ivpn.list
 sudo chmod 644 /etc/apt/sources.list.d/ivpn.list
 sudo apt update
 sudo apt upgrade -y
@@ -144,7 +144,7 @@ wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.g
 sudo chmod 644 /etc/apt/trusted.gpg.d/vscodium.gpg
 echo 'deb https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/debs/ vscodium main' | sudo tee --append /etc/apt/sources.list.d/vscodium.list 
 sudo chmod 644 /etc/apt/sources.list.d/vscodium.list
-sudo apt update 
+sudo apt update
 sudo apt upgrade -y
 sudo apt install -y codium
 sudo cp /etc/firejail/vscodium.profile /etc/firejail/codium.profile
@@ -166,7 +166,7 @@ sudo firecfg
 
 #Download and set icon theme
 git clone https://github.com/NicoHood/arc-icon-theme.git
-mkdir /home/${USER}/.icons 
+mkdir /home/${USER}/.icons
 ln -s /home/${USER}/arc-icon-theme/Arc /home/${USER}/.icons/
 git clone https://github.com/zayronxio/Mojave-CT.git
 ln -s /home/${USER}/Mojave-CT /home/${USER}/.icons/
@@ -218,5 +218,3 @@ connection.stable-id=${CONNECTION}/${BOOT}
 EOF
 
 sudo systemctl restart NetworkManager
-
-
