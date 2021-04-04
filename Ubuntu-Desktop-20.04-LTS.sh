@@ -6,6 +6,8 @@
 
 #Note: BTRFS Setup is not included in this script. I highly recommend using encrypted ZFS instead: https://linsomniac.gitlab.io/post/2020-04-09-ubuntu-2004-encrypted-zfs/
 
+#I also took some codes from https://www.ncsc.gov.uk/collection/end-user-device-security/platform-specific-guidance/ubuntu-18-04-lts as well
+
 #Written by yours truly, Tomster
 
 #Variables
@@ -25,10 +27,16 @@ sudo sed -ie '/^DIR_MODE=/ s/=[0-9]*\+/=0700/' /etc/adduser.conf
 sudo sed -ie '/^UMASK\s\+/ s/022/077/' /etc/login.defs
 echo "umask 077" | sudo tee --append /etc/profile
 
+#Disable shell access for new users
+sudo sed -ie '/^SHELL=/ s/=.*\+/=\/usr\/sbin\/nologin/' /etc/default/useradd
+sudo sed -ie '/^DSHELL=/ s/=.*\+/=\/usr\/sbin\/nologin/' /etc/adduser.conf
+
+#Prevent normal users from accessing su
+sudo dpkg-statoverride --update --add root adm 4750 /bin/su
+
 #Remove unnecessary permissions
 sudo chmod o-w /var/cache
 sudo chmod o-w /var/metrics
-sudo chmod o-w /var/tmp
 
 #Make home directory private
 sudo chmod 700 /home/*
@@ -64,7 +72,7 @@ sudo fwupdmgr update -y
 
 #Remove unneeded packages
 #Note that I remove unattended upgrades because GNOME Software will be handling auto updates
-sudo apt purge gnome-calculator *evince* *seahorse* *gedit* *yelp* gnome-screenshot gnome-power-manager eog gnome-logs gnome-characters gnome-shell-extension-desktop-icons gnome-font-viewer *file-roller* cups* printer-driver* network-manager-pptp* network-manager-openvpn* *nfs* apport* telnet *spice* tcpdump firefox* gnome-disk* gnome-initial-setup ubuntu-report popularity-contest whoopsie speech-dispatcher modemmanager avahi* gnome-shell-extension-ubuntu-dock mobile-broadband-provider-info ImageMagick* adcli libreoffice* ntfs* xfs* tracker* thermald sane* simple-scan *hangul* unattended-upgrades -y
+sudo apt purge gnome-calculator *evince* *seahorse* *gedit* *yelp* gnome-screenshot gnome-power-manager eog gnome-logs gnome-characters gnome-shell-extension-desktop-icons gnome-font-viewer *file-roller* cups* printer-driver* network-manager-pptp* network-manager-openvpn* *nfs* apport* telnet *spice* tcpdump firefox* gnome-disk* gnome-initial-setup ubuntu-report popularity-contest whoopsie speech-dispatcher modemmanager avahi* gnome-shell-extension-ubuntu-dock mobile-broadband-provider-info ImageMagick* adcli libreoffice* ntfs* xfs* tracker* thermald sane* simple-scan *hangul* unattended-upgrades bluez* network-manager-config-connectivity-ubuntu -y
 sudo apt autoremove -y
 sudo snap remove snap-store
 
@@ -75,7 +83,7 @@ sudo apt upgrade -y
 sudo apt -y install neofetch gnome-software flatpak gnome-software-plugin-flatpak firejail apparmor-profiles apparmor-profiles-extra apparmor-utils gnome-tweak-tool git-core gnome-session-wayland libpam-pwquality python3-pip curl arc-theme nautilus
 
 #Put all AppArmor profiles into enforcing mode
-sudo aa-enforce /etc/apparmor. d/*
+sudo aa-enforce /etc/apparmor.d/*
 
 #Install Yubico Stuff
 sudo apt -y install libpam-u2f
