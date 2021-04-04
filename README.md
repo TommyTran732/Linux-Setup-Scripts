@@ -3,10 +3,10 @@ My setup scripts for my workstations. You should edit the scripts to your liking
 Please run the scripts as your actual user and not root. Provide sudo password when it asks you to. Flatpak packages and themes/icons are only installed for your user and not system wide. <br />
 
 
-# Notable Features (Fedora Workstation 33)
+# Fedora Workstation 33
 
 1. Debloat Fedora <br />
-It removes some ~800 useless packages from the default installation. A lot of these have Flatpak alternatives and you should be using them for app confinement. <br />
+The script removes some ~800 useless packages from the default installation. A lot of these have Flatpak alternatives and you should be using them for app confinement. <br />
 
 2. Setup basic privacy and security (Setting umask to 077, closing open ports on firewalld, randomizing mac address, disabling ptrace, install openSnitch as an outbound firewall, ...) <br />
 3. Setup a BTRFS layout compatible with Timeshift. Credits to https://mutschler.eu/linux/install-guides/fedora-btrfs/ <br />
@@ -19,3 +19,23 @@ It removes some ~800 useless packages from the default installation. A lot of th
 ![image](https://user-images.githubusercontent.com/57488583/111019751-29378b00-838f-11eb-8f8f-1f5d374c377e.png) <br />
 <br />
 ![image](https://user-images.githubusercontent.com/57488583/111032096-af2bf400-83d8-11eb-9bcb-da0e3ec278d6.png) <br />
+
+# Ubuntu 20.04 LTS Desktop
+
+Similar to the Fedora script, this script <br >
+
+1. Debloat Ubuntu <br />
+The script removes some ~150 useless packages from the minimal installation.  
+
+2. Setup basic privacy and security (Setting umask to 077, enabling ufw, randomizing mac address, disabling ptrace, install openSnitch as an outbound firewall, ...) <br />
+
+3. Install and set AppArmor profiles to enforcing mode
+
+4. Replace the Snap Store with GNOME Software + Snap and Flatpak plugins
+
+5. Quality of life stuff (Installing some packages that I use, enabling autotrim, setting up a nice GNOME, GTK, and icon theme, ...) <br />
+
+I would recommend that you follow this guide and setup Encrypted ZFS instead of BTRFS with Timeshift on Ubuntu: https://linsomniac.gitlab.io/post/2020-04-09-ubuntu-2004-encrypted-zfs/
+
+![image](https://user-images.githubusercontent.com/57488583/113504635-e0f03080-9528-11eb-8ce4-faeda3520e8c.png)
+
