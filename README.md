@@ -1,5 +1,5 @@
 # Linux Setup Scripts
-My setup scripts for my workstations. You should edit the scripts to your liking before running it. <br />
+My setup scripts for my workstations. You should edit the scripts to your liking before running it. I remove all of the stuff I don't use like Bluetooth (bluez), Printing system (cups) and libvirt (Since I can use GNOME Boxes Flatpak). <br />
 Please run the scripts as your actual user and not root. Provide sudo password when it asks you to. Flatpak packages and themes/icons are only installed for your user and not system wide. <br />
 
 
