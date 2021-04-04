@@ -25,6 +25,10 @@ sed -ie '/^DIR_MODE=/ s/=[0-9]*\+/=0700/' /etc/adduser.conf
 sed -ie '/^UMASK\s\+/ s/022/077/' /etc/login.defs
 echo "umask 077" | sudo tee --append /etc/profile
 
+#Disabling shell access for new users
+sed -ie '/^SHELL=/ s/=.*\+/=\/usr\/sbin\/nologin/' /etc/default/useradd
+sed -ie '/^DSHELL=/ s/=.*\+/=\/usr\/sbin\/nologin/' /etc/adduser.conf
+
 #Make home directory private
 chmod -R o-rwx /home/${USER}
 
