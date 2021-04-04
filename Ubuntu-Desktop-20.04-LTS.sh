@@ -103,6 +103,7 @@ wget https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/python3-o
 sudo dpkg -i opensnitch*.deb python3-opensnitch-ui*.deb
 sudo apt -f install -y
 rm -rf *opensnitch*
+sudo chown -R $USER:$USER /home/${USER}/.config/autostart
 
 #Setup VSCodium
 wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/vscodium.gpg
