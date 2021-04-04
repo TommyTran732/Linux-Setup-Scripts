@@ -67,7 +67,7 @@ sudo snap remove snap-store
 sudo add-apt-repository ppa:alexlarsson/flatpak -y
 sudo apt update
 sudo apt upgrade -y
-sudo apt -y install neofetch gnome-software flatpak gnome-software-plugin-flatpak firejail apparmor-profiles apparmor-profiles-extra apparmor-utils gnome-tweak-tool git-core gnome-session-wayland libpam-pwquality python3-pip
+sudo apt -y install neofetch gnome-software flatpak gnome-software-plugin-flatpak firejail apparmor-profiles apparmor-profiles-extra apparmor-utils gnome-tweak-tool git-core gnome-session-wayland libpam-pwquality python3-pip curl arc-theme nautilus
 
 #Put all AppArmor profiles into enforcing mode
 sudo aa-enforce /etc/apparmor. d/*
@@ -87,8 +87,8 @@ sudo apt install ivpn-ui -y
 #Install OpenSnitch
 wget https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/opensnitch_1.3.6-1_amd64.deb
 wget https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/python3-opensnitch-ui_1.3.6-1_all.deb
-sudp dpkg -i opensnitch*.deb python3-opensnitch-ui*.deb
-sudo apt -f install
+sudo dpkg -i opensnitch*.deb python3-opensnitch-ui*.deb
+sudo apt -f install -y
 rm -rf *opensnitch*
 
 #Setup VSCodium
@@ -116,6 +116,11 @@ sudo systemctl enable fstrim.timer
 #Enable Firejail
 sudo firecfg
 
+#Download GNOME shell theme
+git clone https://github.com/i-mint/midnight.git
+mkdir /home/${USER}/.themes
+ln -s /home/${USER}/midnight/Midnight-* /home/${USER}/.themes/
+
 #Download and set icon theme
 git clone https://github.com/NicoHood/arc-icon-theme.git
 mkdir /home/${USER}/.icons
@@ -136,14 +141,15 @@ find /home/${USER}/Mojave-CT -name '*[Ee]piphany*' -exec rm {} \;
 gsettings set org.gnome.desktop.interface icon-theme "Arc"
 
 #Set GTK theme
-gsettings set org.gnome.desktop.interface gtk-theme "Yaru-dark"
+gsettings set org.gnome.desktop.interface gtk-theme "Arc-dark"
 flatpak upgrade -y
 
 #Set Black GDM background
 mkdir -p /home/${USER}/Pictures/Wallpapers/
 wget https://wallpaperaccess.com/full/512679.jpg -O /home/${USER}/Pictures/Wallpapers/Black.png
 wget github.com/thiggy01/change-gdm-background/raw/master/change-gdm-background
-sudo chmod u+x /home/${USER}/change-gdm-background 
+sudo chmod u+x /home/${USER}/change-gdm-background
+output "Answer no to this or the script will get interupted"
 sudo /home/${USER}/change-gdm-background /home/${USER}/Pictures/Wallpapers/Black.png
 
 #Set Ubuntu 20.04 LTS Wallpaper
