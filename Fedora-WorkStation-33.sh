@@ -64,12 +64,12 @@ echo -e "${HIGHLIGHT}Configuring grub...${NC}"
 output "Please enter a grub sysadmin passphrase..."
 getPassphrase
 
-echo "set superusers=\"sysadmin\"" >> /etc/grub.d/40_custom
-echo -e "$PASS\n$PASS" | grub-mkpasswd-pbkdf2 | tail -n1 | awk -F" " '{print "password_pbkdf2 sysadmin " $7}' >> /etc/grub.d/40_custom
-sed -ie '/echo "menuentry / s/echo "menuentry /echo "menuentry --unrestricted /' /etc/grub.d/10_linux
-sed -ie '/^GRUB_CMDLINE_LINUX_DEFAULT=/ s/"$/ module.sig_enforce=yes"/' /etc/default/grub
-echo "GRUB_SAVEDEFAULT=false" >> /etc/default/grub
-grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+echo "set superusers=\"sysadmin\"" | sudo tee --append /etc/grub.d/40_custom
+echo -e "$PASS\n$PASS" | grub-mkpasswd-pbkdf2 | tail -n1 | awk -F" " '{print "password_pbkdf2 sysadmin " $7}' | sudo tee --append /etc/grub.d/40_custom
+sudo sed -ie '/echo "menuentry / s/echo "menuentry /echo "menuentry --unrestricted /' /etc/grub.d/10_linux
+sudo sed -ie '/^GRUB_CMDLINE_LINUX_DEFAULT=/ s/"$/ module.sig_enforce=yes"/' /etc/default/grub
+echo "GRUB_SAVEDEFAULT=false" | sudo tee --append /etc/default/grub
+sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
 
 #Setup Firewalld
 sudo firewall-cmd --permanent --remove-port=1025-65535/udp
