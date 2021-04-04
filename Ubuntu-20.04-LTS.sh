@@ -22,6 +22,9 @@ umask 077
 sudo sed -i 's/UMASK		022/UMASK		077/g' /etc/login.defs
 echo "umask 077" | sudo tee --append /etc/profile
 
+#Make home directory private
+chmod -R o-rwx /home/${USER}
+
 #Disable ptrace
 echo "kernel.yama.ptrace_scope = 3" | sudo tee /etc/sysctl.d/10-default-yama-scope.conf
 sudo sysctl --load=/etc/sysctl.d/10-default-yama-scope.conf
