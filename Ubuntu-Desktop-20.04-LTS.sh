@@ -58,7 +58,7 @@ sudo apt -y install neofetch gnome-software flatpak gnome-software-plugin-flatpa
 sudo aa-enforce /etc/apparmor. d/*
 
 #Install Yubico Stuff
-sudo apt -y install yubikey-manager pam-u2f pamu2fcfg
+sudo apt -y install libpam-u2f
 mkdir -p /home/${USER}/.config/Yubico
 
 #Install IVPN
