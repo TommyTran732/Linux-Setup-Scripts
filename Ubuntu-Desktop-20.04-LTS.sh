@@ -54,6 +54,19 @@ sudo sysctl --load=/etc/sysctl.d/10-default-yama-scope.conf
 #Blacklist Firewire SBP2
 echo "blacklist firewire-sbp2" | sudo tee /etc/modprobe.d/blacklist.conf
 
+#GRUB hardening (Thanks to https://www.ncsc.gov.uk/collection/end-user-device-security/platform-specific-guidance/ubuntu-18-04-lts)
+echo -e "${HIGHLIGHT}Configuring grub...${NC}"
+echo "Please enter a grub sysadmin passphrase..."
+getPassphrase
+
+echo "set superusers=\"sysadmin\"" >> /etc/grub.d/40_custom
+echo -e "$PASS\n$PASS" | grub-mkpasswd-pbkdf2 | tail -n1 | awk -F" " '{print "password_pbkdf2 sysadmin " $7}' >> /etc/grub.d/40_custom
+sed -ie '/echo "menuentry / s/echo "menuentry /echo "menuentry --unrestricted /' /etc/grub.d/10_linux
+sed -ie '/^GRUB_CMDLINE_LINUX_DEFAULT=/ s/"$/ module.sig_enforce=yes"/' /etc/default/grub
+echo "GRUB_SAVEDEFAULT=false" >> /etc/default/grub
+update-grub
+
+
 #Enable UFW
 sudo ufw enable
 
