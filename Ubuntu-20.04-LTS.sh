@@ -23,8 +23,7 @@ sudo sed -i 's/UMASK		022/UMASK		077/g' /etc/login.defs
 echo "umask 077" | sudo tee --append /etc/profile
 
 #Disable ptrace
-sudo cp /usr/lib/sysctl.d/10-default-yama-scope.conf /etc/sysctl.d/
-sudo sed -i 's/kernel.yama.ptrace_scope = 0/kernel.yama.ptrace_scope = 3/g' /etc/sysctl.d/10-default-yama-scope.conf
+echo "kernel.yama.ptrace_scope = 3" | sudo tee /etc/sysctl.d/10-default-yama-scope.conf
 sudo sysctl --load=/etc/sysctl.d/10-default-yama-scope.conf
 
 #Enable UFW
