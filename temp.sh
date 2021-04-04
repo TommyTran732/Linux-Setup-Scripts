@@ -57,6 +57,7 @@ mkdir -p /home/${USER}/.config/Yubico
 #Install IVPN
 curl -fsSL https://repo.ivpn.net/stable/ubuntu/generic.gpg | sudo apt-key add - 
 curl -fsSL https://repo.ivpn.net/stable/ubuntu/generic.list | sudo tee /etc/apt/sources.list.d/ivpn.list 
+sudo chmod 644 /etc/apt/sources.list.d/ivpn.list
 sudo apt update
 sudo apt upgrade -y
 sudo apt install ivpn-ui -y
@@ -67,9 +68,11 @@ sudo dnf install -y https://github.com/evilsocket/opensnitch/releases/download/v
 sudo chmod -R $USER:USER /home/${USER}/.config/autostart
 
 #Setup VSCodium
-sudo rpm --import https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg 
-printf "[gitlab.com_paulcarroty_vscodium_repo]\nname=gitlab.com_paulcarroty_vscodium_repo\nbaseurl=https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/rpms/\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg" |sudo tee -a /etc/yum.repos.d/vscodium.repo 
-sudo dnf install -y codium
+wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/vscodium.gpg 
+sudo chmod 644 /etc/apt/trusted.gpg.d/vscodium.gpg
+echo 'deb https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/debs/ vscodium main' | sudo tee --append /etc/apt/sources.list.d/vscodium.list 
+sudo chmod 644 /etc/apt/sources.list.d/vscodium.list
+sudo apt install -y codium
 sudo cp /etc/firejail/vscodium.profile /etc/firejail/codium.profile
 sudo chmod 644 /etc/firejail/codium.profile
 
