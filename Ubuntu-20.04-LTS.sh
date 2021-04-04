@@ -20,7 +20,7 @@ cd /home/${USER} || exit
 #Setting umask to 077
 umask 077
 sudo sed -i 's/UMASK		022/UMASK		077/g' /etc/login.defs
-sudo sed -i 's/#umask 022/umask 077/g' /etc/profile
+echo "umask 077" | sudo tee --append /etc/profile
 
 #Disable ptrace
 sudo cp /usr/lib/sysctl.d/10-default-yama-scope.conf /etc/sysctl.d/
@@ -40,7 +40,7 @@ sudo fwupdmgr get-updates
 sudo fwupdmgr update -y
 
 #Remove unneeded packages
-sudo apt purge gnome-calculator *evince* *seahorse* *gedit* *yelp* gnome-screenshot gnome-power-manager eog gnome-logs gnome-characters gnome-shell-extension-desktop-icons gnome-font-viewer *file-roller* cups* printer-driver* network-manager-pptp* network-manager-openvpn* *nfs* aaport* telnet *spice* tcpdump firefox* gnome-disk* gnome-initial-setup ubuntu-report popularity-contest whoopsie speech-dispatcher modemmanager avahi* gnome-shell-extension-ubuntu-dock *mobile* -y
+sudo apt purge gnome-calculator *evince* *seahorse* *gedit* *yelp* gnome-screenshot gnome-power-manager eog gnome-logs gnome-characters gnome-shell-extension-desktop-icons gnome-font-viewer *file-roller* cups* printer-driver* network-manager-pptp* network-manager-openvpn* *nfs* aaport* telnet *spice* tcpdump firefox* gnome-disk* gnome-initial-setup ubuntu-report popularity-contest whoopsie speech-dispatcher modemmanager avahi* gnome-shell-extension-ubuntu-dock mobile-broadband-provider-info -y
 sudo apt autoremove -y
 sudo snap remove snap-store
 
@@ -50,7 +50,7 @@ sudo apt update
 sudo apt upgrade -y
 sudo apt -y install neofetch gnome-software flatpak gnome-software-plugin-flatpak firejail apparmor-profiles apparmor-profiles-extra apparmor-utils gnome-tweak-tool arc-theme
 
-#Install Yubico StuffNetworkManager-config-connectivity-fedora
+#Install Yubico Stuff
 sudo apt -y install yubikey-manager pam-u2f pamu2fcfg
 mkdir -p /home/${USER}/.config/Yubico
 
@@ -63,8 +63,8 @@ sudo apt upgrade -y
 sudo apt install ivpn-ui -y
 
 #Install OpenSnitch
-sudo dnf install -y https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/opensnitch-1.3.6-1.x86_64.rpm
-sudo dnf install -y https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/opensnitch-ui-1.3.6-1.f29.noarch.rpm
+sudo apt install -y https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/opensnitch_1.3.6-1_amd64.deb
+sudo apt install -y https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/python3-opensnitch-ui_1.3.6-1_all.deb
 sudo chmod -R $USER:USER /home/${USER}/.config/autostart
 
 #Setup VSCodium
@@ -112,7 +112,7 @@ find /home/${USER}/Mojave-CT -name '*[Ee]piphany*' -exec rm {} \;
 gsettings set org.gnome.desktop.interface icon-theme "Arc"
 
 #Set GTK theme
-gsettings set org.gnome.desktop.interface gtk-theme "Arc-Dark"
+gsettings set org.gnome.desktop.interface gtk-theme "Yaru-Dark"
 flatpak upgrade -y
 
 #Set Ubuntu 20.04 LTS Wallpaper
@@ -120,10 +120,6 @@ gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgr
 
 #Enable Titlebar buttons
 gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
-
-#Quick Fix for Freon https://github.com/UshakovVasilii/gnome-shell-extension-freon/issues/163
-sudo sed -i 's#`${nvme}#`/usr/bin/sudo ${nvme}#g' /usr/share/gnome-shell/extensions/freon@UshakovVasilii_Github.yahoo.com/nvmecliUtil.js
-echo ''"${USER}"'   ALL = NOPASSWD: /usr/sbin/nvme list -o json, /usr/sbin/nvme smart-log /dev/nvme* -o json' | sudo EDITOR='tee -a' visudo >/dev/null 2>&1
 
 #Enable GNOME shell extensions
 gsettings set org.gnome.shell disable-user-extensions false
