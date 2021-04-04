@@ -185,6 +185,10 @@ pip3 install ./GetExtensions --user
 #Reenable Wayland... They are working to support it, and if you aren't gaming you shouldn't stay on x11 anyways
 sudo sed -i 's^DRIVER=="nvidia", RUN+="/usr/lib/gdm3/gdm-disable-wayland"^#DRIVER=="nvidia", RUN+="/usr/lib/gdm3/gdm-disable-wayland"^g' /usr/lib/udev/rules.d/61-gdm.rules
 
+#Removing duplicated sesssions
+sudo rm -rf /usr/share/wayland-sessions/gnome.desktop
+sudo rm -rf /usr/share/xsessions/gnome*.desktop
+
 #Randomize MAC address
 sudo bash -c 'cat > /etc/NetworkManager/conf.d/00-macrandomize.conf' <<-'EOF'
 [device]
