@@ -20,7 +20,7 @@ The script removes some ~800 useless packages from the default installation. A l
 <br />
 ![image](https://user-images.githubusercontent.com/57488583/111032096-af2bf400-83d8-11eb-9bcb-da0e3ec278d6.png) <br />
 
-# Ubuntu 20.04 LTS Desktop
+# Ubuntu Desktop 20.04 LTS 
 
 Similar to the Fedora script, this script <br >
 
