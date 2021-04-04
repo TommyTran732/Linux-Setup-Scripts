@@ -41,9 +41,11 @@ sudo fwupdmgr update -y
 #Remove unneeded packages
 sudo apt purge gnome-calculator *evince* *seahorse* *gedit* *yelp* gnome-screenshot gnome-power-manager eog gnome-logs gnome-characters gnome-shell-extension-desktop-icons -y
 sudo apt autoremove -y
+sudo snap remove snap-store
 
 #Install packages that I use
-sudo dnf -y install neofetch git-core flat-remix-gtk3-theme libappindicator-gtk3 gnome-shell-extension-appindicator gnome-shell-extension-system-monitor-applet gnome-shell-extension-dash-to-dock gnome-shell-extension-freon gnome-shell-extension-openweather gnome-shell-extension-user-theme gnome-tweak-tool f29-backgrounds-gnome gnome-system-monitor nautilus gvfs-mtp gvfs-goa git-core firejail setroubleshoot gnome-software PackageKit PackageKit-command-not-found fedora-workstation-repositories openssl android-tools bleachbit tuned-gtk
+sudo dnf -y install neofetch git-core flat-remix-gtk3-theme libappindicator-gtk3 gnome-shell-extension-appindicator gnome-shell-extension-system-monitor-applet gnome-shell-extension-dash-to-dock gnome-shell-extension-freon gnome-shell-extension-openweather gnome-shell-extension-user-theme gnome-tweak-tool f29-backgrounds-gnome gnome-system-monitor nautilus gvfs-mtp gvfs-goa git-core fireja tuned-gtk
+sudo apt -y install neofetch gnome-software
 
 #Install Yubico StuffNetworkManager-config-connectivity-fedora
 sudo dnf -y install yubikey-manager pam-u2f pamu2fcfg
