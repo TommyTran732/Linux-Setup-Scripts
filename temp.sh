@@ -20,6 +20,7 @@ cd /home/${USER} || exit
 #Setting umask to 077
 umask 077
 sudo sed -i 's/UMASK		022/UMASK		077/g' /etc/login.defs
+sudo sed -i 's/#umask 022/umask 077/g' /etc/profile
 
 #Disable ptrace
 sudo cp /usr/lib/sysctl.d/10-default-yama-scope.conf /etc/sysctl.d/
@@ -48,7 +49,7 @@ sudo dnf -y install neofetch git-core flat-remix-gtk3-theme libappindicator-gtk3
 sudo add-apt-repository ppa:alexlarsson/flatpak -y
 sudo apt update
 sudo apt upgrade -y
-sudo apt -y install neofetch gnome-software flatpak gnome-software-plugin-flatpak firejail apparmor-profiles apparmor-profiles-extra apparmor-utils gnome-tweak-tool 
+sudo apt -y install neofetch gnome-software flatpak gnome-software-plugin-flatpak firejail apparmor-profiles apparmor-profiles-extra apparmor-utils gnome-tweak-tool arc-theme
 
 #Install Yubico StuffNetworkManager-config-connectivity-fedora
 sudo apt -y install yubikey-manager pam-u2f pamu2fcfg
