@@ -49,6 +49,9 @@ sudo apt update
 sudo apt upgrade -y
 sudo apt -y install neofetch gnome-software flatpak gnome-software-plugin-flatpak firejail apparmor-profiles apparmor-profiles-extra apparmor-utils gnome-tweak-tool git-core 
 
+#Put all AppArmor profiles into enforcing mode
+sudo aa-enforce /etc/apparmor. d/*
+
 #Install Yubico Stuff
 sudo apt -y install yubikey-manager pam-u2f pamu2fcfg
 mkdir -p /home/${USER}/.config/Yubico
