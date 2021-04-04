@@ -127,49 +127,6 @@ sudo set-gdm-wallpaper /home/${USER}/Pictures/Wallpapers/Black.png
 #Enable Titlebar buttons
 gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
 
-#Quick Fixes for Flatpak Steam if I install it on the system
-ln -s /home/${USER}/.var/app/com.valvesoftware.Steam/.local/share/Steam /home/${USER}/.local/share/Steam
-
-sudo bash -c 'cat > /etc/sysctl.d/99-steam.conf' <<-'EOF'
-dev.i915.perf_stream_paranoid=0
-EOF
-
-sudo sysctl --load=/etc/sysctl.d/99-steam.conf
-
-sudo bash -c 'cat > /etc/pulse/daemon.conf' <<-'EOF'
-# $ sudo nano /etc/pulse/daemon.conf
-
-# Start as daemon 
-daemonize = yes
-allow-module-loading = yes
-
-# Realtime optimization
-high-priority = yes
-realtime-scheduling = yes
-realtime-priority = 9
-
-# Scales the device-volume with the volume of the "loudest" application
-flat-volumes = no
-
-# Script file management
-load-default-script-file = yes
-default-script-file = /etc/pulse/default.pa
-
-# Sample rate
-resample-method = speex-float-9
-default-sample-format = s24-32le
-default-sample-rate = 192000
-alternate-sample-rate = 176000
-exit-idle-time = -1
-
-# Optimized fragements for steam
-default-fragments = 5
-default-fragment-size-msec = 2
-
-# Volume
-deferred-volume-safety-margin-usec = 1
-EOF
-
 #Quick Fix for Freon https://github.com/UshakovVasilii/gnome-shell-extension-freon/issues/163
 sudo sed -i 's#`${nvme}#`/usr/bin/sudo ${nvme}#g' /usr/share/gnome-shell/extensions/freon@UshakovVasilii_Github.yahoo.com/nvmecliUtil.js
 echo ''"${USER}"'   ALL = NOPASSWD: /usr/sbin/nvme list -o json, /usr/sbin/nvme smart-log /dev/nvme* -o json' | sudo EDITOR='tee -a' visudo >/dev/null 2>&1
@@ -195,12 +152,5 @@ connection.stable-id=${CONNECTION}/${BOOT}
 EOF
 
 sudo systemctl restart NetworkManager
-
-#Last step, import key to MOK
-output "Just to avoid confusion, we are importing Akmods's key"
-sudo mokutil --import /etc/pki/akmods/certs/public_key.der
-#output "Now we import DKMS's key"
-#sudo mokutil --import /root/mok.der
-output "All done! You have to reboot now."
 
 
