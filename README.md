@@ -35,9 +35,11 @@ The script removes some ~150 useless packages from the minimal installation.
 
 5. Quality of life stuff (Installing some packages that I use, enabling autotrim, setting up a nice GNOME, GTK, and icon theme, ...) <br />
 
-I would recommend that you follow this guide and setup Encrypted ZFS instead of BTRFS with Timeshift on Ubuntu: https://linsomniac.gitlab.io/post/2020-04-09-ubuntu-2004-encrypted-zfs/
+6. Remove telemetry (apports, popularity contest, whoopsie) - Keep in mind Snapd still phones home with your unique ID and installed snap packages list. Remove snapd if you don't need it. <br />
 
-6. Remove telemetry (apports, popularity contest, whoopsie) - Keep in mind Snapd still phones home with your unique ID and installed snap packages list. Remove snapd if you don't need it.
+7. Signing Ashmem kernel modules (for whatever reason, it is not signed by default)
+
+I would recommend that you follow this guide and setup Encrypted ZFS instead of BTRFS with Timeshift on Ubuntu: https://linsomniac.gitlab.io/post/2020-04-09-ubuntu-2004-encrypted-zfs/
 
 ![image](https://user-images.githubusercontent.com/57488583/113504635-e0f03080-9528-11eb-8ce4-faeda3520e8c.png)
 
