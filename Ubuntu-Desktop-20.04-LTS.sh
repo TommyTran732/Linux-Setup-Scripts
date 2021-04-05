@@ -81,7 +81,7 @@ sudo snap remove snap-store
 sudo add-apt-repository ppa:alexlarsson/flatpak -y
 sudo apt update
 sudo apt upgrade -y
-sudo apt -y install neofetch gnome-software flatpak gnome-software-plugin-flatpak firejail apparmor-profiles apparmor-profiles-extra apparmor-utils gnome-tweak-tool git-core gnome-session-wayland libpam-pwquality python3-pip curl arc-theme nautilus lm-sensors nvme-cli
+sudo apt install neofetch gnome-software flatpak gnome-software-plugin-flatpak firejail apparmor-profiles apparmor-profiles-extra apparmor-utils gnome-tweak-tool git-core libpam-pwquality python3-pip curl nautilus lm-sensors nvme-cli -y
 
 #Put all AppArmor profiles into enforcing mode
 sudo aa-enforce /etc/apparmor.d/*
@@ -157,7 +157,10 @@ find /home/${USER}/Mojave-CT -name '*[Ee]piphany*' -exec rm {} \;
 gsettings set org.gnome.desktop.interface icon-theme "Arc"
 
 #Set GTK theme
-gsettings set org.gnome.desktop.interface gtk-theme "Arc-dark"
+sudo add-apt-repository ppa:daniruiz/flat-remix -y
+sudo apt update
+sudo apt install flat-remix-gtk -y
+gsettings set org.gnome.desktop.interface gtk-theme "Flat-Remix-GTK-Blue-Dark"
 flatpak upgrade -y
 
 #Set Black GDM background
@@ -187,9 +190,8 @@ pip3 install ./GetExtensions --user
 #Reenable Wayland... They are working to support it, and if you aren't gaming you shouldn't stay on x11 anyways
 sudo sed -i 's^DRIVER=="nvidia", RUN+="/usr/lib/gdm3/gdm-disable-wayland"^#DRIVER=="nvidia", RUN+="/usr/lib/gdm3/gdm-disable-wayland"^g' /usr/lib/udev/rules.d/61-gdm.rules
 
-#Removing duplicated sesssions
-sudo rm -rf /usr/share/wayland-sessions/gnome.desktop
-sudo rm -rf /usr/share/xsessions/gnome*.desktop
+#Signing ashmem kernel module
+kmodsign sha512 /var/lib/shim-signed/mok/MOK.priv /var/lib/shim-signed/mok/MOK.der /lib/modules/`uname -r`/kernel/drivers/staging/android/ashmem_linux.ko
 
 #Randomize MAC address
 sudo bash -c 'cat > /etc/NetworkManager/conf.d/00-macrandomize.conf' <<-'EOF'
