@@ -106,24 +106,13 @@ sudo apt -f install -y
 rm -rf *opensnitch*
 sudo chown -R $USER:$USER /home/${USER}/.config/autostart
 
-#Setup VSCodium
-wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/vscodium.gpg
-sudo chmod 644 /etc/apt/trusted.gpg.d/vscodium.gpg
-echo 'deb https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/debs/ vscodium main' | sudo tee --append /etc/apt/sources.list.d/vscodium.list
-sudo chmod 644 /etc/apt/sources.list.d/vscodium.list
-sudo apt update
-sudo apt upgrade -y
-sudo apt install -y codium
-sudo cp /etc/firejail/vscodium.profile /etc/firejail/codium.profile
-sudo chmod 644 /etc/firejail/codium.profile
-
 #Setting up Flatpak
 flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak remote-add --user flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
 flatpak remove --unused
 
 #Install default applications
-flatpak install flathub com.github.tchx84.Flatseal org.mozilla.firefox org.videolan.VLC org.gnome.eog org.gnome.Calendar org.gnome.Contacts org.gnome.FileRoller com.yubico.yubioath -y
+flatpak install flathub com.github.tchx84.Flatseal org.mozilla.firefox org.videolan.VLC org.gnome.eog org.gnome.Calendar org.gnome.Contacts org.gnome.FileRoller com.yubico.yubioath com.vscodium.codium -y
 
 #Enable auto TRIM
 sudo systemctl enable fstrim.timer
