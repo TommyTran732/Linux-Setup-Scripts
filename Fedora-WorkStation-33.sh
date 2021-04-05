@@ -121,6 +121,7 @@ find /home/${USER}/Mojave-CT -name '*[Ss]team*' -exec rm {} \;
 find /home/${USER}/Mojave-CT -name '*[Tt]hunderbird*' -exec rm {} \;
 find /home/${USER}/Mojave-CT -name '*[Mm]inecraft*' -exec rm {} \;
 find /home/${USER}/Mojave-CT -name '*[Ee]piphany*' -exec rm {} \;
+find /home/${USER}/Mojave-CT -name '*[Rr]iot*' -exec rm {} \;
 gsettings set org.gnome.desktop.interface icon-theme "Arc"
 
 #Set GTK theme
