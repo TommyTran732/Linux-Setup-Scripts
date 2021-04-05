@@ -97,7 +97,6 @@ sudo chmod 644 /etc/apt/sources.list.d/ivpn.list
 sudo apt update
 sudo apt upgrade -y
 sudo apt install ivpn-ui -y
-sudo pip3 install obfsproxy
 
 #Install OpenSnitch
 wget https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/opensnitch_1.3.6-1_amd64.deb
