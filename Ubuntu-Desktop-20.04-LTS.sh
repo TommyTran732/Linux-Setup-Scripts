@@ -73,7 +73,7 @@ sudo fwupdmgr update -y
 
 #Remove unneeded packages
 #Note that I remove unattended upgrades because GNOME Software will be handling auto updates
-sudo apt purge gnome-calculator *evince* *seahorse* *gedit* *yelp* gnome-screenshot gnome-power-manager eog gnome-logs gnome-characters gnome-shell-extension-desktop-icons gnome-font-viewer *file-roller* network-manager-pptp* network-manager-openvpn* *nfs* apport* telnet *spice* tcpdump firefox* gnome-disk* gnome-initial-setup ubuntu-report popularity-contest whoopsie speech-dispatcher modemmanager avahi* gnome-shell-extension-ubuntu-dock mobile-broadband-provider-info ImageMagick* adcli libreoffice* ntfs* xfs* tracker* thermald sane* simple-scan *hangul* unattended-upgrades ibus-tables -y
+sudo apt purge gnome-calculator *evince* *seahorse* *gedit* *yelp* gnome-screenshot gnome-power-manager eog gnome-logs gnome-characters gnome-shell-extension-desktop-icons gnome-font-viewer *file-roller* network-manager-pptp* network-manager-openvpn* *nfs* apport* telnet *spice* tcpdump firefox* gnome-disk* gnome-initial-setup ubuntu-report popularity-contest whoopsie speech-dispatcher modemmanager avahi* gnome-shell-extension-ubuntu-dock mobile-broadband-provider-info ImageMagick* adcli libreoffice* ntfs* xfs* tracker* thermald sane* simple-scan *hangul* unattended-upgrades ibus-table -y
 sudo apt autoremove -y
 sudo snap remove snap-store
 
@@ -190,7 +190,7 @@ pip3 install ./GetExtensions --user
 sudo sed -i 's^DRIVER=="nvidia", RUN+="/usr/lib/gdm3/gdm-disable-wayland"^#DRIVER=="nvidia", RUN+="/usr/lib/gdm3/gdm-disable-wayland"^g' /usr/lib/udev/rules.d/61-gdm.rules
 
 #Signing ashmem kernel module
-kmodsign sha512 /var/lib/shim-signed/mok/MOK.priv /var/lib/shim-signed/mok/MOK.der /lib/modules/`uname -r`/kernel/drivers/staging/android/ashmem_linux.ko
+sudo kmodsign sha512 /var/lib/shim-signed/mok/MOK.priv /var/lib/shim-signed/mok/MOK.der /lib/modules/`uname -r`/kernel/drivers/staging/android/ashmem_linux.ko
 
 #Randomize MAC address
 sudo bash -c 'cat > /etc/NetworkManager/conf.d/00-macrandomize.conf' <<-'EOF'
