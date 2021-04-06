@@ -115,7 +115,6 @@ flatpak remove --unused
 
 #Install default applications
 flatpak install flathub com.github.tchx84.Flatseal org.mozilla.firefox org.videolan.VLC org.gnome.eog org.gnome.Calendar org.gnome.Contacts org.gnome.FileRoller com.vscodium.codium -y
-flatpak install gnome-nightly org.gnome.NautilusDevel
 
 #Enable auto TRIM
 sudo systemctl enable fstrim.timer
