@@ -186,6 +186,9 @@ gsettings set org.gnome.shell disable-user-extensions false
 #Enable tap to click
 gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
 
+#Enable touchpad while typing
+gsettings set org.gnome.desktop.peripherals.touchpad disable-while-typing false
+
 #Install and sign NVIDIA proprietary drivers
 sudo dnf copr enable egeretto/kmodtool-secureboot -y
 sudo dnf copr enable egeretto/akmods-secureboot -y
