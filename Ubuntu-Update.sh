@@ -16,6 +16,7 @@ sudo apt purge gnome-calculator *evince* *seahorse* *gedit* *yelp* gnome-screens
 
 #Install gnome extensions (most extensions are available in the repos now)
 sudo apt install gnome-shell-extensions gnome-shell-extension-dash-to-dock gnome-shell-extension-freon gnome-shell-extension-system-monitor gnome-shell-extension-weather
+sudo rm -rf /usr/share/xsessions/gnome-classic.desktop
 
 #Remove GetExtensions
 pip3 uninstall GetExtensions
