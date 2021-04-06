@@ -21,8 +21,6 @@ sudo rm -rf /usr/share/xsessions/gnome-classic.desktop
 #Remove GetExtensions
 pip3 uninstall GetExtensions
 rm -rf /home/${USER}/.local/lib/python*
-sudo apt purge python3-pip -y
-sudo apt autoremove -y
 
 #Reinstall OpenSnitch
 wget https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/opensnitch_1.3.6-1_amd64.deb
