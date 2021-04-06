@@ -73,7 +73,7 @@ sudo fwupdmgr update -y
 
 #Remove unneeded packages
 #Note that I remove unattended upgrades because GNOME Software will be handling auto updates
-sudo apt purge gnome-calculator *evince* *seahorse* *gedit* *yelp* gnome-screenshot gnome-power-manager eog gnome-logs gnome-characters gnome-shell-extension-desktop-icons gnome-font-viewer *file-roller* network-manager-pptp* network-manager-openvpn* *nfs* apport* telnet *spice* tcpdump firefox* gnome-disk* gnome-initial-setup ubuntu-report popularity-contest whoopsie speech-dispatcher modemmanager avahi* gnome-shell-extension-ubuntu-dock mobile-broadband-provider-info ImageMagick* adcli libreoffice* ntfs* xfs* tracker* thermald sane* simple-scan *hangul* unattended-upgrades ibus-table ubuntu-restricted-addons* gvfs* -y
+sudo apt purge gnome-calculator *evince* *seahorse* *gedit* *yelp* gnome-screenshot gnome-power-manager eog gnome-logs gnome-characters gnome-shell-extension-desktop-icons gnome-font-viewer *file-roller* network-manager-pptp* network-manager-openvpn* *nfs* apport* telnet *spice* tcpdump firefox* gnome-disk* gnome-initial-setup ubuntu-report popularity-contest whoopsie speech-dispatcher modemmanager avahi* gnome-shell-extension-ubuntu-dock mobile-broadband-provider-info ImageMagick* adcli libreoffice* ntfs* xfs* tracker* thermald sane* simple-scan *hangul* unattended-upgrades ibus-table ubuntu-restricted-addons* -y
 sudo apt autoremove -y
 sudo snap remove snap-store
 
@@ -89,6 +89,7 @@ sudo aa-enforce /etc/apparmor.d/*
 #Install Yubico Stuff
 sudo apt -y install libpam-u2f
 mkdir -p /home/${USER}/.config/Yubico
+sudo snap install yubioath-desktop
 
 #Install IVPN
 curl -fsSL https://repo.ivpn.net/stable/ubuntu/generic.gpg | sudo apt-key add -
@@ -113,7 +114,7 @@ flatpak remote-add --user gnome-nightly https://nightly.gnome.org/gnome-nightly.
 flatpak remove --unused
 
 #Install default applications
-flatpak install flathub com.github.tchx84.Flatseal org.mozilla.firefox org.videolan.VLC org.gnome.eog org.gnome.Calendar org.gnome.Contacts org.gnome.FileRoller com.yubico.yubioath com.vscodium.codium -y
+flatpak install flathub com.github.tchx84.Flatseal org.mozilla.firefox org.videolan.VLC org.gnome.eog org.gnome.Calendar org.gnome.Contacts org.gnome.FileRoller com.vscodium.codium -y
 flatpak install gnome-nightly org.gnome.NautilusDevel
 
 #Enable auto TRIM
