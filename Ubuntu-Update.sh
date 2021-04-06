@@ -13,6 +13,9 @@ sudo apt purge gnome-calculator *evince* *seahorse* *gedit* *yelp* gnome-screens
 #Fix up dependencies for OpenSnitch
 sudo apt install python3-grpcio python3-slugify -y
 
+#Put all AppArmor profiles into enforcing mode
+sudo aa-enforce /etc/apparmor.d/*
+
 #Update flatpak
 flatpak update
 flatpak remove --unused
