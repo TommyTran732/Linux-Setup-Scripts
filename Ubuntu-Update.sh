@@ -23,8 +23,13 @@ rm -rf /home/${USER}/.local/lib/python*
 sudo apt purge python3-pip -y
 sudo apt autoremove -y
 
-#Fix up dependencies for OpenSnitch
-sudo apt install python3-grpcio python3-slugify -y
+#Reinstall OpenSnitch
+wget https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/opensnitch_1.3.6-1_amd64.deb
+wget https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/python3-opensnitch-ui_1.3.6-1_all.deb
+sudo dpkg -i opensnitch*.deb python3-opensnitch-ui*.deb
+sudo apt -f install -y
+rm -rf *opensnitch*
+sudo chown -R $USER:$USER /home/${USER}/.config/autostart
 
 #Put all AppArmor profiles into enforcing mode
 sudo aa-enforce /etc/apparmor.d/*
