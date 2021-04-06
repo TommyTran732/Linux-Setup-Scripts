@@ -5,7 +5,7 @@
 sudo apt purge gnome-calculator *evince* *seahorse* *gedit* *yelp* gnome-screenshot gnome-power-manager eog gnome-logs gnome-characters gnome-shell-extension-desktop-icons gnome-font-viewer *file-roller* network-manager-pptp* network-manager-openvpn* *nfs* apport* telnet *spice* tcpdump firefox* gnome-disk* gnome-initial-setup ubuntu-report popularity-contest whoopsie speech-dispatcher modemmanager avahi* gnome-shell-extension-ubuntu-dock mobile-broadband-provider-info ImageMagick* adcli libreoffice* ntfs* xfs* tracker* thermald sane* simple-scan *hangul* unattended-upgrades ibus-table ubuntu-restricted-addons* python3-reportlab-accel* *remote-desktop* xserver-xephyr -y
 
 #Fix up dependencies for OpenSnitch
-sudo apt install python3-grpcio python3-slugify
+sudo apt install python3-grpcio python3-slugify -y
 
 #Update flatpak
 flatpak update
