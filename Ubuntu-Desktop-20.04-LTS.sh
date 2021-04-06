@@ -25,7 +25,7 @@ cd /home/${USER} || exit
 umask 077
 sudo sed -ie '/^DIR_MODE=/ s/=[0-9]*\+/=0700/' /etc/adduser.conf
 sudo sed -ie '/^UMASK\s\+/ s/022/077/' /etc/login.defs
-sudo sed -i 's/USERGROUPS_ENAB no/USERGROUPS_ENAB yes/g' /etc/login.defs
+sudo sed -i 's/USERGROUPS_ENAB yes/USERGROUPS_ENAB no/g' /etc/login.defs
 echo "umask 077" | sudo tee --append /etc/profile
 
 #Disable shell access for new users
