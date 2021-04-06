@@ -1,5 +1,8 @@
 #This is a quick script to run after any Ubuntu update after 20.04 (tested on 20.10 and 21.04)
 
+#Variables
+USER=$(whoami)
+
 #Fixing umask
 umask 077
 sudo sed -ie '/^DIR_MODE=/ s/=[0-9]*\+/=0700/' /etc/adduser.conf
@@ -10,6 +13,15 @@ sudo sed -i 's/HOME_MODE       0750/HOME_MODE       0700/g' /etc/login.defs
 #Remove unneeded packages
 #Note that I remove unattended upgrades because GNOME Software will be handling auto updates
 sudo apt purge gnome-calculator *evince* *seahorse* *gedit* *yelp* gnome-screenshot gnome-power-manager eog gnome-logs gnome-characters gnome-shell-extension-desktop-icons gnome-font-viewer *file-roller* network-manager-pptp* network-manager-openvpn* *nfs* apport* telnet *spice* tcpdump firefox* gnome-disk* gnome-initial-setup ubuntu-report popularity-contest whoopsie speech-dispatcher modemmanager avahi* gnome-shell-extension-ubuntu-dock mobile-broadband-provider-info ImageMagick* adcli libreoffice* ntfs* xfs* tracker* thermald sane* simple-scan *hangul* unattended-upgrades ibus-table python3-reportlab-accel* *remote-desktop* xserver-xephyr info -y
+
+#Install gnome extensions (most extensions are available in the repos now)
+sudo apt install gnome-shell-extensions gnome-shell-extension-dash-to-dock gnome-shell-extension-freon gnome-shell-extension-system-monitor gnome-shell-extension-weather
+
+#Remove GetExtensions
+pip3 uninstall GetExtensions
+rm -rf /home/${USER}/.local/lib/python*
+sudo apt purge python3-pip -y
+sudo apt autoremove -y
 
 #Fix up dependencies for OpenSnitch
 sudo apt install python3-grpcio python3-slugify -y
