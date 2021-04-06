@@ -81,7 +81,7 @@ sudo snap remove snap-store
 sudo add-apt-repository ppa:alexlarsson/flatpak -y
 sudo apt update
 sudo apt upgrade -y
-sudo apt install neofetch gnome-software flatpak gnome-software-plugin-flatpak firejail apparmor-profiles apparmor-profiles-extra apparmor-utils gnome-tweak-tool git-core libpam-pwquality python3-pip curl nautilus lm-sensors nvme-cli -y
+sudo apt install neofetch gnome-software flatpak gnome-software-plugin-flatpak apparmor-profiles apparmor-profiles-extra apparmor-utils gnome-tweak-tool git-core libpam-pwquality python3-pip curl nautilus lm-sensors nvme-cli -y
 
 #Put all AppArmor profiles into enforcing mode
 sudo aa-enforce /etc/apparmor.d/*
@@ -116,9 +116,6 @@ flatpak install flathub com.github.tchx84.Flatseal org.mozilla.firefox org.video
 
 #Enable auto TRIM
 sudo systemctl enable fstrim.timer
-
-#Enable Firejail
-sudo firecfg
 
 #Download GNOME shell theme
 git clone https://github.com/i-mint/midnight.git
