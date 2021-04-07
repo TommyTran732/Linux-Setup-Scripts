@@ -184,6 +184,15 @@ sudo sed -i 's^DRIVER=="nvidia", RUN+="/usr/lib/gdm3/gdm-disable-wayland"^#DRIVE
 #Signing ashmem kernel module
 sudo kmodsign sha512 /var/lib/shim-signed/mok/MOK.priv /var/lib/shim-signed/mok/MOK.der /lib/modules/`uname -r`/kernel/drivers/staging/android/ashmem_linux.ko
 
+#Kind of an ugly hack, but since I use Nvidia and it needs to sign the Nvidia driver everytime theres a kernel update anyways, so I am doing this for now
+sudo bash -c 'cat > /etc/dkms/sign_helper.sh' <<-'EOF'
+#!/bin/sh
+/lib/modules/"$1"/build/scripts/sign-file sha512 /root/mok.priv /root/mok.der "$2"
+echo "kmodsign sha512 /var/lib/shim-signed/mok/MOK.priv /var/lib/shim-signed/mok/MOK.der /lib/modules/`uname -r`/kernel/drivers/staging/android/ashmem_linux.ko"
+EOF
+
+sudo chmod 755 /etc/dkms/sign_helper.sh
+
 #Randomize MAC address
 sudo bash -c 'cat > /etc/NetworkManager/conf.d/00-macrandomize.conf' <<-'EOF'
 [device]
