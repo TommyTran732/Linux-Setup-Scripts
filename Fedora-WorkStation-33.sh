@@ -62,7 +62,7 @@ sudo dnf -y remove abrt f33-backgrounds-gnome nm-connection-editor mozilla-files
 sudo dnf config-manager --set-disabled fedora-cisco-openh264 -y
 
 #Install packages that I use
-sudo dnf -y install neofetch git-core flat-remix-gtk3-theme gnome-shell-extension-appindicator gnome-shell-extension-system-monitor-applet gnome-shell-extension-dash-to-dock gnome-shell-extension-freon gnome-shell-extension-openweather gnome-shell-extension-user-theme gnome-tweak-tool f29-backgrounds-gnome gnome-system-monitor git-core setroubleshoot gnome-software PackageKit PackageKit-command-not-found fedora-workstation-repositories openssl android-tools bleachbit tuned-gtk
+sudo dnf -y install neofetch git-core flat-remix-gtk3-theme gnome-shell-extension-appindicator gnome-shell-extension-system-monitor-applet gnome-shell-extension-dash-to-dock gnome-shell-extension-freon gnome-shell-extension-openweather gnome-shell-extension-user-theme gnome-tweak-tool f29-backgrounds-gnome gnome-system-monitor git-core setroubleshoot gnome-software PackageKit PackageKit-command-not-found fedora-workstation-repositories openssl
 
 #Install Yubico StuffNetworkManager-config-connectivity-fedora
 sudo dnf -y install yubikey-manager pam-u2f pamu2fcfg
