@@ -27,7 +27,7 @@ The script removes some ~800 useless packages from the default installation. A l
 Similar to the Fedora script, this script <br >
 
 1. Debloat Ubuntu <br />
-The script removes some ~150 useless packages from the minimal installation.  
+The script removes some ~200 useless packages from the minimal installation.  
 
 2. Setup basic privacy and security (Setting umask to 077, enabling ufw, randomizing mac address, disabling ptrace, install openSnitch as an outbound firewall, removing unnecessary permissions...) <br />
 
