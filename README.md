@@ -2,6 +2,8 @@
 My setup scripts for my workstations. You should edit the scripts to your liking before running it. 
 Please run the scripts as your actual user and not root. Provide sudo password when it asks you to. Flatpak packages and themes/icons are only installed for your user and not system wide. <br />
 
+Do note that I remove bluetooth (bluez and gnome-bluetooth) from the system, as well as the printing stack (cups, printer-drivers, etc) as I do not use them. 
+
 
 # Fedora Workstation 33
 
