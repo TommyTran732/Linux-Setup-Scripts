@@ -56,6 +56,35 @@ sudo systemctl mask whoopsie.service
 sudo sed -i 's/kernel.yama.ptrace_scope = 1/kernel.yama.ptrace_scope = 3/g' /etc/sysctl.d/10-ptrace.conf
 sudo sysctl --load=/etc/sysctl.d/10-ptrace.conf
 
+#Security kernel settings
+sudo bash -c 'cat > /etc/sysctl.d/51-dmesg-restrict.conf' <<-'EOF'
+kernel.dmesg_restrict = 1
+EOF
+
+sudo sysctl --load=/etc/sysctl.d/51-dmesg-restrict.conf
+
+sudo bash -c 'cat > /etc/sysctl.d/51-kptr-restrict.conf' <<-'EOF'
+kernel.kptr_restrict = 2
+EOF
+
+sudo sysctl --load=/etc/sysctl.d/51-kptr-restrict.conf
+
+sudo bash -c 'cat > /etc/sysctl.d/51-kexec-restrict.conf' <<-'EOF'
+kernel.kexec_load_disabled = 1
+EOF
+
+sudo sysctl --load=/etc/sysctl.d/51-kexec-restrict.conf
+
+sudo bash -c 'cat > /etc/sysctl.d/10-security.conf' <<-'EOF'
+fs.protected_hardlinks = 1
+fs.protected_symlinks = 1
+net.core.bpf_jit_harden = 2
+kernel.yama.ptrace_scope = 3
+module.sig_enforce = 1
+EOF
+
+sudo sysctl --load=/etc/sysctl.d/10-security.conf.conf
+
 #Blacklist Firewire SBP2
 echo "blacklist firewire-sbp2" | sudo tee /etc/modprobe.d/blacklist.conf
 
