@@ -79,7 +79,7 @@ sudo bash -c 'cat > /etc/sysctl.d/10-security.conf' <<-'EOF'
 fs.protected_hardlinks = 1
 fs.protected_symlinks = 1
 net.core.bpf_jit_harden = 2
-# module.sig_enforce = 1
+module.sig_enforce = 1
 EOF
 
 sudo sysctl --load=/etc/sysctl.d/10-security.conf.conf
