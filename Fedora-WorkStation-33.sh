@@ -32,6 +32,35 @@ sudo cp /usr/lib/sysctl.d/10-default-yama-scope.conf /etc/sysctl.d/
 sudo sed -i 's/kernel.yama.ptrace_scope = 0/kernel.yama.ptrace_scope = 3/g' /etc/sysctl.d/10-default-yama-scope.conf
 sudo sysctl --load=/etc/sysctl.d/10-default-yama-scope.conf
 
+#Security kernel settings
+sudo bash -c 'cat > /etc/sysctl.d/51-dmesg-restrict.conf' <<-'EOF'
+kernel.dmesg_restrict = 1
+EOF
+
+sudo sysctl --load=/etc/sysctl.d/51-dmesg-restrict.conf
+
+sudo bash -c 'cat > /etc/sysctl.d/51-kptr-restrict.conf' <<-'EOF'
+kernel.kptr_restrict = 2
+EOF
+
+sudo sysctl --load=/etc/sysctl.d/51-kptr-restrict.conf
+
+sudo bash -c 'cat > /etc/sysctl.d/51-kexec-restrict.conf' <<-'EOF'
+kernel.kexec_load_disabled = 1
+EOF
+
+sudo sysctl --load=/etc/sysctl.d/51-kexec-restrict.conf
+
+sudo bash -c 'cat > /etc/sysctl.d/10-security.conf' <<-'EOF'
+fs.protected_hardlinks = 1
+fs.protected_symlinks = 1
+net.core.bpf_jit_harden = 2
+kernel.yama.ptrace_scope = 3
+module.sig_enforce = 1
+EOF
+
+sudo sysctl --load=/etc/sysctl.d/10-security.conf.conf
+
 #Blacklist Firewire SBP2
 echo "blacklist firewire-sbp2" | sudo tee /etc/modprobe.d/blacklist.conf
 
@@ -141,35 +170,6 @@ dev.i915.perf_stream_paranoid=0
 EOF
 
 sudo sysctl --load=/etc/sysctl.d/99-steam.conf
-
-#Security kernel settings
-sudo bash -c 'cat > /etc/sysctl.d/51-dmesg-restrict.conf' <<-'EOF'
-kernel.dmesg_restrict = 1
-EOF
-
-sudo sysctl --load=/etc/sysctl.d/51-dmesg-restrict.conf
-
-sudo bash -c 'cat > /etc/sysctl.d/51-kptr-restrict.conf' <<-'EOF'
-kernel.kptr_restrict = 2
-EOF
-
-sudo sysctl --load=/etc/sysctl.d/51-kptr-restrict.conf
-
-sudo bash -c 'cat > /etc/sysctl.d/51-kexec-restrict.conf' <<-'EOF'
-kernel.kexec_load_disabled = 1
-EOF
-
-sudo sysctl --load=/etc/sysctl.d/51-kexec-restrict.conf
-
-sudo bash -c 'cat > /etc/sysctl.d/10-security.conf' <<-'EOF'
-fs.protected_hardlinks = 1
-fs.protected_symlinks = 1
-net.core.bpf_jit_harden = 2
-kernel.yama.ptrace_scope = 3
-module.sig_enforce = 1
-EOF
-
-sudo sysctl --load=/etc/sysctl.d/10-security.conf.conf
 
 #Quick fixes for pulse audio with steam
 sudo bash -c 'cat > /etc/pulse/daemon.conf' <<-'EOF'
