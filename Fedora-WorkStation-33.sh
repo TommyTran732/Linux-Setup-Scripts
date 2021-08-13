@@ -9,7 +9,7 @@
 #Variables
 USER=$(whoami)
 PARTITIONID=$(sudo cat /etc/crypttab | awk '{print $1}')
-PARTITIONUUID=$(sudo blkid -s UUID -o value /dev/mapper/${PARTITIONID})
+PARTITIONUUID=$(sudo blkid -s UUID -o value /dev/mapper/"${PARTITIONID}")
 
 output(){
     echo -e '\e[36m'$1'\e[0m';
@@ -17,7 +17,7 @@ output(){
 
 #Moving to the home directory
 #Note that I always use /home/${USER} because gnome-terminal is wacky and sometimes doesn't load the environment variables in correctly (Right click somewhere in nautilus, click on open in terminal, then hit create new tab and you will see.)
-cd /home/${USER} || exit
+cd /home/"${USER}" || exit
 
 #Setting umask to 077
 umask 077
@@ -94,7 +94,7 @@ sudo dnf -y install neofetch git-core flat-remix-gtk3-theme gnome-shell-extensio
 
 #Install Yubico StuffNetworkManager-config-connectivity-fedora
 sudo dnf -y install yubikey-manager pam-u2f pamu2fcfg
-mkdir -p /home/${USER}/.config/Yubico
+mkdir -p /home/"${USER}"/.config/Yubico
 
 #Install IVPN
 sudo dnf config-manager --add-repo https://repo.ivpn.net/stable/fedora/generic/ivpn.repo -y
@@ -103,7 +103,7 @@ sudo dnf -y install ivpn-ui
 #Install OpenSnitch
 sudo dnf install -y https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/opensnitch-1.3.6-1.x86_64.rpm
 sudo dnf install -y https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/opensnitch-ui-1.3.6-1.f29.noarch.rpm
-sudo chown -R $USER:$USER /home/${USER}/.config/autostart
+sudo chown -R "${USER}":"${USER}" /home/"${USER}"/.config/autostart
 
 #Setting up Flatpak
 flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -119,28 +119,18 @@ sudo systemctl enable fstrim.timer
 
 #Download and set GNOME shell theme
 git clone https://github.com/i-mint/midnight.git
-mkdir /home/${USER}/.themes
-ln -s /home/${USER}/midnight/Midnight-* /home/${USER}/.themes/
+mkdir /home/"${USER}"/.themes
+ln -s /home/"${USER}"/midnight/Midnight-* /home/"${USER}"/.themes/
 gsettings set org.gnome.shell.extensions.user-theme name "Midnight-Blue"
 
 #Download and set icon theme
 git clone https://github.com/NicoHood/arc-icon-theme.git
-mkdir /home/${USER}/.icons 
-ln -s /home/${USER}/arc-icon-theme/Arc /home/${USER}/.icons/
-git clone https://github.com/zayronxio/Mojave-CT.git
-ln -s /home/${USER}/Mojave-CT /home/${USER}/.icons/
-sed -i 's/Inherits=Moka,Adwaita,gnome,hicolor/Inherits=Mojave-CT,Moka,Adwaita,gnome,hicolor/g' /home/${USER}/arc-icon-theme/Arc/index.theme
-find /home/${USER}/arc-icon-theme -name '*[Tt]rash*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Nn]autilus*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Gg]nome.[Ss]ettings*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Gg]nome.[Tt]weak*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Gg]nome.[Ss]oftware*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Gg]nome.[Bb]oxes*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Ss]team*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Tt]hunderbird*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Mm]inecraft*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Ee]piphany*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Rr]iot*' -exec rm {} \;
+mkdir /home/"${USER}"/.icons 
+ln -s /home/"${USER}"/arc-icon-theme/Arc /home/"${USER}"/.icons/
+git clone https://github.com/tommytran732/Mojave-CT.git
+ln -s /home/"${USER}"/Mojave-CT /home/"${USER}"/.icons/
+sed -i 's/Inherits=Moka,Adwaita,gnome,hicolor/Inherits=Mojave-CT,Moka,Adwaita,gnome,hicolor/g' /home/"${USER}"/arc-icon-theme/Arc/index.theme
+find /home/"${USER}"/arc-icon-theme -name '*[Tt]rash*' -exec rm {} \;
 gsettings set org.gnome.desktop.interface icon-theme "Arc"
 
 #Set GTK theme
@@ -151,18 +141,18 @@ flatpak upgrade -y
 gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/f29/default/f29.xml'
 
 #Set Black GDM background
-mkdir -p /home/${USER}/Pictures/Wallpapers/
-wget https://wallpaperaccess.com/full/512679.jpg -O /home/${USER}/Pictures/Wallpapers/Black.png
+mkdir -p /home/"${USER}"/Pictures/Wallpapers/
+wget https://wallpaperaccess.com/full/512679.jpg -O /home/"${USER}"/Pictures/Wallpapers/Black.png
 sudo dnf -y copr enable zirix/gdm-wallpaper
 sudo dnf -y install gdm-wallpaper
-sudo set-gdm-wallpaper /home/${USER}/Pictures/Wallpapers/Black.png
+sudo set-gdm-wallpaper /home/"${USER}"/Pictures/Wallpapers/Black.png
 (sudo crontab -l ; echo "@reboot /usr/bin/set-gdm-wallpaper /home/${USER}/Pictures/Wallpapers/Black.png >> /dev/null 2>&1")| sudo crontab -
 
 #Enable Titlebar buttons
 gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
 
 #Quick Fixes for Flatpak Steam if I install it on the system
-ln -s /home/${USER}/.var/app/com.valvesoftware.Steam/.local/share/Steam /home/${USER}/.local/share/Steam
+ln -s /home/"${USER}"/.var/app/com.valvesoftware.Steam/.local/share/Steam /home/"${USER}"/.local/share/Steam
 
 sudo bash -c 'cat > /etc/sysctl.d/99-steam.conf' <<-'EOF'
 dev.i915.perf_stream_paranoid=0

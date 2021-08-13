@@ -19,7 +19,7 @@ output(){
 
 #Moving to the home directory
 #Note that I always use /home/${USER} because gnome-terminal is wacky and sometimes doesn't load the environment variables in correctly (Right click somewhere in nautilus, click on open in terminal, then hit create new tab and you will see.)
-cd /home/${USER} || exit
+cd /home/"${USER}" || exit
 
 #Setting umask to 077
 umask 077
@@ -115,7 +115,7 @@ sudo aa-enforce /etc/apparmor.d/*
 
 #Install Yubico Stuff
 sudo apt -y install libpam-u2f
-mkdir -p /home/${USER}/.config/Yubico
+mkdir -p /home/"${USER}"/.config/Yubico
 sudo snap install yubioath-desktop
 
 #Install IVPN
@@ -132,7 +132,7 @@ wget https://github.com/evilsocket/opensnitch/releases/download/v1.3.6/python3-o
 sudo dpkg -i opensnitch*.deb python3-opensnitch-ui*.deb
 sudo apt -f install -y
 rm -rf *opensnitch*
-sudo chown -R $USER:$USER /home/${USER}/.config/autostart
+sudo chown -R "$USER":"$USER" /home/"${USER}"/.config/autostart
 
 #Setting up Flatpak
 flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -148,27 +148,17 @@ sudo systemctl enable fstrim.timer
 
 #Download GNOME shell theme
 git clone https://github.com/i-mint/midnight.git
-mkdir /home/${USER}/.themes
-ln -s /home/${USER}/midnight/Midnight-* /home/${USER}/.themes/
+mkdir /home/"${USER}"/.themes
+ln -s /home/"${USER}"/midnight/Midnight-* /home/"${USER}"/.themes/
 
 #Download and set icon theme
 git clone https://github.com/NicoHood/arc-icon-theme.git
-mkdir /home/${USER}/.icons
-ln -s /home/${USER}/arc-icon-theme/Arc /home/${USER}/.icons/
-git clone https://github.com/zayronxio/Mojave-CT.git
-ln -s /home/${USER}/Mojave-CT /home/${USER}/.icons/
-sed -i 's/Inherits=Moka,Adwaita,gnome,hicolor/Inherits=Mojave-CT,Moka,Adwaita,gnome,hicolor/g' /home/${USER}/arc-icon-theme/Arc/index.theme
-find /home/${USER}/arc-icon-theme -name '*[Tt]rash*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Nn]autilus*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Gg]nome.[Ss]ettings*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Gg]nome.[Tt]weak*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Gg]nome.[Ss]oftware*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Gg]nome.[Bb]oxes*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Ss]team*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Tt]hunderbird*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Mm]inecraft*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Ee]piphany*' -exec rm {} \;
-find /home/${USER}/Mojave-CT -name '*[Rr]iot*' -exec rm {} \;
+mkdir /home/"${USER}"/.icons
+ln -s /home/"${USER}"/arc-icon-theme/Arc /home/"${USER}"/.icons/
+git clone https://github.com/tommytran732/Mojave-CT.git
+ln -s /home/"${USER}"/Mojave-CT /home/"${USER}"/.icons/
+sed -i 's/Inherits=Moka,Adwaita,gnome,hicolor/Inherits=Mojave-CT,Moka,Adwaita,gnome,hicolor/g' /home/"${USER}"/arc-icon-theme/Arc/index.theme
+find /home/"${USER}"/arc-icon-theme -name '*[Tt]rash*' -exec rm {} \;
 gsettings set org.gnome.desktop.interface icon-theme "Arc"
 
 #Set GTK theme
@@ -179,12 +169,12 @@ gsettings set org.gnome.desktop.interface gtk-theme "Flat-Remix-GTK-Blue-Dark"
 flatpak upgrade -y
 
 #Set Black GDM background
-mkdir -p /home/${USER}/Pictures/Wallpapers/
-wget https://wallpaperaccess.com/full/512679.jpg -O /home/${USER}/Pictures/Wallpapers/Black.png
+mkdir -p /home/"${USER}"/Pictures/Wallpapers/
+wget https://wallpaperaccess.com/full/512679.jpg -O /home/"${USER}"/Pictures/Wallpapers/Black.png
 wget github.com/thiggy01/change-gdm-background/raw/master/change-gdm-background
-sudo chmod u+x /home/${USER}/change-gdm-background
+sudo chmod u+x /home/"${USER}"/change-gdm-background
 output "Answer no to this or the script will get interupted"
-sudo /home/${USER}/change-gdm-background /home/${USER}/Pictures/Wallpapers/Black.png
+sudo /home/"${USER}"/change-gdm-background /home/"${USER}"/Pictures/Wallpapers/Black.png
 
 #Set Ubuntu 20.04 LTS Wallpaper
 gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/matt-mcnulty-nyc-2nd-ave.jpg'
