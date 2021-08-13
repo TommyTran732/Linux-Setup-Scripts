@@ -92,7 +92,7 @@ sudo ufw enable
 #Update packages and firmware
 sudo apt update
 sudo apt upgrade -y
-sudp apt autoremove -y
+sudo apt autoremove -y
 sudo fwupdmgr get-devices
 sudo fwupdmgr refresh --force
 sudo fwupdmgr get-updates -y
