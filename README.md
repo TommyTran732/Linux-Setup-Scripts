@@ -4,6 +4,8 @@ Please run the scripts as your actual user and not root. Provide sudo password w
 
 Do note that I remove bluetooth (bluez and gnome-bluetooth) from the system, as well as the printing stack (cups, printer-drivers, etc) as I do not use them. 
 
+Visit my Matrix group: https://matrix.to/#/#tommytran732:matrix.org
+
 # Arch Linux
 Check out this repository: https://github.com/tommytran732/Arch-Setup-Script <br />
 
