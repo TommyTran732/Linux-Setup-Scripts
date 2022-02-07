@@ -152,7 +152,7 @@ mkdir /home/"${USER}"/.themes
 ln -s /home/"${USER}"/midnight/Midnight-* /home/"${USER}"/.themes/
 
 #Download and set icon theme
-git clone https://github.com/NicoHood/arc-icon-theme.git
+git clone https://github.com/horst3180/arc-icon-theme.git
 mkdir /home/"${USER}"/.icons
 ln -s /home/"${USER}"/arc-icon-theme/Arc /home/"${USER}"/.icons/
 git clone https://github.com/tommytran732/Mojave-CT.git
