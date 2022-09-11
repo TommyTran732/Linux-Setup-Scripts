@@ -14,6 +14,6 @@ Check out this repository: https://github.com/tommytran732/Arch-Setup-Script <br
 1. Debloat Fedora <br />
 The script removes some ~800 useless packages from the default installation. A lot of these have Flatpak alternatives. <br />
 2. Setup basic privacy and security (Setting umask to 077, closing open ports on firewalld, randomizing mac address, kernel module blacklist, sysctl hardening, etc) <br />
-3. Setup a BTRFS layout compatible with Timeshift. Credits to https://mutschler.eu/linux/install-guides/fedora-btrfs/ <br />
+3. Setup a BTRFS layout compatible with Timeshift. Credits to https://mutschler.dev/linux/fedora-btrfs-33/ <br />
 4. Setup Flathub <br >
 5. Quality of life stuff (Installing some packages that I use, enabling autotrim, setting up a nice GNOME, GTK, and icon theme, speeding up DNF, ...) <br />
