@@ -25,41 +25,10 @@ sudo sed -i 's/umask 022/umask 077/g' /etc/bashrc
 #Make home directory private
 chmod 700 /home/*
 
-#Disable ptrace
-sudo cp /usr/lib/sysctl.d/10-default-yama-scope.conf /etc/sysctl.d/
-sudo sed -i 's/kernel.yama.ptrace_scope = 0/kernel.yama.ptrace_scope = 3/g' /etc/sysctl.d/10-default-yama-scope.conf
-sudo sysctl --load=/etc/sysctl.d/10-default-yama-scope.conf
-
 #Security kernel settings
-sudo bash -c 'cat > /etc/sysctl.d/51-dmesg-restrict.conf' <<-'EOF'
-kernel.dmesg_restrict = 1
-EOF
-
-sudo sysctl --load=/etc/sysctl.d/51-dmesg-restrict.conf
-
-sudo bash -c 'cat > /etc/sysctl.d/51-kptr-restrict.conf' <<-'EOF'
-kernel.kptr_restrict = 2
-EOF
-
-sudo sysctl --load=/etc/sysctl.d/51-kptr-restrict.conf
-
-sudo bash -c 'cat > /etc/sysctl.d/51-kexec-restrict.conf' <<-'EOF'
-kernel.kexec_load_disabled = 1
-EOF
-
-sudo sysctl --load=/etc/sysctl.d/51-kexec-restrict.conf
-
-sudo bash -c 'cat > /etc/sysctl.d/10-security.conf' <<-'EOF'
-fs.protected_hardlinks = 1
-fs.protected_symlinks = 1
-net.core.bpf_jit_harden = 2
-kernel.yama.ptrace_scope = 3
-EOF
-
-sudo sysctl --load=/etc/sysctl.d/10-security.conf.conf
-
-#Blacklist Firewire SBP2
-echo "blacklist firewire-sbp2" | sudo tee /etc/modprobe.d/blacklist.conf
+curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf -o /etc/modprobe.d/30_security-misc.conf
+curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/sysctl.d/30_security-misc.conf -o /etc/sysctl.d/30_security-misc.conf
+curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/sysctl.d/30_silent-kernel-printk.conf -o /etc/sysctl.d/30_silent-kernel-printk.conf
 
 #Setup Firewalld
 sudo firewall-cmd --permanent --remove-port=1025-65535/udp
@@ -73,6 +42,7 @@ sudo firewall-cmd --reload
 sudo echo 'fastestmirror=1' | sudo tee -a /etc/dnf/dnf.conf
 sudo echo 'max_parallel_downloads=10' | sudo tee -a /etc/dnf/dnf.conf
 sudo echo 'deltarpm=true' | sudo tee -a /etc/dnf/dnf.conf
+sudo echo 'coutme=false' | sudo tee -a /etc/dnf/dnf.conf
 
 #Update packages and firmware
 sudo dnf upgrade -y
@@ -88,9 +58,9 @@ sudo dnf -y remove abrt f36-backgrounds-gnome nm-connection-editor mozilla-files
 sudo dnf config-manager --set-disabled fedora-cisco-openh264 -y
 
 #Install packages that I use
-sudo dnf -y install neofetch git-core flat-remix-gtk3-theme gnome-shell-extension-appindicator gnome-shell-extension-system-monitor-applet gnome-shell-extension-dash-to-dock gnome-shell-extension-freon gnome-shell-extension-openweather gnome-shell-extension-user-theme gnome-tweak-tool f29-backgrounds-gnome gnome-system-monitor git-core setroubleshoot gnome-software PackageKit PackageKit-command-not-found fedora-workstation-repositories openssl
+sudo dnf -y install neofetch git-core flat-remix-gtk-theme gnome-shell-extension-appindicator gnome-shell-extension-system-monitor-applet gnome-shell-extension-dash-to-dock gnome-shell-extension-freon gnome-shell-extension-openweather gnome-shell-extension-user-theme gnome-tweak-tool f29-backgrounds-gnome gnome-system-monitor git-core setroubleshoot gnome-software PackageKit PackageKit-command-not-found fedora-workstation-repositories openssl yubioath-desktop
 
-#Install Yubico StuffNetworkManager-config-connectivity-fedora
+#Install Yubico Stuff
 sudo dnf -y install yubikey-manager pam-u2f pamu2fcfg
 mkdir -p /home/"${USER}"/.config/Yubico
 
@@ -101,11 +71,10 @@ sudo dnf -y install ivpn-ui
 #Setting up Flatpak
 flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak remote-add --user flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
-flatpak remote-add --user gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo
 flatpak remove --unused
 
 #Install default applications
-flatpak install flathub com.github.tchx84.Flatseal org.mozilla.firefox org.videolan.VLC org.gnome.eog org.gnome.Calendar org.gnome.Contacts org.gnome.FileRoller com.yubico.yubioath com.vscodium.codium -y
+flatpak install flathub com.github.tchx84.Flatseal org.videolan.VLC org.gnome.eog org.gnome.FileRoller -y
 
 #Enable auto TRIM
 sudo systemctl enable fstrim.timer
@@ -187,12 +156,5 @@ EOF
 
 sudo systemctl restart NetworkManager
 sudo hostnamectl hostname "localhost"
-
-#Last step, import key to MOK
-output "Just to avoid confusion, we are importing Akmods's key"
-sudo mokutil --import /etc/pki/akmods/certs/public_key.der
-#output "Now we import DKMS's key"
-#sudo mokutil --import /root/mok.der
-output "All done! You have to reboot now."
 
 
