@@ -42,7 +42,7 @@ sudo firewall-cmd --reload
 sudo echo 'fastestmirror=1' | sudo tee -a /etc/dnf/dnf.conf
 sudo echo 'max_parallel_downloads=10' | sudo tee -a /etc/dnf/dnf.conf
 sudo echo 'deltarpm=true' | sudo tee -a /etc/dnf/dnf.conf
-sudo echo 'coutme=false' | sudo tee -a /etc/dnf/dnf.conf
+sudo echo 'countme=false' | sudo tee -a /etc/dnf/dnf.conf
 
 #Update packages and firmware
 sudo dnf upgrade -y
