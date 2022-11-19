@@ -8,7 +8,10 @@ GSSAPIAuthentication no" | sudo tee -a /etc/ssh/sshd_config.d/10-custom.conf
 echo "PasswordAuthentication no" | sudo tee /etc/ssh/sshd_config.d/40-disable-passwords.conf
 
 sudo dnf install tuned -y
-sudo tuned-adm profile virtual-guest
+sudo tuned-adm profile virtual-guest yara
+
+sudo insights-client --collector malware-detection
+sed -i 's/test_scan: true/test_scan: false/' /etc/insights-client/malware-detection-config.yml
 
 sudo curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf -o /etc/modprobe.d/30_security-misc.conf
 sudo curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/sysctl.d/30_security-misc.conf -o /etc/sysctl.d/30_security-misc.conf
