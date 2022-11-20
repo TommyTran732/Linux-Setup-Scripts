@@ -1,7 +1,16 @@
 #!/bin/bash
 
 sed -i '1 {s/^/#/}' /etc/apt/sources.list.d/pve-enterprise.list
-sed -i 's/main contrib/main contrib non-free/' /etc/apt/sources.list
+
+echo 'deb https://deb.debian.org/debian/ bullseye main contrib non-free
+
+deb https://deb.debian.org/debian/ bullseye-updates main contrib non-free
+
+# security updates
+deb https://security.debian.org bullseye-security main contrib non-free
+
+deb http://download.proxmox.com/debian/pve bullseye pve-no-subscription' | tee /etc/apt/sources.list
+
 apt update
 apt upgrade -y
 apt install -y intel-microcode tuned apparmor-profiles fwupd

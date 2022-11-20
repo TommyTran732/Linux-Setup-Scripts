@@ -1,5 +1,7 @@
 #!/bin/bash
 
+find /etc/apt/sources.list.d -type f -exec sed -i 's/http:/https:/g' {} \;
+
 apt update
 apt upgrade -y
 apt install -y tuned apparmor-profiles ufw
