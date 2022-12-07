@@ -7,8 +7,8 @@ echo "X11Forwarding no
 GSSAPIAuthentication no" | sudo tee -a /etc/ssh/sshd_config.d/10-custom.conf
 echo "PasswordAuthentication no" | sudo tee /etc/ssh/sshd_config.d/40-disable-passwords.conf
 
-sudo dnf install tuned -y
-sudo tuned-adm profile virtual-guest yara
+sudo dnf install tuned yara -y
+sudo tuned-adm profile virtual-guest
 
 sudo insights-client --collector malware-detection
 sudo sed -i 's/test_scan: true/test_scan: false/' /etc/insights-client/malware-detection-config.yml
