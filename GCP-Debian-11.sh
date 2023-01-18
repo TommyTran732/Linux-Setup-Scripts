@@ -17,6 +17,9 @@ curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system
 mkdir -p /etc/systemd/system/sshd.service.d
 curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/limits.conf -o /etc/systemd/system/sshd.service.d/limits.conf
 
+echo "GSSAPIAuthentication no" > /etc/ssh/ssh_config.d/10-custom.conf
+echo "VerifyHostKeyDNS yes" >> /etc/ssh/ssh_config.d/10-custom.conf
+
 rm -rf /etc/chrony/chrony.conf
 curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony/chrony.conf
 

@@ -33,3 +33,6 @@ sudo systemctl restart irqbalance
 sudo mkdir -p /etc/systemd/system/sshd.service.d
 sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/limits.conf -o /etc/systemd/system/sshd.service.d/limits.conf
 sudo systemctl restart sshd
+
+echo "GSSAPIAuthentication no" | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
+echo "VerifyHostKeyDNS yes" | sudo tee -a /etc/ssh/ssh_config.d/10-custom.conf

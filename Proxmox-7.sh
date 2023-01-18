@@ -52,3 +52,6 @@ systemctl enable --now fwupd-refresh.timer
 
 bash <(curl -s https://raw.githubusercontent.com/Weilbyte/PVEDiscordDark/master/PVEDiscordDark.sh ) install
 systemctl restart pveproxy.service
+
+echo "GSSAPIAuthentication no" > /etc/ssh/ssh_config.d/10-custom.conf
+echo "VerifyHostKeyDNS yes" >> /etc/ssh/ssh_config.d/10-custom.conf
