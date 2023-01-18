@@ -26,3 +26,6 @@ curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.con
 echo "* hard core 0" | tee -a /etc/security/limits.conf
 
 sed -i 's/#GSSAPIAuthentication no/GSSAPIAuthentication no/g' /etc/ssh/sshd_config
+
+sed -i 's/#DNSSEC=no/DNSSEC=yes/g' /etc/systemd/resolved.conf
+systemctl restart systemd-resolved
