@@ -36,3 +36,66 @@ sudo systemctl restart sshd
 
 echo "GSSAPIAuthentication no" | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
 echo "VerifyHostKeyDNS yes" | sudo tee -a /etc/ssh/ssh_config.d/10-custom.conf
+
+sudo dnf install unbound
+echo 'server:
+  chroot: ""
+
+  auto-trust-anchor-file: "/var/lib/unbound/root.key"
+  trust-anchor-signaling: yes
+  root-key-sentinel: yes
+
+  tls-ciphers: "PROFILE=SYSTEM"
+
+  hide-http-user-agent: yes
+  hide-identity: yes
+  hide-trustanchor: yes
+  hide-version: yes
+
+  deny-any: yes
+  do-not-query-localhost: yes
+  harden-algo-downgrade: yes
+  harden-large-queries: yes
+  harden-referral-path: yes
+  ignore-cd-flag: yes
+  max-udp-size: 3072
+  module-config: "validator iterator"
+  minimal-responses: yes
+  qname-minimisation-strict: yes
+  unwanted-reply-threshold: 10000000
+  use-caps-for-id: yes
+
+  outgoing-port-permit: 1024-65535
+
+  prefetch: yes
+  prefetch-key: yes
+
+forward-zone:
+  name: "."
+  forward-tls-upstream: yes
+  forward-addr: 8.8.8.8#dns.google
+  forward-addr: 8.8.4.4#dns.google
+  forward-addr: 2001:4860:4860::8888#dns.google
+  forward-addr: 2001:4860:4860::8844#dns.google' | sudo tee /etc/unbound/unbound.conf
+  
+mkdir -p /etc/systemd/system/unbound.service.d
+echo $'[Service]
+MemoryDenyWriteExecute=true
+PrivateDevices=true
+PrivateTmp=true
+ProtectHome=true
+ProtectClock=true
+ProtectControlGroups=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+# This breaks using socket options like \'so-rcvbuf\'. Explicitly disable for visibility.
+ProtectKernelTunables=true
+ProtectProc=invisible
+RestrictAddressFamilies=AF_INET AF_INET6 AF_NETLINK AF_UNIX
+RestrictRealtime=true
+SystemCallArchitectures=native
+SystemCallFilter=~@clock @cpu-emulation @debug @keyring @module mount @obsolete @resources
+RestrictNamespaces=yes
+LockPersonality=yes' | sudo tee /etc/systemd/system/unbound.service.d/override.conf
+
+sudo systemctl enable --now unbound
