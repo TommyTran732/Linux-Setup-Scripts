@@ -79,10 +79,6 @@ sudo dnf -y install neofetch git-core flat-remix-gtk-theme gnome-shell-extension
 sudo dnf -y install yubikey-manager pam-u2f pamu2fcfg
 mkdir -p /home/"${USER}"/.config/Yubico
 
-#Install IVPN
-sudo dnf config-manager --add-repo https://repo.ivpn.net/stable/fedora/generic/ivpn.repo -y
-sudo dnf -y install ivpn-ui
-
 #Setting up Flatpak
 flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak remote-add --user flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
