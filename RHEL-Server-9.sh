@@ -60,7 +60,6 @@ echo 'server:
   ignore-cd-flag: yes
   max-udp-size: 3072
   module-config: "validator iterator"
-  minimal-responses: yes
   qname-minimisation-strict: yes
   unwanted-reply-threshold: 10000000
   use-caps-for-id: yes
