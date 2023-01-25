@@ -55,6 +55,3 @@ systemctl restart pveproxy.service
 
 echo "GSSAPIAuthentication no" > /etc/ssh/ssh_config.d/10-custom.conf
 echo "VerifyHostKeyDNS yes" >> /etc/ssh/ssh_config.d/10-custom.conf
-
-sed -i 's/#DNSSEC=no/DNSSEC=yes/g' /etc/systemd/resolved.conf
-systemctl restart systemd-resolved
