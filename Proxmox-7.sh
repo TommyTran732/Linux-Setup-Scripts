@@ -1,5 +1,12 @@
 #!/bin/bash
 
+echo 'GSSAPIAuthentication no
+VerifyHostKeyDNS yes' | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
+sed -i 's/#GSSAPIAuthentication no/GSSAPIAuthentication no/g' /etc/ssh/sshd_config
+mkdir -p /etc/systemd/system/sshd.service.d
+curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/limits.conf -o /etc/systemd/system/sshd.service.d/limits.conf
+systemctl restart sshd
+
 sed -i '1 {s/^/#/}' /etc/apt/sources.list.d/pve-enterprise.list
 
 echo 'deb https://deb.debian.org/debian/ bullseye main contrib non-free
@@ -17,6 +24,10 @@ apt install -y intel-microcode tuned apparmor-profiles fwupd
 
 tuned-adm profile virtual-host
 
+rm -rf /etc/chrony/chrony.conf
+curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony/chrony.conf
+systemctl restart chronyd
+
 ### This part assumes that you are using systemd-boot
 echo -e "spectre_v2=on spec_store_bypass_disable=on l1tf=full,force mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force nosmt=force l1d_flush=on mmio_stale_data=full,nosmt random.trust_bootloader=off random.trust_cpu=off intel_iommu=on amd_iommu=on efi=disable_early_pci_dma iommu.passthrough=0 iommu.strict=1 slab_nomerge init_on_alloc=1 init_on_free=1 pti=on vsyscall=none page_alloc.shuffle=1 randomize_kstack_offset=on extra_latent_entropy debugfs=off $(cat /etc/kernel/cmdline)" > /etc/kernel/cmdline
 proxmox-boot-tool refresh
@@ -28,11 +39,6 @@ sed -i 's/kernel.yama.ptrace_scope=2/kernel.yama.ptrace_scope=3/g' /etc/sysctl.d
 curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/sysctl.d/30_silent-kernel-printk.conf -o /etc/sysctl.d/30_silent-kernel-printk.conf
 mkdir -p /etc/systemd/system/NetworkManager.service.d
 curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf -o /etc/systemd/system/NetworkManager.service.d/99-brace.conf
-mkdir -p /etc/systemd/system/sshd.service.d
-curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/limits.conf -o /etc/systemd/system/sshd.service.d/limits.conf
-
-rm -rf /etc/chrony/chrony.conf
-curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony/chrony.conf
 
 echo "* hard core 0" | tee -a /etc/security/limits.conf
 
@@ -52,6 +58,3 @@ systemctl enable --now fwupd-refresh.timer
 
 bash <(curl -s https://raw.githubusercontent.com/Weilbyte/PVEDiscordDark/master/PVEDiscordDark.sh ) install
 systemctl restart pveproxy.service
-
-echo "GSSAPIAuthentication no" > /etc/ssh/ssh_config.d/10-custom.conf
-echo "VerifyHostKeyDNS yes" >> /etc/ssh/ssh_config.d/10-custom.conf
