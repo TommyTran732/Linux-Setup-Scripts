@@ -57,5 +57,10 @@ ExecStart=ExecStart=/usr/bin/fwupdmgr update' | tee /etc/systemd/system/fwupd-re
 systemctl daemon-reload
 systemctl enable --now fwupd-refresh.timer
 
+# Installing Discord PVE Theme
 bash <(curl -s https://raw.githubusercontent.com/Weilbyte/PVEDiscordDark/master/PVEDiscordDark.sh ) install
+
+# Disable Nagging
+sed -Ezi.bak "s/(Ext.Msg.show\(\{\s+title: gettext\('No valid sub)/void\(\{ \/\/\1/g" /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js
+
 systemctl restart pveproxy.service
