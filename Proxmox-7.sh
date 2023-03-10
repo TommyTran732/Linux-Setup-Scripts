@@ -2,6 +2,7 @@
 
 echo 'GSSAPIAuthentication no
 VerifyHostKeyDNS yes' | tee /etc/ssh/ssh_config.d/10-custom.conf
+sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
 sed -i 's/#GSSAPIAuthentication no/GSSAPIAuthentication no/g' /etc/ssh/sshd_config
 mkdir -p /etc/systemd/system/sshd.service.d
 curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/limits.conf -o /etc/systemd/system/sshd.service.d/limits.conf
