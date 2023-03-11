@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# You need to add either the non-subscription repo or the testing repo from the Proxmox WebUI after running this script.
+
 echo 'GSSAPIAuthentication no
 VerifyHostKeyDNS yes' | tee /etc/ssh/ssh_config.d/10-custom.conf
 sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
