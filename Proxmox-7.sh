@@ -21,7 +21,7 @@ deb http://download.proxmox.com/debian/pve bullseye pve-no-subscription' | tee /
 
 apt update
 apt upgrade -y
-apt install -y --no-install-recommends intel-microcode tuned apparmor-profiles fwupd dropbear-initramfs
+apt install -y --no-install-recommends intel-microcode tuned fwupd dropbear-initramfs
 
 tuned-adm profile virtual-host
 
