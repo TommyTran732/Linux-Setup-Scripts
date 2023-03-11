@@ -27,7 +27,6 @@ echo 'server:
   hide-version: yes
 
   deny-any: yes
-  do-not-query-localhost: yes
   harden-algo-downgrade: yes
   harden-large-queries: yes
   harden-referral-path: yes
