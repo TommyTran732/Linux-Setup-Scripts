@@ -9,7 +9,7 @@ sudo find /etc/apt/sources.list.d -type f -exec sudo sed -i 's/http:/https:/g' {
 
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y tuned apparmor-profiles unbound ufw
+sudo apt install -y --no-install-recommends tuned unbound ufw
 
 sudo tuned-adm profile virtual-guest
 
