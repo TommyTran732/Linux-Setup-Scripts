@@ -32,7 +32,6 @@ echo 'server:
   use-caps-for-id: yes
 
   outgoing-port-permit: 1024-65535
-  outgoing-port-avoid: 51820
 
   prefetch: yes
   prefetch-key: yes
