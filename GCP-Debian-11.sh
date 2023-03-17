@@ -11,6 +11,9 @@ sudo apt update
 sudo apt upgrade -y
 sudo apt install -y --no-install-recommends tuned unbound ufw
 
+sudo ufw enable
+sudo ufw allow 22/tcp
+
 sudo tuned-adm profile virtual-guest
 
 echo 'server:
