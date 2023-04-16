@@ -105,3 +105,4 @@ sudo firewall-cmd --permanent --remove-service=cockpit
 sudo firewall-cmd --reload
 
 sudo sed -i 's/apply_updates = no/apply_updates = yes/g' /etc/dnf/automatic.conf
+sudo systemctl enable --now dnf-automatic.timer
