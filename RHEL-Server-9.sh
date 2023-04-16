@@ -93,8 +93,10 @@ sudo sysctl -p
 
 sudo mkdir -p /etc/systemd/system/NetworkManager.service.d
 sudo curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf -o /etc/systemd/system/NetworkManager.service.d/99-brace.conf
+sudo systemctl daemon-reload
 sudo systemctl restart NetworkManager
 
 sudo mkdir -p /etc/systemd/system/irqbalance.service.d
 sudo curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/irqbalance.service.d/99-brace.conf -o /etc/systemd/system/irqbalance.service.d/99-brace.conf
+sudo systemctl daemon-reload
 sudo systemctl restart irqbalance
