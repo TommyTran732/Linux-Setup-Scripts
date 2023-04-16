@@ -100,3 +100,6 @@ sudo mkdir -p /etc/systemd/system/irqbalance.service.d
 sudo curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/irqbalance.service.d/99-brace.conf -o /etc/systemd/system/irqbalance.service.d/99-brace.conf
 sudo systemctl daemon-reload
 sudo systemctl restart irqbalance
+
+sudo firewall-cmd --permanent --remove-service=cockpit
+sudo firewall-cmd --reload
