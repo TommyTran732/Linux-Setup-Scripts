@@ -103,3 +103,5 @@ sudo systemctl restart irqbalance
 
 sudo firewall-cmd --permanent --remove-service=cockpit
 sudo firewall-cmd --reload
+
+sudo sed -i 's/apply_updates = no/apply_updates = yes/g' /etc/dnf/automatic.conf
