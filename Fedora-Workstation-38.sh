@@ -94,10 +94,6 @@ gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgr
 #Enable Titlebar buttons
 gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
 
-#Quick Fix for Freon https://github.com/UshakovVasilii/gnome-shell-extension-freon/issues/163
-sudo sed -i 's#`${nvme}#`/usr/bin/sudo ${nvme}#g' /usr/share/gnome-shell/extensions/freon@UshakovVasilii_Github.yahoo.com/nvmecliUtil.js
-echo ''"${USER}"'   ALL = NOPASSWD: /usr/sbin/nvme list -o json, /usr/sbin/nvme smart-log /dev/nvme* -o json' | sudo EDITOR='tee -a' visudo >/dev/null 2>&1
-
 #Enable GNOME shell extensions
 gsettings set org.gnome.shell disable-user-extensions false
 
