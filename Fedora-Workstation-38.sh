@@ -73,7 +73,7 @@ sudo dnf -y remove abrt nm-connection-editor mozilla-filesystem chrome-gnome-she
 sudo dnf config-manager --set-disabled fedora-cisco-openh264 -y
 
 #Install packages that I use
-sudo dnf -y install git-core flat-remix-gtk-theme gnome-shell-extension-appindicator gnome-shell-extension-system-monitor-applet gnome-shell-extension-dash-to-dock gnome-shell-extension-freon gnome-shell-extension-openweather gnome-shell-extension-user-theme gnome-tweak-tool f29-backgrounds-gnome gnome-system-monitor setroubleshoot
+sudo dnf -y install git-core flat-remix-gtk-theme gnome-shell-extension-appindicator gnome-shell-extension-system-monitor-applet gnome-shell-extension-dash-to-dock gnome-shell-extension-freon gnome-shell-extension-openweather gnome-shell-extension-user-theme gnome-tweak-tool f29-backgrounds-gnome setroubleshoot
 
 #Enable auto TRIM
 sudo systemctl enable fstrim.timer
