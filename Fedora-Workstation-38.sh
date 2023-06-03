@@ -78,12 +78,6 @@ sudo dnf -y install git-core flat-remix-gtk-theme gnome-shell-extension-appindic
 #Enable auto TRIM
 sudo systemctl enable fstrim.timer
 
-#Download and set GNOME shell theme
-git clone https://github.com/i-mint/midnight.git
-mkdir /home/"${USER}"/.themes
-ln -s /home/"${USER}"/midnight/Midnight-* /home/"${USER}"/.themes/
-gsettings set org.gnome.shell.extensions.user-theme name "Midnight-Blue"
-
 #Download and set icon theme
 git clone https://github.com/horst3180/arc-icon-theme.git
 mkdir /home/"${USER}"/.icons
