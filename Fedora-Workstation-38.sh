@@ -73,19 +73,14 @@ sudo dnf -y remove abrt nm-connection-editor mozilla-filesystem chrome-gnome-she
 sudo dnf config-manager --set-disabled fedora-cisco-openh264 -y
 
 #Install packages that I use
-sudo dnf -y install neofetch git-core flat-remix-gtk-theme gnome-shell-extension-appindicator gnome-shell-extension-system-monitor-applet gnome-shell-extension-dash-to-dock gnome-shell-extension-freon gnome-shell-extension-openweather gnome-shell-extension-user-theme gnome-tweak-tool f29-backgrounds-gnome gnome-system-monitor git-core setroubleshoot gnome-software PackageKit PackageKit-command-not-found fedora-workstation-repositories openssl yubioath-desktop
-
-#Install Yubico Stuff
-sudo dnf -y install yubikey-manager pam-u2f pamu2fcfg
-mkdir -p /home/"${USER}"/.config/Yubico
+sudo dnf -y install git-core flat-remix-gtk-theme gnome-shell-extension-appindicator gnome-shell-extension-system-monitor-applet gnome-shell-extension-dash-to-dock gnome-shell-extension-freon gnome-shell-extension-openweather gnome-shell-extension-user-theme gnome-tweak-tool f29-backgrounds-gnome gnome-system-monitor setroubleshoot
 
 #Setting up Flatpak
 flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak remote-add --user flathub-beta https://flathub.org/beta-repo/flathub-beta.flatpakrepo
 flatpak remove --unused
 
 #Install default applications
-flatpak install flathub com.github.tchx84.Flatseal org.videolan.VLC org.gnome.eog org.gnome.FileRoller -y
+flatpak install flathub com.github.tchx84.Flatseal org.gnome.eog org.gnome.FileRoller -y
 
 #Enable auto TRIM
 sudo systemctl enable fstrim.timer
