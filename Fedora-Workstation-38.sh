@@ -73,35 +73,13 @@ sudo dnf -y remove abrt nm-connection-editor mozilla-filesystem chrome-gnome-she
 sudo dnf config-manager --set-disabled fedora-cisco-openh264 -y
 
 #Install packages that I use
-sudo dnf -y install git-core gnome-shell-extension-appindicator f29-backgrounds-gnome setroubleshoot
+sudo dnf -y install gnome-console gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo setroubleshoot
 
 #Enable auto TRIM
 sudo systemctl enable fstrim.timer
 
-#Download and set icon theme
-git clone https://github.com/horst3180/arc-icon-theme.git
-mkdir /home/"${USER}"/.icons
-ln -s /home/"${USER}"/arc-icon-theme/Arc /home/"${USER}"/.icons/
-git clone https://github.com/tommytran732/Mojave-CT.git
-ln -s /home/"${USER}"/Mojave-CT /home/"${USER}"/.icons/
-sed -i 's/Inherits=Moka,Adwaita,gnome,hicolor/Inherits=Mojave-CT,Moka,Adwaita,gnome,hicolor/g' /home/"${USER}"/arc-icon-theme/Arc/index.theme
-find /home/"${USER}"/arc-icon-theme -name '*[Tt]rash*' -exec rm {} \;
-gsettings set org.gnome.desktop.interface icon-theme "Arc"
-
-#Set Fedora 29 Animated Wallpaper
-gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/f29/default/f29.xml'
-
 #Enable Titlebar buttons
 gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
-
-#Enable GNOME shell extensions
-gsettings set org.gnome.shell disable-user-extensions false
-
-#Enable tap to click
-gsettings set org.gnome.desktop.peripherals.touchpad tap-to-click true
-
-#Enable touchpad while typing
-gsettings set org.gnome.desktop.peripherals.touchpad disable-while-typing false
 
 #Setup BTRFS layout and Timeshift
 sudo mkdir /btrfs_pool
@@ -133,3 +111,5 @@ EOF
 
 sudo systemctl restart NetworkManager
 sudo hostnamectl hostname "localhost"
+
+## The script is done. You can also remove gnome-terminal since gnome-console will replace it.
