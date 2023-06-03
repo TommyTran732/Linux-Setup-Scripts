@@ -108,14 +108,6 @@ flatpak upgrade -y
 #Set Fedora 29 Animated Wallpaper
 gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/f29/default/f29.xml'
 
-#Set Black GDM background
-mkdir -p /home/"${USER}"/Pictures/Wallpapers/
-wget https://wallpaperaccess.com/full/512679.jpg -O /home/"${USER}"/Pictures/Wallpapers/Black.png
-sudo dnf -y copr enable zirix/gdm-wallpaper
-sudo dnf -y install gdm-wallpaper
-sudo set-gdm-wallpaper /home/"${USER}"/Pictures/Wallpapers/Black.png
-(sudo crontab -l ; echo "@reboot /usr/bin/set-gdm-wallpaper /home/${USER}/Pictures/Wallpapers/Black.png >> /dev/null 2>&1")| sudo crontab -
-
 #Enable Titlebar buttons
 gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
 
