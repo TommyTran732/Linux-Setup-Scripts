@@ -2,7 +2,7 @@
 
 #Please note that this is how I PERSONALLY setup my computer - I do some stuff such as not using anything to download GNOME extensions from extensions.gnome.org and installing the extensions as a package instead
 #Customize it to your liking
-#Run this script as your user, NOT root
+#Run this script as your admin user, NOT root
 
 #Variables
 USER=$(whoami)
@@ -74,13 +74,6 @@ sudo dnf config-manager --set-disabled fedora-cisco-openh264 -y
 
 #Install packages that I use
 sudo dnf -y install git-core flat-remix-gtk-theme gnome-shell-extension-appindicator gnome-shell-extension-system-monitor-applet gnome-shell-extension-dash-to-dock gnome-shell-extension-freon gnome-shell-extension-openweather gnome-shell-extension-user-theme gnome-tweak-tool f29-backgrounds-gnome gnome-system-monitor setroubleshoot
-
-#Setting up Flatpak
-flatpak remote-add --user flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak remove --unused
-
-#Install default applications
-flatpak install flathub com.github.tchx84.Flatseal org.gnome.eog org.gnome.FileRoller -y
 
 #Enable auto TRIM
 sudo systemctl enable fstrim.timer
