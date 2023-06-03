@@ -73,7 +73,7 @@ sudo dnf -y remove abrt nm-connection-editor mozilla-filesystem chrome-gnome-she
 sudo dnf config-manager --set-disabled fedora-cisco-openh264 -y
 
 #Install packages that I use
-sudo dnf -y install gnome-console gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo
+sudo dnf -y install gnome-console git-core flat-remix-theme gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo
 
 #Enable auto TRIM
 sudo systemctl enable fstrim.timer
