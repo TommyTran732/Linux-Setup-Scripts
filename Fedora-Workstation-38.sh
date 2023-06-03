@@ -78,9 +78,6 @@ sudo dnf -y install gnome-console gnome-shell-extension-appindicator gnome-shell
 #Enable auto TRIM
 sudo systemctl enable fstrim.timer
 
-#Enable Titlebar buttons
-gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
-
 #Setup BTRFS layout and Timeshift
 sudo mkdir /btrfs_pool
 sudo mount -o subvolid=5 /dev/mapper/${PARTITIONID} /btrfs_pool
