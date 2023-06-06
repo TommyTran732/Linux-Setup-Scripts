@@ -70,7 +70,7 @@ sudo fwupdmgr get-updates -y
 sudo fwupdmgr update -y
 
 #Remove unneeded packages
-apt purge -y gedit gnome-calculator gnome-character gnome-font-viewer gnome-logs gnome-power-manager seahorse whoopsie
+apt purge -y gedit gnome-calculator gnome-character gnome-font-viewer gnome-logs gnome-power-manager gnome-shell-extension-prefs seahorse whoopsie
 
 #Install packages that I use
 apt install -y git-core gnome-text-editor
