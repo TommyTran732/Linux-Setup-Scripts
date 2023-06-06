@@ -47,6 +47,16 @@ rm -rf /etc/chrony/chrony.conf
 sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony/chrony.conf
 sudo systemctl restart chronyd
 
+# Disable automount
+echo '[org/gnome/desktop/media-handling]
+automount=false
+automount-open=false' | sudo tee /etc/dconf/db/local.d/automount-disable
+
+echo 'org/gnome/desktop/media-handling/automount
+org/gnome/desktop/media-handling/automount-open' | sudo tee /etc/dconf/db/local.d/locks/automount-disable
+
+sudo dconf update
+
 #Setup Firewalld
 sudo firewall-cmd --permanent --remove-port=1025-65535/udp
 sudo firewall-cmd --permanent --remove-port=1025-65535/tcp
