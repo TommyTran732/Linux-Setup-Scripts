@@ -4,6 +4,14 @@
 #Customize it to your liking
 #Run this script as your admin user, NOT root
 
+#Compliance
+sudo ua enable usg
+sudo apt install -y usg
+sudo usg fix cis_level2_workstation
+
+#Allow su which is disabled by CIS 
+sudo sed -i 's/auth required pam_wheel.so use_uid group=sugroup//g' /etc/pam.d/su
+
 #Setting umask to 077
 umask 077
 sudo sed -ie '/^DIR_MODE=/ s/=[0-9]*\+/=0700/' /etc/adduser.conf
@@ -91,11 +99,3 @@ connection.stable-id=${CONNECTION}/${BOOT}
 EOF
 
 sudo systemctl restart NetworkManager
-
-#Compliance
-sudo ua enable usg
-sudo apt install -y usg
-sudo usg fix cis_level2_workstation
-
-#Allow su which is disabled by CIS 
-sudo sed -i 's/auth required pam_wheel.so use_uid group=sugroup//g' /etc/pam.d/su
