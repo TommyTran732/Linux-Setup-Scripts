@@ -45,6 +45,7 @@ echo "VerifyHostKeyDNS yes" | sudo tee -a /etc/ssh/ssh_config.d/10-custom.conf
 #Setup NTS
 rm -rf /etc/chrony/chrony.conf
 sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony/chrony.conf
+sudo systemctl restart chronyd
 
 #Setup Firewalld
 sudo firewall-cmd --permanent --remove-port=1025-65535/udp
