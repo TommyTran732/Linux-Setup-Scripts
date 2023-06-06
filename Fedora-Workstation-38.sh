@@ -19,9 +19,8 @@ cd /home/"${USER}" || exit
 
 #Setting umask to 077
 umask 077
-sudo sed -i 's/umask 002/umask 077/g' /etc/bashrc
 sudo sed -i 's/umask 022/umask 077/g' /etc/bashrc
-echo "umask 077" >> /etc/bashrc
+echo "umask 077" | sudo tee -a /etc/bashrc
 
 #Make home directory private
 chmod 700 /home/*
