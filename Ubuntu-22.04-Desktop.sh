@@ -32,8 +32,11 @@ echo "GSSAPIAuthentication no" | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
 echo "VerifyHostKeyDNS yes" | sudo tee -a /etc/ssh/ssh_config.d/10-custom.conf
 
 #Setup NTS
+sudo systemctl disable systemd-timesyncd
+sudo apt install -y chronyd
 rm -rf /etc/chrony/chrony.conf
 sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony/chrony.conf
+sudo systemctl restart chronyd
 
 #Setup UFW
 sudo ufw enable
