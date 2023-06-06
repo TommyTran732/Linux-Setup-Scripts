@@ -49,6 +49,9 @@ org/gnome/desktop/media-handling/automount-open' | sudo tee /etc/dconf/db/local.
 sudo dconf update
 
 #Setup UFW
+#UFW Snap is strictly confined, unlike its .deb counterpart
+sudo apt purge -y ufw
+sudo snap install ufw
 sudo ufw enable
 
 #Disable crash reports
