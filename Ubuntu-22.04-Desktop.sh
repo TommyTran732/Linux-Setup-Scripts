@@ -60,10 +60,10 @@ sudo fwupdmgr get-updates -y
 sudo fwupdmgr update -y
 
 #Remove unneeded packages
-apt purge -y gnome-calculator gnome-power-manager whoopsie
+apt purge -y gedit gnome-calculator gnome-character gnome-font-viewer gnome-logs gnome-power-manager seahorse whoopsie
 
 #Install packages that I use
-apt install -y git-core gnome-console
+apt install -y git-core gnome-console gnome-text-editor
 
 #Randomize MAC address
 sudo bash -c 'cat > /etc/NetworkManager/conf.d/00-macrandomize.conf' <<-'EOF'
