@@ -54,7 +54,7 @@ sudo fwupdmgr get-updates -y
 sudo fwupdmgr update -y
 
 #Remove unneeded packages
-apt purge -y gnome-calculator
+apt purge -y gnome-calculator gnome-power-manager
 
 #Install packages that I use
 apt install -y git-core gnome-console
