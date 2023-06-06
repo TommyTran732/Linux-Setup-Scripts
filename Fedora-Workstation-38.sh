@@ -78,7 +78,28 @@ sudo fwupdmgr get-updates -y
 sudo fwupdmgr update -y
 
 #Remove unneeded packages
-sudo dnf -y remove abrt cups nm-connection-editor mozilla-filesystem chrome-gnome-shell quota* nmap-ncat virtualbox-guest-additions spice-vdagent nfs-utils teamd tcpdump sgpio ImageMagick* adcli libreoffice* lvm2 qemu-guest-agent hyperv* gnome-classic* baobab *kkc* *zhuyin* *pinyin* *evince* *yelp* ModemManager fedora-bookmarks fedora-chromium-config gnome-tour gnome-themes-extra gnome-shell-extension-background-logo gnome-screenshot gnome-remote-desktop gnome-font-viewer gnome-calculator NetworkManager-pptp-gnome NetworkManager-ssh-gnome NetworkManager-openconnect-gnome NetworkManager-openvpn-gnome NetworkManager-vpnc-gnome podman*  *libvirt* open-vm* *speech* sos totem gnome-characters firefox openssh-server dmidecode xorg-x11-drv-vmware xorg-x11-drv-amdgpu yajl words ibus-hangui vino openh264 realmd rsync net-snmp-libs net-tools traceroute mtr geolite2* gnome-boxes gnome-disk-utility gedit gnome-calendar cheese gnome-contacts rhythmbox gnome-screenshot gnome-maps gnome-weather gnome-logs ibus-typing-booster *m17n* gnome-clocks gnome-color-manager mlocate cyrus-sasl-plain cyrus-sasl-gssapi sssd* gnome-user* dos2unix kpartx rng-tools ppp* thermald *perl* gnome-shell-extension-apps-menu gnome-shell-extension-horizontal-workspaces gnome-shell-extension-launch-new-instance gnome-shell-extension-places-menu gnome-shell-extension-window-list file-roller* sane* simple-scan *hangul* mediawriter *anthy*
+sudo dnf -y remove fedora-bookmarks fedora-chromium-config firefox mozilla-filesystem \
+    #Network + hardware tools
+    cups nmap-ncat nfs-utils nmap-ncat openssh-server net-snmp-libs net-tools traceroute rsync tcpdump teamd geolite2* mtr dmidecode sgpio \
+    #Remove support for some languages and spelling
+    ibus-typing-booster *speech* *zhuyin* *pinyin* *kkc* *m17n* *hangul* *anthy* words \
+    #Remove codec + image + printers
+    openh264 ImageMagick* sane* simple-scan \ 
+    #Remove Active Directory + Sysadmin + reporting tools
+    sssd* realmd adcli cyrus-sasl-plain cyrus-sasl-gssapi mlocate quota* dos2unix kpartx sos abrt \
+    #Remove vm and virtual stuff
+    podman* *libvirt* open-vm* qemu-guest-agent hyperv* spice-vdagent virtualbox-guest-additions vino xorg-x11-drv-vmware xorg-x11-drv-amdgpu \
+    #NetworkManager
+    NetworkManager-pptp-gnome NetworkManager-ssh-gnome NetworkManager-openconnect-gnome NetworkManager-openvpn-gnome NetworkManager-vpnc-gnome nm-connection-editor ppp* ModemManager\
+    #Remove Gnome apps
+    gnome-tour gnome-themes-extra gnome-screenshot gnome-remote-desktop gnome-font-viewer gnome-calculator gnome-calendar gnome-contacts \
+    gnome-maps gnome-weather gnome-logs gnome-boxes gnome-disk-utility gnome-clocks gnome-color-manager gnome-characters baobab totem \
+    gnome-shell-extension-background-logo gnome-shell-extension-apps-menu gnome-shell-extension-horizontal-workspaces gnome-shell-extension-launch-new-instance gnome-shell-extension-places-menu gnome-shell-extension-window-list \
+    gnome-classic* gnome-user* chrome-gnome-shell \
+    #Remove apps
+    rhythmbox *yelp* *evince* libreoffice* cheese gedit file-roller* mediawriter \
+    #other
+    lvm2 rng-tools thermald *perl* yajl
 
 #Disable openh264 repo
 sudo dnf config-manager --set-disabled fedora-cisco-openh264 -y
