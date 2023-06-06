@@ -57,7 +57,7 @@ sudo fwupdmgr update -y
 apt purge -y gnome-calculator
 
 #Install packages that I use
-apt install -y gnome-console
+apt install -y git-core gnome-console
 
 #Randomize MAC address
 sudo bash -c 'cat > /etc/NetworkManager/conf.d/00-macrandomize.conf' <<-'EOF'
