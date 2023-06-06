@@ -96,3 +96,6 @@ sudo systemctl restart NetworkManager
 sudo ua enable usg
 sudo apt install -y usg
 sudo usg fix cis_level2_workstation
+
+#Allow su which is disabled by CIS 
+sudo sed -i 's/auth required pam_wheel.so use_uid group=sugroup//g' /etc/pam.d/su
