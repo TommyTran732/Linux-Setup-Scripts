@@ -11,6 +11,9 @@ sudo sed -ie '/^UMASK\s\+/ s/022/077/' /etc/login.defs
 sudo sed -i 's/USERGROUPS_ENAB yes/USERGROUPS_ENAB no/g' /etc/login.defs
 echo "umask 077" | sudo tee --append /etc/profile
 
+#Make sure the system has curl (minimal installs do not include it)
+sudo apt install -y curl
+
 #Security kernel settings
 sudo curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf -o /etc/modprobe.d/30_security-misc.conf
 sudo curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/sysctl.d/30_security-misc.conf -o /etc/sysctl.d/30_security-misc.conf
