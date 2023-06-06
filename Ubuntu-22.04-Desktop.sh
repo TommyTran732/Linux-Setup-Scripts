@@ -31,6 +31,10 @@ sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/syste
 echo "GSSAPIAuthentication no" | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
 echo "VerifyHostKeyDNS yes" | sudo tee -a /etc/ssh/ssh_config.d/10-custom.conf
 
+#Setup NTS
+rm -rf /etc/chrony/chrony.conf
+curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony/chrony.conf
+
 #Disable crash reports
 gsettings set com.ubuntu.update-notifier show-apport-crashes false
 ubuntu-report -f send no
@@ -40,6 +44,14 @@ sudo systemctl mask apport.service
 sudo systemctl stop whoopsie.service
 sudo systemctl disable whoopsie.service
 sudo systemctl mask whoopsie.service
+
+#Update packages and firmware
+sudo apt update -y
+sudo apt full-upgrade -y
+sudo fwupdmgr get-devices
+sudo fwupdmgr refresh --force
+sudo fwupdmgr get-updates -y
+sudo fwupdmgr update -y
 
 #Remove unneeded packages
 apt purge -y gnome-calculator
