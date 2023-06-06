@@ -91,3 +91,8 @@ connection.stable-id=${CONNECTION}/${BOOT}
 EOF
 
 sudo systemctl restart NetworkManager
+
+#Compliance
+sudo ua enable usg
+sudo apt install -y usg
+sudo usg fix cis_level2_workstation
