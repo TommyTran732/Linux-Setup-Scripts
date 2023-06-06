@@ -58,3 +58,15 @@ apt purge -y gnome-calculator
 
 #Install packages that I use
 apt install -y gnome-console
+
+#Randomize MAC address
+sudo bash -c 'cat > /etc/NetworkManager/conf.d/00-macrandomize.conf' <<-'EOF'
+[device]
+wifi.scan-rand-mac-address=yes
+[connection]
+wifi.cloned-mac-address=random
+ethernet.cloned-mac-address=random
+connection.stable-id=${CONNECTION}/${BOOT}
+EOF
+
+sudo systemctl restart NetworkManager
