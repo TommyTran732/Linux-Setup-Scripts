@@ -43,7 +43,7 @@ echo "GSSAPIAuthentication no" | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
 echo "VerifyHostKeyDNS yes" | sudo tee -a /etc/ssh/ssh_config.d/10-custom.conf
 
 #Setup NTS
-rm -rf /etc/chrony/chrony.conf
+sudo rm -rf /etc/chrony/chrony.conf
 sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony/chrony.conf
 sudo systemctl restart chronyd
 
@@ -66,9 +66,9 @@ sudo firewall-cmd --permanent --remove-service=samba-client
 sudo firewall-cmd --reload
 
 #Speed up DNF
-sudo echo 'fastestmirror=1' | sudo tee -a /etc/dnf/dnf.conf
-sudo echo 'deltarpm=true' | sudo tee -a /etc/dnf/dnf.conf
-sudo echo 'countme=false' | sudo tee -a /etc/dnf/dnf.conf
+echo 'fastestmirror=1' | sudo tee -a /etc/dnf/dnf.conf
+echo 'deltarpm=true' | sudo tee -a /etc/dnf/dnf.conf
+echo 'countme=false' | sudo tee -a /etc/dnf/dnf.conf
 
 #Update packages and firmware
 sudo dnf upgrade -y
@@ -105,7 +105,7 @@ sudo dnf -y remove fedora-bookmarks fedora-chromium-config firefox mozilla-files
 sudo dnf config-manager --set-disabled fedora-cisco-openh264 -y
 
 #Install packages that I use
-sudo dnf -y install gnome-console git-core flat-remix-theme gnome-shell-extension-appindicator gnome-shell-extension-background-blur gnome-shell-extension-dash-to-dock gnome-shell-extension-dash-to-dock gnome-shell-extension-no-overview
+sudo dnf -y install gnome-console git-core flat-remix-theme gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-dash-to-dock gnome-shell-extension-dash-to-dock gnome-shell-extension-no-overview
 
 #Enable auto TRIM
 sudo systemctl enable fstrim.timer
