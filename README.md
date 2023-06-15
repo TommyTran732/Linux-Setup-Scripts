@@ -6,7 +6,7 @@ Do note that I remove bluetooth (bluez and gnome-bluetooth) from the system, as 
 
 Visit my Matrix group: https://matrix.to/#/#tommytran732:matrix.org
 
-# Fedora Workstation 36
+# Fedora Workstation 38
 
 1. Debloat Fedora <br />
 The script removes some ~800 useless packages from the default installation. A lot of these have Flatpak alternatives. <br />
