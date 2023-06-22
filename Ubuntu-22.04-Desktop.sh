@@ -66,7 +66,11 @@ sudo snap install ufw
 sudo ufw enable
 
 #Disable crash reports
-gsettings set com.ubuntu.update-notifier show-apport-crashes false
+echo '[com/ubuntu/update-notifier]
+show-apport-crashes=false' | sudo tee /etc/dconf/db/local.d/disable-apport-crashes
+
+echo 'com/ubuntu/update-notifier/show-apport-crashes' | sudo tee /etc/dconf/db/local.d/locks/disable-apport-crashes
+
 ubuntu-report -f send no
 sudo systemctl stop apport.service
 sudo systemctl disable apport.service
