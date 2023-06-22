@@ -47,6 +47,9 @@ sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chron
 sudo systemctl restart chronyd
 
 # Disable automount
+
+sudo mkdir -p /etc/dconf/db/local.d/locks/
+
 echo '[org/gnome/desktop/media-handling]
 automount=false
 automount-open=false' | sudo tee /etc/dconf/db/local.d/automount-disable
