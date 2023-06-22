@@ -71,6 +71,8 @@ show-apport-crashes=false' | sudo tee /etc/dconf/db/local.d/disable-apport-crash
 
 echo 'com/ubuntu/update-notifier/show-apport-crashes' | sudo tee /etc/dconf/db/local.d/locks/disable-apport-crashes
 
+sudo dconf update
+
 ubuntu-report -f send no
 sudo systemctl stop apport.service
 sudo systemctl disable apport.service
