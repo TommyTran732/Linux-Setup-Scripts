@@ -90,9 +90,8 @@ sudo fwupdmgr get-updates -y
 sudo fwupdmgr update -y
 
 #Remove unneeded packages
-sudo apt purge -y cups* eog gedit gnome-calculator gnome-characters* gnome-font-viewer gnome-logs gnome-power-manager gnome-shell-extension-prefs seahorse tcpdump whoopsie
+sudo apt purge -y cups* eog gedit firefox* gnome-calculator gnome-characters* gnome-font-viewer gnome-logs gnome-power-manager gnome-shell-extension-prefs seahorse tcpdump whoopsie
 sudo apt autoremove -y
-sudo snap remove firefox
 
 #Install packages that I use
 sudo apt install -y git-core gnome-text-editor
