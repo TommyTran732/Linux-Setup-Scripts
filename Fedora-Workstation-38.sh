@@ -41,6 +41,7 @@ sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/syste
 
 echo "GSSAPIAuthentication no" | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
 echo "VerifyHostKeyDNS yes" | sudo tee -a /etc/ssh/ssh_config.d/10-custom.conf
+sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 
 #Setup NTS
 sudo rm -rf /etc/chrony/chrony.conf

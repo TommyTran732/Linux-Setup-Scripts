@@ -4,6 +4,7 @@
 mkdir -p /etc/ssh/ssh_config.d /etc/ssh/sshd_config.d
 echo 'GSSAPIAuthentication no
 VerifyHostKeyDNS yes' | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
+sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 echo 'X11Forwarding no
 GSSAPIAuthentication no
 PasswordAuthentication no' | sudo tee /etc/ssh/sshd_config.d/10-custom.conf

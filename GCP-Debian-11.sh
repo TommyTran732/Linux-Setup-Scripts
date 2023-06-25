@@ -2,6 +2,7 @@
 
 echo 'GSSAPIAuthentication no
 VerifyHostKeyDNS yes' | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
+sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 sudo sed -i 's/#GSSAPIAuthentication no/GSSAPIAuthentication no/g' /etc/ssh/sshd_config
 sudo systemctl restart sshd
 
