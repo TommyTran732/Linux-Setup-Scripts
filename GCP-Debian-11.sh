@@ -44,10 +44,10 @@ echo 'server:
 forward-zone:
   name: "."
   forward-tls-upstream: yes
-  forward-addr: 8.8.8.8#dns.google
-  forward-addr: 8.8.4.4#dns.google
-  forward-addr: 2001:4860:4860::8888#dns.google
-  forward-addr: 2001:4860:4860::8844#dns.google' | sudo tee /etc/unbound/unbound.conf.d/custom.conf
+  forward-addr: 1.1.1.1@853#cloudflare-dns.com
+  forward-addr: 1.0.0.1@853#cloudflare-dns.com
+  forward-addr: 2606:4700:4700::1111@853#cloudflare-dns.com
+  forward-addr: 2606:4700:4700::1001@853#cloudflare-dns.com' | sudo tee /etc/unbound/unbound.conf.d/custom.conf
 
 mkdir -p /etc/systemd/system/unbound.service.d
 echo $'[Service]
