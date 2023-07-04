@@ -2,6 +2,11 @@
 
 #Meant to be run on Ubuntu Pro Minimal 
 
+#Compliance
+sudo ua enable usg
+sudo apt install -y usg
+sudo usg fix cis_level2_server
+
 #Security kernel settings
 sudo curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf -o /etc/modprobe.d/30_security-misc.conf
 sudo curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/sysctl.d/30_security-misc.conf -o /etc/sysctl.d/30_security-misc.conf
