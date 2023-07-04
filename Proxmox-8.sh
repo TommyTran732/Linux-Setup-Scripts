@@ -13,14 +13,14 @@ systemctl restart sshd
 
 sed -i '1 {s/^/#/}' /etc/apt/sources.list.d/pve-enterprise.list
 
-echo 'deb https://deb.debian.org/debian/ bullseye main contrib non-free
+echo 'deb https://deb.debian.org/debian/ bookworm main contrib non-free
 
-deb https://deb.debian.org/debian/ bullseye-updates main contrib non-free
+deb https://deb.debian.org/debian/ bookworm-updates main contrib non-free
 
 # security updates
-deb https://security.debian.org bullseye-security main contrib non-free
+deb https://security.debian.org bookworm-security main contrib non-free
 
-deb http://download.proxmox.com/debian/pve bullseye pve-no-subscription' | tee /etc/apt/sources.list
+deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription' | tee /etc/apt/sources.list
 
 apt update
 apt upgrade -y
