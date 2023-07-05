@@ -58,7 +58,7 @@ systemctl enable --now pve-daily-update.timer
 
 mkdir -p /etc/systemd/system/fwupd-refresh.service.d
 echo '[Service]
-ExecStart=ExecStart=/usr/bin/fwupdmgr update' | tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
+ExecStart=/usr/bin/fwupdmgr update' | tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
 systemctl daemon-reload
 systemctl enable --now fwupd-refresh.timer
 
