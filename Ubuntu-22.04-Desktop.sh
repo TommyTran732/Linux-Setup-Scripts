@@ -110,3 +110,6 @@ connection.stable-id=${CONNECTION}/${BOOT}
 EOF
 
 sudo systemctl restart NetworkManager
+
+# Enable fstrim.timer
+sudo systemctl enable --now fstrim.timer

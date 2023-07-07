@@ -16,3 +16,6 @@ sudo apt update
 sudo apt -y --no-install-recommends install runsc
 sudo runsc install
 sudo systemctl restart docker
+
+# Enable fstrim.timer
+sudo systemctl enable --now fstrim.timer

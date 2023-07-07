@@ -107,3 +107,6 @@ sudo firewall-cmd --reload
 
 sudo sed -i 's/apply_updates = no/apply_updates = yes\nreboot = when-needed/g' /etc/dnf/automatic.conf
 sudo systemctl enable --now dnf-automatic.timer
+
+# Enable fstrim.timer
+sudo systemctl enable --now fstrim.timer

@@ -46,5 +46,8 @@ sudo apt install fwupd
 mkdir -p /etc/systemd/system/fwupd-refresh.service.d
 echo '[Service]
 ExecStart=/usr/bin/fwupdmgr update' | tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
-systemctl daemon-reload
-systemctl enable --now fwupd-refresh.timer
+sudo systemctl daemon-reload
+sudo systemctl enable --now fwupd-refresh.timer
+
+# Enable fstrim.timer
+sudo systemctl enable --now fstrim.timer

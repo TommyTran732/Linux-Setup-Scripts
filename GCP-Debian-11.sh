@@ -105,3 +105,6 @@ sudo mkdir -p /etc/systemd/system/NetworkManager.service.d
 sudo curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf -o /etc/systemd/system/NetworkManager.service.d/99-brace.conf
 
 echo "* hard core 0" | tee -a /etc/security/limits.conf
+
+# Enable fstrim.timer
+sudo ystemctl enable --now fstrim.timer
