@@ -46,10 +46,10 @@ echo 'server:
 forward-zone:
   name: "."
   forward-tls-upstream: yes
-  forward-addr: 1.1.1.1@853#cloudflare-dns.com
-  forward-addr: 1.0.0.1@853#cloudflare-dns.com
-  forward-addr: 2606:4700:4700::1111@853#cloudflare-dns.com
-  forward-addr: 2606:4700:4700::1001@853#cloudflare-dns.com' | sudo tee /etc/unbound/unbound.conf
+  forward-addr: 1.1.1.2@853#security.cloudflare-dns.com
+  forward-addr: 1.0.0.2@853#security.cloudflare-dns.com
+  forward-addr: 2606:4700:4700::1112@853#security.cloudflare-dns.com
+  forward-addr: 2606:4700:4700::1002@853#security.cloudflare-dns.com' | sudo tee /etc/unbound/unbound.conf
 
 mkdir -p /etc/systemd/system/unbound.service.d
 echo $'[Service]
