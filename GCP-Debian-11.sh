@@ -86,6 +86,7 @@ BindReadOnlyPaths=-/run/systemd/notify:@UNBOUND_CHROOT_DIR@/run/systemd/notify
 BindReadOnlyPaths=-/dev/urandom:@UNBOUND_CHROOT_DIR@/dev/urandom
 BindPaths=-/dev/log:@UNBOUND_CHROOT_DIR@/dev/log' | sudo tee /etc/systemd/system/unbound.service.d/override.conf
 
+sudo systemctl daemon-reload
 sudo systemctl restart unbound
 sudo systemctl disable --now systemd-resolved
 
