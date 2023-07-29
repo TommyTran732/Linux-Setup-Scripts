@@ -10,7 +10,7 @@ sudo find /etc/apt/sources.list.d -type f -exec sudo sed -i 's/http:/https:/g' {
 
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y --no-install-recommends tuned unbound ufw
+sudo apt install -y --no-install-recommends tuned unbound resolvconf ufw
 
 sudo ufw enable
 sudo ufw allow 22/tcp
@@ -20,6 +20,7 @@ sudo tuned-adm profile virtual-guest
 echo 'server:
   trust-anchor-signaling: yes
   root-key-sentinel: yes
+  tls-cert-bundle: /etc/ssl/certs/ca-certificates.crt
 
   hide-identity: yes
   hide-trustanchor: yes
@@ -86,6 +87,7 @@ BindReadOnlyPaths=-/dev/urandom:@UNBOUND_CHROOT_DIR@/dev/urandom
 BindPaths=-/dev/log:@UNBOUND_CHROOT_DIR@/dev/log' | sudo tee /etc/systemd/system/unbound.service.d/override.conf
 
 sudo systemctl restart unbound
+sudo systemctl disable --now systemd-resolved
 
 sudo mkdir -p /etc/systemd/system/sshd.service.d
 sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/limits.conf -o /etc/systemd/system/sshd.service.d/limits.conf
