@@ -18,6 +18,7 @@ sudo ufw allow 22/tcp
 sudo tuned-adm profile virtual-guest
 
 echo 'server:
+  trust-anchor-file: "/var/lib/unbound/root.key
   trust-anchor-signaling: yes
   root-key-sentinel: yes
   tls-cert-bundle: /etc/ssl/certs/ca-certificates.crt
@@ -49,6 +50,8 @@ forward-zone:
   forward-addr: 1.0.0.2@853#security.cloudflare-dns.com
   forward-addr: 2606:4700:4700::1112@853#security.cloudflare-dns.com
   forward-addr: 2606:4700:4700::1002@853#security.cloudflare-dns.com' | sudo tee /etc/unbound/unbound.conf.d/custom.conf
+
+sudo mv /etc/unbound/unbound.conf.d/root-auto-trust-anchor-file.conf  /etc/unbound/unbound.conf.d/root-auto-trust-anchor-file.conf.bk
 
 mkdir -p /etc/systemd/system/unbound.service.d
 echo $'[Service]
