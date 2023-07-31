@@ -15,8 +15,10 @@ sudo apt install -y --no-install-recommends tuned unbound resolvconf ufw
 sudo ufw enable
 sudo ufw allow 22/tcp
 
+#Setup tuned
 sudo tuned-adm profile virtual-guest
 
+#Setup unbound
 echo 'server:
   trust-anchor-file: "/var/lib/unbound/root.key
   trust-anchor-signaling: yes
