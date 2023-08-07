@@ -17,7 +17,6 @@ sudo tuned-adm profile virtual-guest
 
 #Setup unbound
 echo 'server:
-  trust-anchor-file: "/var/lib/unbound/root.key
   trust-anchor-signaling: yes
   root-key-sentinel: yes
   tls-cert-bundle: /etc/ssl/certs/ca-certificates.crt
@@ -50,8 +49,6 @@ forward-zone:
   forward-addr: 2606:4700:4700::1112@853#security.cloudflare-dns.com
   forward-addr: 2606:4700:4700::1002@853#security.cloudflare-dns.com' | sudo tee /etc/unbound/unbound.conf.d/custom.conf
 
-sudo mv /etc/unbound/unbound.conf.d/root-auto-trust-anchor-file.conf  /etc/unbound/unbound.conf.d/root-auto-trust-anchor-file.conf.bk
-
 mkdir -p /etc/systemd/system/unbound.service.d
 echo $'[Service]
 CapabilityBoundingSet=CAP_NET_BIND_SERVICE CAP_SETGID CAP_SETUID CAP_SYS_CHROOT CAP_SYS_RESOURCE CAP_NET_RAW
@@ -67,10 +64,6 @@ ProtectKernelModules=true
 # This breaks using socket options like \'so-rcvbuf\'. Explicitly disable for visibility.
 ProtectKernelTunables=false
 ProtectProc=invisible
-ProtectSystem=strict
-RuntimeDirectory=unbound
-ConfigurationDirectory=unbound
-StateDirectory=unbound
 RestrictAddressFamilies=AF_INET AF_INET6 AF_NETLINK AF_UNIX
 RestrictRealtime=true
 SystemCallArchitectures=native
