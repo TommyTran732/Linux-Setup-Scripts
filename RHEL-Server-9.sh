@@ -78,6 +78,10 @@ sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/syste
 sudo systemctl restart sshd
 
 sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony.conf
+
+echo '# Command-line options for chronyd
+OPTIONS="-F 1"' | sudo tee /etc/sysconfig/chronyd
+
 sudo systemctl restart chronyd
 
 sudo insights-client --collector malware-detection
