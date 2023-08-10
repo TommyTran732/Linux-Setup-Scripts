@@ -10,7 +10,7 @@ sudo usg fix cis_level2_server
 #Install packages
 sudo apt update -y
 sudo apt full-upgrade -y
-sudo apt install -y curl fwupd resolveconf tuned unbound
+sudo apt install -y curl fwupd libpam-pwquality tuned unbound
 
 #Setup tuned
 sudo tuned-adm profile virtual-guest
