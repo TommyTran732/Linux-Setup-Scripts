@@ -13,44 +13,53 @@ output(){
     echo -e '\e[36m'$1'\e[0m';
 }
 
-#Moving to the home directory
+# Moving to the home directory
 #Note that I always use /home/${USER} because gnome-terminal is wacky and sometimes doesn't load the environment variables in correctly (Right click somewhere in nautilus, click on open in terminal, then hit create new tab and you will see.)
 cd /home/"${USER}" || exit
 
-#Setting umask to 077
+# Setting umask to 077
 umask 077
 sudo sed -i 's/umask 022/umask 077/g' /etc/bashrc
 echo "umask 077" | sudo tee -a /etc/bashrc
 
-#Make home directory private
+# Make home directory private
 chmod 700 /home/*
 
-#Security kernel settings
+# Setup NTS
+sudo rm -rf /etc/chrony/chrony.conf
+sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony/chrony.conf
+echo '# Command-line options for chronyd
+OPTIONS="-F 1"' | sudo tee /etc/sysconfig/chronyd
+
+sudo systemctl restart chronyd
+
+# Setup Firewalld
+sudo firewall-cmd --permanent --remove-port=1025-65535/udp
+sudo firewall-cmd --permanent --remove-port=1025-65535/tcp
+sudo firewall-cmd --permanent --remove-service=mdns
+sudo firewall-cmd --permanent --remove-service=ssh
+sudo firewall-cmd --permanent --remove-service=samba-client
+sudo firewall-cmd --reload
+
+# Harden SSH
+echo "GSSAPIAuthentication no" | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
+echo "VerifyHostKeyDNS yes" | sudo tee -a /etc/ssh/ssh_config.d/10-custom.conf
+sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
+
+# Security kernel settings
 sudo curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf -o /etc/modprobe.d/30_security-misc.conf
 sudo curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/sysctl.d/30_security-misc.conf -o /etc/sysctl.d/30_security-misc.conf
 sudo curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/sysctl.d/30_silent-kernel-printk.conf -o /etc/sysctl.d/30_silent-kernel-printk.conf
 sudo curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/sysctl.d/30_security-misc_kexec-disable.conf -o /etc/sysctl.d/30_security-misc_kexec-disable.conf
 
-#Systemd Hardening
+# Systemd Hardening
 sudo mkdir -p /etc/systemd/system/NetworkManager.service.d
 sudo curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf -o /etc/systemd/system/NetworkManager.service.d/99-brace.conf
 sudo mkdir -p /etc/systemd/system/irqbalance.service.d
 sudo curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/irqbalance.service.d/99-brace.conf -o /etc/systemd/system/irqbalance.service.d/99-brace.conf
-sudo mkdir -p /etc/systemd/system/sshd.service.d
-sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/local.conf -o /etc/systemd/system/sshd.service.d/limits.conf
 
-echo "GSSAPIAuthentication no" | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
-echo "VerifyHostKeyDNS yes" | sudo tee -a /etc/ssh/ssh_config.d/10-custom.conf
-sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
-
-#Setup NTS
-sudo rm -rf /etc/chrony/chrony.conf
-sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony/chrony.conf
-
-echo '# Command-line options for chronyd
-OPTIONS="-F 1"' | sudo tee /etc/sysconfig/chronyd
-
-sudo systemctl restart chronyd
+sudo systemctl restart NetworkManager
+sudo systemctl restart irqbalance
 
 # Disable automount
 echo '[org/gnome/desktop/media-handling]
@@ -62,27 +71,19 @@ org/gnome/desktop/media-handling/automount-open' | sudo tee /etc/dconf/db/local.
 
 sudo dconf update
 
-#Setup Firewalld
-sudo firewall-cmd --permanent --remove-port=1025-65535/udp
-sudo firewall-cmd --permanent --remove-port=1025-65535/tcp
-sudo firewall-cmd --permanent --remove-service=mdns
-sudo firewall-cmd --permanent --remove-service=ssh
-sudo firewall-cmd --permanent --remove-service=samba-client
-sudo firewall-cmd --reload
-
-#Speed up DNF
+# Speed up DNF
 echo 'fastestmirror=1' | sudo tee -a /etc/dnf/dnf.conf
 echo 'deltarpm=true' | sudo tee -a /etc/dnf/dnf.conf
 echo 'countme=false' | sudo tee -a /etc/dnf/dnf.conf
 
-#Update packages and firmware
+# Update packages and firmware
 sudo dnf upgrade -y
 sudo fwupdmgr get-devices
 sudo fwupdmgr refresh --force
 sudo fwupdmgr get-updates -y
 sudo fwupdmgr update -y
 
-#Remove unneeded packages
+# Remove unneeded packages
 sudo dnf -y remove fedora-bookmarks fedora-chromium-config firefox mozilla-filesystem \
     #Network + hardware tools
     cups nmap-ncat nfs-utils nmap-ncat openssh-server net-snmp-libs net-tools opensc traceroute rsync tcpdump teamd geolite2* mtr dmidecode sgpio \
@@ -106,16 +107,19 @@ sudo dnf -y remove fedora-bookmarks fedora-chromium-config firefox mozilla-files
     #other
     lvm2 rng-tools thermald *perl* yajl
 
-#Disable openh264 repo
+# Disable openh264 repo
 sudo dnf config-manager --set-disabled fedora-cisco-openh264 -y
 
-#Install packages that I use
-sudo dnf -y install gnome-console git-core flat-remix-theme gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo gnome-shell-extension-dash-to-dock gnome-shell-extension-no-overview
+# Install packages that I use
+sudo dnf -y install gnome-console git-core flat-remix-theme gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo gnome-shell-extension-dash-to-dock gnome-shell-extension-no-overview tuned
 
-#Enable auto TRIM
+# Setup tuned
+sudo tuned-adm profile latency-performance
+
+# Enable auto TRIM
 sudo systemctl enable fstrim.timer
 
-#Setup BTRFS layout and Timeshift
+# Setup BTRFS layout and Timeshift
 sudo mkdir /btrfs_pool
 sudo mount -o subvolid=5 /dev/mapper/${PARTITIONID} /btrfs_pool
 sudo mv /btrfs_pool/root /btrfs_pool/@
@@ -127,7 +131,7 @@ sudo echo "UUID=${PARTITIONUUID} /btrfs_pool             btrfs   subvolid=5,ssd,
 sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
 sudo dnf -y install timeshift
 
-#Randomize MAC address
+# andomize MAC address
 sudo bash -c 'cat > /etc/NetworkManager/conf.d/00-macrandomize.conf' <<-'EOF'
 [device]
 wifi.scan-rand-mac-address=yes
@@ -137,7 +141,7 @@ wifi.cloned-mac-address=random
 ethernet.cloned-mac-address=random
 EOF
 
-#Disable transient hostname
+# Disable transient hostname
 sudo bash -c 'cat > /etc/NetworkManager/conf.d/00-macrandomize.conf' <<-'EOF'
 [main]
 hostname-mode=none
