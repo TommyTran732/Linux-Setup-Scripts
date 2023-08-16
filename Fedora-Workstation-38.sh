@@ -46,6 +46,10 @@ sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 #Setup NTS
 sudo rm -rf /etc/chrony/chrony.conf
 sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony/chrony.conf
+
+echo '# Command-line options for chronyd
+OPTIONS="-F 1"' | sudo tee /etc/sysconfig/chronyd
+
 sudo systemctl restart chronyd
 
 # Disable automount
@@ -85,7 +89,7 @@ sudo dnf -y remove fedora-bookmarks fedora-chromium-config firefox mozilla-files
     #Remove support for some languages and spelling
     ibus-typing-booster *speech* *zhuyin* *pinyin* *kkc* *m17n* *hangul* *anthy* words \
     #Remove codec + image + printers
-    openh264 ImageMagick* sane* simple-scan \ 
+    openh264 ImageMagick* sane* simple-scan \
     #Remove Active Directory + Sysadmin + reporting tools
     sssd* realmd adcli cyrus-sasl-plain cyrus-sasl-gssapi mlocate quota* dos2unix kpartx sos abrt \
     #Remove vm and virtual stuff
