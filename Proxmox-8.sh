@@ -21,12 +21,13 @@ systemctl restart sshd
 # Setup repositories
 sed -i '1 {s/^/#/}' /etc/apt/sources.list.d/pve-enterprise.list
 
-echo 'deb https://deb.debian.org/debian/ bookworm main contrib non-free
+echo 'deb https://deb.debian.org/debian/ bookworm main contrib non-free non-free-firmware
 
-deb https://deb.debian.org/debian/ bookworm-updates main contrib non-free
+deb http://deb.debian.org/debian-security/ bookworm-security main contrib non-free non-free-firmware
 
-# security updates
-deb https://security.debian.org bookworm-security main contrib non-free
+deb https://deb.debian.org/debian/ bookworm-updates main contrib non-free non-free-firmware
+
+deb https://deb.debian.org/debian/ bookworm-backports main contrib non-free non-free-firmware
 
 deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription' | tee /etc/apt/sources.list
 
