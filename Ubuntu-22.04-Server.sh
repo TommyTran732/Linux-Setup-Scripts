@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #Meant to be run on Ubuntu Pro Minimal 
+#The script assumes you already have Ubuntu Pro activated
 
 #Compliance
 sudo ua enable usg

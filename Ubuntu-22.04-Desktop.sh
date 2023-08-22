@@ -1,8 +1,7 @@
 #!/bin/bash
 
 #Please note that this is how I PERSONALLY setup my computer - I do some stuff such as not using anything to download GNOME extensions from extensions.gnome.org and installing the extensions as a package instead
-#Customize it to your liking
-#Run this script as your admin user, NOT root
+##The script assumes you already have Ubuntu Pro activated
 
 # Compliance
 sudo ua enable usg
