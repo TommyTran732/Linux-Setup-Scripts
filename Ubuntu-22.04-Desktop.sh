@@ -21,8 +21,11 @@ sudo sed -ie '/^UMASK\s\+/ s/022/077/' /etc/login.defs
 sudo sed -i 's/USERGROUPS_ENAB yes/USERGROUPS_ENAB no/g' /etc/login.defs
 echo "umask 077" | sudo tee --append /etc/profile
 
-# Make sure the system has curl (minimal installs do not include it)
+# Update and install packages
+sudo apt update -y
+sudo apt full-upgrade -y
 sudo apt install -y curl
+sudo apt autoremove -y
 
 # Setup NTS
 sudo systemctl disable systemd-timesyncd

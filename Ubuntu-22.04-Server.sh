@@ -15,6 +15,7 @@ sudo apt purge -y aide*
 sudo apt update -y
 sudo apt full-upgrade -y
 sudo apt install -y curl fwupd libpam-pwquality tuned unbound
+sudo apt autoremove -y
 
 # Setup NTS
 sudo systemctl disable systemd-timesyncd
