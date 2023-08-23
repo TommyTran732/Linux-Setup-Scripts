@@ -25,7 +25,7 @@ sudo systemctl restart chronyd
 sudo apt purge -y ufw
 sudo snap install ufw
 sudo ufw enable
-sudo ufw allow 22
+sudo ufw allow OpenSSH
 
 # Harden SSH
 echo "GSSAPIAuthentication no" | sudo tee /etc/ssh/ssh_config.d/10-custom.conf

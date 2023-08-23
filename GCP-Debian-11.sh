@@ -15,7 +15,7 @@ sudo apt upgrade -y
 # Setup ufw
 sudo apt install ufw -y
 sudo ufw enable
-sudo ufw allow 22/tcp
+sudo ufw allow OpenSSH
 
 # Harden SSH
 echo 'GSSAPIAuthentication no
