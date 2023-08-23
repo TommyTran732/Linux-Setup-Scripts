@@ -3,10 +3,13 @@
 #Please note that this is how I PERSONALLY setup my computer - I do some stuff such as not using anything to download GNOME extensions from extensions.gnome.org and installing the extensions as a package instead
 ##The script assumes you already have Ubuntu Pro activated
 
-# Compliance
+#Compliance and updates
 sudo ua enable usg
+sudo apt update -y
+sudo apt full-upgrade -y
 sudo apt install -y usg
-sudo usg fix cis_level2_workstation
+sudo apt autoremove -y
+sudo usg fix cis_level2_server
 
 # Remove AIDE
 sudo apt purge -y aide*
@@ -20,12 +23,6 @@ sudo sed -ie '/^DIR_MODE=/ s/=[0-9]*\+/=0700/' /etc/adduser.conf
 sudo sed -ie '/^UMASK\s\+/ s/022/077/' /etc/login.defs
 sudo sed -i 's/USERGROUPS_ENAB yes/USERGROUPS_ENAB no/g' /etc/login.defs
 echo "umask 077" | sudo tee --append /etc/profile
-
-# Update and install packages
-sudo apt update -y
-sudo apt full-upgrade -y
-sudo apt install -y curl
-sudo apt autoremove -y
 
 # Setup NTS
 sudo systemctl disable systemd-timesyncd
@@ -116,4 +113,5 @@ EOF
 sudo systemctl restart NetworkManager
 
 # Enable fstrim.timer
+sudo apt install tuned -y
 sudo systemctl enable --now fstrim.timer

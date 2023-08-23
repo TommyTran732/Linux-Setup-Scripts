@@ -3,24 +3,20 @@
 #Meant to be run on Ubuntu Pro Minimal 
 #The script assumes you already have Ubuntu Pro activated
 
-#Compliance
+#Compliance and updates
 sudo ua enable usg
-sudo apt install -y usg
+sudo apt update -y
+sudo apt full-upgrade -y
+sudo apt install -y usg curl libpam-pwquality
+sudo apt autoremove -y
 sudo usg fix cis_level2_server
 
 # Remove AIDE
 sudo apt purge -y aide*
 
-# Update and install packages
-sudo apt update -y
-sudo apt full-upgrade -y
-sudo apt install -y curl fwupd libpam-pwquality tuned unbound
-sudo apt autoremove -y
-
 # Setup NTS
-sudo systemctl disable systemd-timesyncd
+sudo systemctl disable --now systemd-timesyncd
 sudo apt install -y chrony
-rm -rf /etc/chrony/chrony.conf
 sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony/chrony.conf
 sudo systemctl restart chronyd
 
@@ -41,6 +37,9 @@ sudo systemctl daemon-reload
 sudo systemctl restart sshd
 
 # Setup unbound
+
+sudp apt install -y unbound
+
 echo 'server:
   trust-anchor-signaling: yes
   root-key-sentinel: yes
@@ -123,6 +122,8 @@ sudo systemctl stop whoopsie.service
 sudo systemctl disable whoopsie.service
 sudo systemctl mask whoopsie.service
 
+#Setup fwupd
+sudo apt install fwupd -y
 mkdir -p /etc/systemd/system/fwupd-refresh.service.d
 echo '[Service]
 ExecStart=/usr/bin/fwupdmgr update' | tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
@@ -130,6 +131,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now fwupd-refresh.timer
 
 # Setup tuned
+sudo apt install tuned -y
 sudo tuned-adm profile virtual-guest
 
 # Enable fstrim.timer

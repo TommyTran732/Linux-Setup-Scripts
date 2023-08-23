@@ -49,10 +49,10 @@ sudo curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/s
 sudo systemctl daemon-reload
 sudo systemctl restart irqbalance
 
-# Install packages
-sudo dnf install tuned unbound yara -y
-
 # Setup unbound
+
+sudo dnf install unbound -y
+
 echo 'server:
   chroot: ""
 
@@ -113,6 +113,8 @@ LockPersonality=yes' | sudo tee /etc/systemd/system/unbound.service.d/override.c
 
 sudo systemctl enable --now unbound
 
+# Setup yara
+sudo dnf install -y yara
 sudo insights-client --collector malware-detection
 sudo sed -i 's/test_scan: true/test_scan: false/' /etc/insights-client/malware-detection-config.yml
 
@@ -121,7 +123,16 @@ sudo sed -i 's/test_scan: true/test_scan: false/' /etc/insights-client/malware-d
 sudo sed -i 's/apply_updates = no/apply_updates = yes\nreboot = when-needed/g' /etc/dnf/automatic.conf
 sudo systemctl enable --now dnf-automatic.timer
 
+#Setup fwupd
+sudo dnf install fwupd -y
+mkdir -p /etc/systemd/system/fwupd-refresh.service.d
+echo '[Service]
+ExecStart=/usr/bin/fwupdmgr update' | tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
+sudo systemctl daemon-reload
+sudo systemctl enable --now fwupd-refresh.timer
+
 # Setup tuned
+sudo dnf install tuned -y
 sudo tuned-adm profile virtual-guest
 
 # Enable fstrim.timer

@@ -11,9 +11,9 @@ sudo find /etc/apt/sources.list.d -type f -exec sudo sed -i 's/http:/https:/g' {
 # Update and install packages
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y --no-install-recommends tuned unbound resolvconf ufw
 
 # Setup ufw
+sudo apt install ufw -y
 sudo ufw enable
 sudo ufw allow 22/tcp
 
@@ -42,6 +42,9 @@ sudo curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/s
 echo "* hard core 0" | tee -a /etc/security/limits.conf
 
 # Setup unbound
+
+sudo apt instal unbound resolvconf -y
+
 echo 'server:
   trust-anchor-signaling: yes
   root-key-sentinel: yes
@@ -112,6 +115,7 @@ sudo systemctl restart unbound
 sudo systemctl disable --now systemd-resolved
 
 # Setup tuned
+sudo dnf install tuned -y
 sudo tuned-adm profile virtual-guest
 
 # Enable fstrim.timer
