@@ -26,8 +26,7 @@ echo "umask 077" | sudo tee --append /etc/profile
 
 # Setup NTS
 sudo systemctl disable systemd-timesyncd
-sudo apt install -y chrony
-rm -rf /etc/chrony/chrony.conf
+sudo apt install -y curl chrony
 sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony/chrony.conf
 sudo systemctl restart chronyd
 
