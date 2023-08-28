@@ -9,7 +9,7 @@ sudo apt update -y
 sudo apt full-upgrade -y
 sudo apt install -y usg
 sudo apt autoremove -y
-sudo usg fix cis_level2_server
+sudo usg fix cis_level2_workstation
 
 # Remove AIDE
 sudo apt purge -y aide*
