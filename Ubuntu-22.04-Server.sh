@@ -38,7 +38,7 @@ sudo systemctl restart sshd
 
 # Setup unbound
 
-sudp apt install -y unbound
+sudo apt install -y unbound
 
 echo 'server:
   trust-anchor-signaling: yes
