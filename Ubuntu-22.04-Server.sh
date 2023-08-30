@@ -28,8 +28,8 @@ sudo ufw enable
 sudo ufw allow OpenSSH
 
 # Harden SSH
-echo "GSSAPIAuthentication no
-echo "VerifyHostKeyDNS yes"" | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
+echo 'GSSAPIAuthentication no
+VerifyHostKeyDNS yes' | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
 sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 sudo mkdir -p /etc/systemd/system/sshd.service.d
 sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/local.conf -o /etc/systemd/system/sshd.service.d/local.conf
