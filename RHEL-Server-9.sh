@@ -22,7 +22,7 @@ sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 echo 'X11Forwarding no
 GSSAPIAuthentication no
 PasswordAuthentication no' | sudo tee /etc/ssh/sshd_config.d/10-custom.conf
-sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/local.conf -o /etc/systemd/system/sshd.service.d/local.conf
+sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/local.conf -o /etc/systemd/system/sshd.service.d/override.conf
 sudo systemctl daemon-reload
 sudo systemctl restart sshd
 

@@ -23,7 +23,7 @@ VerifyHostKeyDNS yes' | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
 sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 sudo sed -i 's/#GSSAPIAuthentication no/GSSAPIAuthentication no/g' /etc/ssh/sshd_config
 sudo mkdir -p /etc/systemd/system/sshd.service.d
-sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/local.conf -o /etc/systemd/system/sshd.service.d/local.conf
+sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/local.conf -o /etc/systemd/system/sshd.service.d/override.conf
 sudo systemctl daemon-reload
 sudo systemctl restart sshd
 
