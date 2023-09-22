@@ -31,6 +31,17 @@ sudo ufw allow OpenSSH
 echo 'GSSAPIAuthentication no
 VerifyHostKeyDNS yes' | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
 sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
+echo 'HostKey /etc/ssh/ssh_host_ed25519_key
+HostKeyAlgorithms ssh-ed25519
+#KexAlgorithms sntrup761x25519-sha512@openssh.com
+PubkeyAcceptedKeyTypes ssh-ed25519
+Ciphers aes256-gcm@openssh.com
+MACs -*
+PasswordAuthentication no 
+PermitRootLogin no
+KerberosAuthentication no
+GSSAPIAuthentication no' | sudo tee /etc/ssh/sshd_config.d/10-custom.conf
+sudo chmod 644 /etc/ssh/sshd_config.d/10-custom.conf
 sudo mkdir -p /etc/systemd/system/ssh.service.d
 sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/local.conf -o /etc/systemd/system/ssh.service.d/override.conf
 sudo systemctl daemon-reload

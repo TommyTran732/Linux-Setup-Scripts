@@ -11,8 +11,10 @@ systemctl restart chronyd
 echo 'GSSAPIAuthentication no
 VerifyHostKeyDNS yes' | tee /etc/ssh/ssh_config.d/10-custom.conf
 sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
-sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
-sed -i 's/#GSSAPIAuthentication no/GSSAPIAuthentication no/g' /etc/ssh/sshd_config
+echo 'PasswordAuthentication no 
+KerberosAuthentication no
+GSSAPIAuthentication no' | sudo tee /etc/ssh/sshd_config.d/10-custom.conf
+sudo chmod 644 /etc/ssh/sshd_config.d/10-custom.conf
 mkdir -p /etc/systemd/system/ssh.service.d
 curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/local.conf -o /etc/systemd/system/ssh.service.d/override.conf
 systemctl daemon-reload

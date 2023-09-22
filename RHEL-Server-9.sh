@@ -19,9 +19,17 @@ mkdir -p /etc/ssh/ssh_config.d /etc/ssh/sshd_config.d
 echo 'GSSAPIAuthentication no
 VerifyHostKeyDNS yes' | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
 sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
-echo 'X11Forwarding no
-GSSAPIAuthentication no
-PasswordAuthentication no' | sudo tee /etc/ssh/sshd_config.d/10-custom.conf
+echo 'HostKey /etc/ssh/ssh_host_ed25519_key
+HostKeyAlgorithms ssh-ed25519
+#KexAlgorithms sntrup761x25519-sha512@openssh.com
+PubkeyAcceptedKeyTypes ssh-ed25519
+Ciphers aes256-gcm@openssh.com
+MACs -*
+PasswordAuthentication no 
+PermitRootLogin no
+KerberosAuthentication no
+GSSAPIAuthentication no' | sudo tee /etc/ssh/sshd_config.d/10-custom.conf
+sudo chmod 644 /etc/ssh/sshd_config.d/10-custom.conf
 sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/local.conf -o /etc/systemd/system/sshd.service.d/override.conf
 sudo systemctl daemon-reload
 sudo systemctl restart sshd
