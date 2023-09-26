@@ -76,8 +76,8 @@ org/gnome/desktop/media-handling/automount-open' | sudo tee /etc/dconf/db/local.
 sudo dconf update
 
 # Speed up DNF
-echo 'fastestmirror=1' | sudo tee -a /etc/dnf/dnf.conf
-echo 'countme=false' | sudo tee -a /etc/dnf/dnf.conf
+echo -e 'fastestmirror=1\nmax_parallel_downloads=10\ndeltarpm=False\ndefaultyes=True\ninstall_weak_deps=False\ncountme=False' | sudo tee -a /etc/dnf/dnf.conf
+sudo sed -i 's/^metalink=.*/&\&protocol=https/g' /etc/yum.repos.d/*
 
 # Update packages and firmware
 sudo dnf upgrade -y

@@ -57,6 +57,10 @@ sudo curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/s
 sudo systemctl daemon-reload
 sudo systemctl restart irqbalance
 
+# Setup dnf
+echo -e 'fastestmirror=1\nmax_parallel_downloads=10\ndeltarpm=False\ndefaultyes=True\ninstall_weak_deps=False\ncountme=False' | sudo tee -a /etc/dnf/dnf.conf
+sudo sed -i 's/^metalink=.*/&\&protocol=https/g' /etc/yum.repos.d/*
+
 # Setup unbound
 
 sudo dnf install unbound -y
