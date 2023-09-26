@@ -33,9 +33,13 @@ OPTIONS="-F 1"' | sudo tee /etc/sysconfig/chronyd
 
 sudo systemctl restart chronyd
 
-# Setup Firewalld
+# Setup Networking
+sudo hostnamectl hostname 'localhost'
+sudo hostnamectl --transient hostname ''
 sudo firewall-cmd --set-default-zone=block
+sudo firewall-cmd --permanent --add-service=dhcpv6-client
 sudo firewall-cmd --reload
+sudo firewall-cmd --lockdown-on
 
 # Harden SSH
 echo "GSSAPIAuthentication no" | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
@@ -124,7 +128,7 @@ sudo echo "UUID=${PARTITIONUUID} /btrfs_pool             btrfs   subvolid=5,ssd,
 sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
 sudo dnf -y install timeshift
 
-# andomize MAC address
+# Randomize MAC address
 sudo bash -c 'cat > /etc/NetworkManager/conf.d/00-macrandomize.conf' <<-'EOF'
 [device]
 wifi.scan-rand-mac-address=yes
@@ -133,14 +137,5 @@ wifi.scan-rand-mac-address=yes
 wifi.cloned-mac-address=random
 ethernet.cloned-mac-address=random
 EOF
-
-# Disable transient hostname
-sudo bash -c 'cat > /etc/NetworkManager/conf.d/00-macrandomize.conf' <<-'EOF'
-[main]
-hostname-mode=none
-EOF
-
-sudo systemctl restart NetworkManager
-sudo hostnamectl hostname "localhost"
 
 ## The script is done. You can also remove gnome-terminal since gnome-console will replace it.
