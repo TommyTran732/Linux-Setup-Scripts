@@ -34,8 +34,6 @@ OPTIONS="-F 1"' | sudo tee /etc/sysconfig/chronyd
 sudo systemctl restart chronyd
 
 # Setup Networking
-sudo hostnamectl hostname 'localhost'
-sudo hostnamectl --transient hostname ''
 sudo firewall-cmd --set-default-zone=block
 sudo firewall-cmd --permanent --add-service=dhcpv6-client
 sudo firewall-cmd --reload
