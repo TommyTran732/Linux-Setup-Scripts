@@ -34,11 +34,7 @@ OPTIONS="-F 1"' | sudo tee /etc/sysconfig/chronyd
 sudo systemctl restart chronyd
 
 # Setup Firewalld
-sudo firewall-cmd --permanent --remove-port=1025-65535/udp
-sudo firewall-cmd --permanent --remove-port=1025-65535/tcp
-sudo firewall-cmd --permanent --remove-service=mdns
-sudo firewall-cmd --permanent --remove-service=ssh
-sudo firewall-cmd --permanent --remove-service=samba-client
+sudo firewall-cmd --set-default-zone=block
 sudo firewall-cmd --reload
 
 # Harden SSH
