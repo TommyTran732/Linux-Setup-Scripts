@@ -74,7 +74,6 @@ sudo dconf update
 
 # Speed up DNF
 echo 'fastestmirror=1' | sudo tee -a /etc/dnf/dnf.conf
-echo 'deltarpm=true' | sudo tee -a /etc/dnf/dnf.conf
 echo 'countme=false' | sudo tee -a /etc/dnf/dnf.conf
 
 # Update packages and firmware
