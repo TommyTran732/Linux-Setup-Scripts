@@ -111,7 +111,7 @@ sudo dnf -y remove fedora-bookmarks fedora-chromium-config firefox mozilla-files
     lvm2 rng-tools thermald *perl* yajl
 
 # Disable openh264 repo
-sudo dnf config-manager --set-disabled fedora-cisco-openh264 -y
+sudo dnf config-manager --set-disabled fedora-cisco-openh264
 
 # Install packages that I use
 sudo dnf -y install gnome-console git-core flat-remix-theme gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo gnome-shell-extension-dash-to-dock gnome-shell-extension-no-overview
