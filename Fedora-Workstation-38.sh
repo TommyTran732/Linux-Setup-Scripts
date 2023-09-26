@@ -34,6 +34,11 @@ OPTIONS="-F 1"' | sudo tee /etc/sysconfig/chronyd
 sudo systemctl restart chronyd
 
 # Setup Networking
+echo -e '[device]\nwifi.scan-rand-mac-address=yes\n\n[connection]\nwifi.cloned-mac-address=random\nethernet.cloned-mac-address=random' | sudo tee /etc/NetworkManager/conf.d/99-random-mac.conf
+echo -e '[main]\nhostname-mode=none' | sudo tee /etc/NetworkManager/conf.d/01-transient-hostname.conf
+sudo nmcli general reload conf
+sudo hostnamectl hostname 'localhost'
+sudo hostnamectl --transient hostname ''
 sudo firewall-cmd --set-default-zone=block
 sudo firewall-cmd --permanent --add-service=dhcpv6-client
 sudo firewall-cmd --reload
@@ -125,15 +130,5 @@ sudo sed -i 's/subvol=home/subvol=@home,ssd,noatime,space_cache,commit=120,compr
 sudo echo "UUID=${PARTITIONUUID} /btrfs_pool             btrfs   subvolid=5,ssd,noatime,space_cache,commit=120,compress=zstd:1,discard=async,x-systemd.device-timeout=0   0 0" | sudo tee -a /etc/fstab
 sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
 sudo dnf -y install timeshift
-
-# Randomize MAC address
-sudo bash -c 'cat > /etc/NetworkManager/conf.d/00-macrandomize.conf' <<-'EOF'
-[device]
-wifi.scan-rand-mac-address=yes
-
-[connection]
-wifi.cloned-mac-address=random
-ethernet.cloned-mac-address=random
-EOF
 
 ## The script is done. You can also remove gnome-terminal since gnome-console will replace it.
