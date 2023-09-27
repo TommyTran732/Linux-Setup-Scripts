@@ -78,7 +78,7 @@ org/gnome/desktop/media-handling/automount-open' | sudo tee /etc/dconf/db/local.
 sudo dconf update
 
 # Setup ZRAM
-echo -e '[zram0]\nzram-size = min(ram, 8192)\ncompression-algorithm = zstd' | sudo tee /etc/systemd/zram-generator.conf
+echo -e '[zram0]\nzram-fraction = 1\nmax-zram-size = 8192\ncompression-algorithm = zstd' | sudo tee /etc/systemd/zram-generator.conf
 
 # Speed up DNF
 echo -e 'fastestmirror=1\nmax_parallel_downloads=10\ndeltarpm=False\ndefaultyes=True\ninstall_weak_deps=False\ncountme=False' | sudo tee -a /etc/dnf/dnf.conf
