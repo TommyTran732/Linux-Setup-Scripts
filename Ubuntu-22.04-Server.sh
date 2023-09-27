@@ -128,7 +128,12 @@ sudo curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/
 sudo sed -i 's/kernel.yama.ptrace_scope=2/kernel.yama.ptrace_scope=3/g' /etc/sysctl.d/30_security-misc.conf
 sudo sed -i 's/net.ipv4.icmp_echo_ignore_all=1/net.ipv4.icmp_echo_ignore_all=0/g' /etc/sysctl.d/30_security-misc.conf
 sudo sed -i 's/net.ipv6.icmp.echo_ignore_all=1/net.ipv6.icmp.echo_ignore_all=0/g' /etc/sysctl.d/30_security-misc.conf
+sudo sysctl -p
 
+# Rebuild initramfs
+sudo update-initramfs -u
+
+# Disable telemetry
 sudo systemctl stop apport.service
 sudo systemctl disable apport.service
 sudo systemctl mask apport.service

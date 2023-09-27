@@ -47,6 +47,18 @@ sudo curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/
 sudo curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/sysctl.d/30_silent-kernel-printk.conf -o /etc/sysctl.d/30_silent-kernel-printk.conf
 sudo curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/sysctl.d/30_security-misc_kexec-disable.conf -o /etc/sysctl.d/30_security-misc_kexec-disable.conf
 sudo sed -i 's/kernel.yama.ptrace_scope=2/kernel.yama.ptrace_scope=3/g' /etc/sysctl.d/30_security-misc.conf
+sudo sysctl -p
+
+# Rebuild initramfs
+sudo update-initramfs -u
+
+# Disable telemetry
+sudo systemctl stop apport.service
+sudo systemctl disable apport.service
+sudo systemctl mask apport.service
+sudo systemctl stop whoopsie.service
+sudo systemctl disable whoopsie.service
+sudo systemctl mask whoopsie.service
 
 # Systemd Hardening
 sudo mkdir -p /etc/systemd/system/NetworkManager.service.d

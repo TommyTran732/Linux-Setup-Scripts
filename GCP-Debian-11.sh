@@ -41,7 +41,12 @@ sudo curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/
 sudo curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/sysctl.d/30_security-misc_kexec-disable.conf -o /etc/sysctl.d/30_security-misc_kexec-disable.conf
 sudo mkdir -p /etc/systemd/system/NetworkManager.service.d
 sudo curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf -o /etc/systemd/system/NetworkManager.service.d/99-brace.conf
+sudo sysctl -p
 
+# Rebuild initramfs
+sudo update-initramfs -u
+
+# Security limit
 echo "* hard core 0" | tee -a /etc/security/limits.conf
 
 # Setup unbound
