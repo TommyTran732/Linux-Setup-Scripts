@@ -109,7 +109,7 @@ sudo fwupdmgr update -y
 # Remove unneeded packages
 sudo dnf -y remove fedora-bookmarks fedora-chromium-config firefox mozilla-filesystem \
     #Network + hardware tools
-    cups nmap-ncat nfs-utils nmap-ncat openssh-server net-snmp-libs net-tools opensc traceroute rsync tcpdump teamd geolite2* mtr dmidecode sgpio \
+    nmap-ncat nfs-utils nmap-ncat openssh-server net-snmp-libs net-tools opensc traceroute rsync tcpdump teamd geolite2* mtr dmidecode sgpio \
     #Remove support for some languages and spelling
     ibus-typing-booster *speech* *zhuyin* *pinyin* *kkc* *m17n* *hangul* *anthy* words \
     #Remove codec + image + printers
