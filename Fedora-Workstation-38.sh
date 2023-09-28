@@ -126,7 +126,7 @@ sudo dnf -y remove fedora-bookmarks fedora-chromium-config firefox mozilla-files
     gnome-shell-extension-background-logo gnome-shell-extension-apps-menu gnome-shell-extension-horizontal-workspaces gnome-shell-extension-launch-new-instance gnome-shell-extension-places-menu gnome-shell-extension-window-list \
     gnome-classic* gnome-user* gnome-text-editor chrome-gnome-shell eog \
     #Remove apps
-    rhythmbox *yelp* *evince* libreoffice* cheese file-roller* mediawriter abrt \
+    rhythmbox yelp evince libreoffice* cheese file-roller* mediawriter abrt \
     #other
     lvm2 rng-tools thermald *perl* yajl
 
