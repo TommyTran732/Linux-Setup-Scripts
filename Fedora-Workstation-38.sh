@@ -117,7 +117,7 @@ sudo dnf -y remove fedora-bookmarks fedora-chromium-config firefox mozilla-files
     #Remove codec + image + printers
     openh264 ImageMagick* sane* simple-scan \
     #Remove Active Directory + Sysadmin + reporting tools
-    sssd* realmd adcli cyrus-sasl-plain cyrus-sasl-gssapi mlocate quota* dos2unix kpartx sos abrt \
+    sssd* realmd adcli cyrus-sasl-plain cyrus-sasl-gssapi mlocate quota* dos2unix kpartx sos abrt samba-client gvfs-smb \
     #Remove vm and virtual stuff
     podman* *libvirt* open-vm* qemu-guest-agent hyperv* spice-vdagent virtualbox-guest-additions vino xorg-x11-drv-vmware xorg-x11-drv-amdgpu \
     #NetworkManager
