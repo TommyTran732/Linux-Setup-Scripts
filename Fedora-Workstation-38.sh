@@ -101,6 +101,8 @@ sudo sed -i 's/^metalink=.*/&\&protocol=https/g' /etc/yum.repos.d/*
 
 # Update packages and firmware
 sudo dnf upgrade -y
+echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
+sudo systemctl restart fwupd
 sudo fwupdmgr get-devices
 sudo fwupdmgr refresh --force
 sudo fwupdmgr get-updates -y

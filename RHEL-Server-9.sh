@@ -154,6 +154,8 @@ sudo systemctl enable --now dnf-automatic.timer
 
 #Setup fwupd
 sudo dnf install fwupd -y
+echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
+sudo systemctl restart fwupd
 mkdir -p /etc/systemd/system/fwupd-refresh.service.d
 echo '[Service]
 ExecStart=/usr/bin/fwupdmgr update' | tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
