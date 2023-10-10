@@ -35,9 +35,7 @@ sudo ufw allow OpenSSH
 echo 'GSSAPIAuthentication no
 VerifyHostKeyDNS yes' | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
 sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
-echo 'PasswordAuthentication no 
-KerberosAuthentication no
-GSSAPIAuthentication no' | sudo tee /etc/ssh/sshd_config.d/10-custom.conf
+sudo curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/ssh/sshd_config/10-custom.conf -o /etc/ssh/sshd_config.d/10-custom.conf
 sudo chmod 644 /etc/ssh/sshd_config.d/10-custom.conf
 sudo mkdir -p /etc/systemd/system/ssh.service.d
 sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/local.conf -o /etc/systemd/system/ssh.service.d/override.conf
