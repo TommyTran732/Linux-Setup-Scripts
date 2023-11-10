@@ -141,16 +141,4 @@ sudo dnf -y install gnome-console git-core gnome-shell-extension-appindicator gn
 # Enable auto TRIM
 sudo systemctl enable fstrim.timer
 
-# Setup BTRFS layout and Timeshift
-sudo mkdir /btrfs_pool
-sudo mount -o subvolid=5 /dev/mapper/${PARTITIONID} /btrfs_pool
-sudo mv /btrfs_pool/root /btrfs_pool/@
-sudo mv /btrfs_pool/home /btrfs_pool/@home
-sudo btrfs subvolume list /btrfs_pool
-sudo sed -i 's/subvol=root/subvol=@,ssd,noatime,space_cache,commit=120,compress=zstd:1,discard=async/' /etc/fstab
-sudo sed -i 's/subvol=home/subvol=@home,ssd,noatime,space_cache,commit=120,compress=zstd:1,discard=async/' /etc/fstab
-sudo echo "UUID=${PARTITIONUUID} /btrfs_pool             btrfs   subvolid=5,ssd,noatime,space_cache,commit=120,compress=zstd:1,discard=async,x-systemd.device-timeout=0   0 0" | sudo tee -a /etc/fstab
-sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
-sudo dnf -y install timeshift
-
 ## The script is done. You can also remove gnome-terminal since gnome-console will replace it.
