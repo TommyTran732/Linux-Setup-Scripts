@@ -48,8 +48,8 @@ OPTIONS="-F 1"' | sudo tee /etc/sysconfig/chronyd
 sudo systemctl restart chronyd
 
 # Setup Networking
-echo -e '[device]\nwifi.scan-rand-mac-address=yes\n\n[connection]\nwifi.cloned-mac-address=random\nethernet.cloned-mac-address=random' | sudo tee /etc/NetworkManager/conf.d/99-random-mac.conf
-echo -e '[main]\nhostname-mode=none' | sudo tee /etc/NetworkManager/conf.d/01-transient-hostname.conf
+sudo curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/NetworkManager/conf.d/00-macrandomize.conf -o /etc/NetworkManager/conf.d/00-macrandomize.conf
+sudo curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/NetworkManager/conf.d/01-transient-hostname.conf -o /etc/NetworkManager/conf.d/01-transient-hostname.conf
 sudo nmcli general reload conf
 sudo hostnamectl hostname 'localhost'
 sudo hostnamectl --transient hostname ''

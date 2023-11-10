@@ -28,7 +28,7 @@ sudo usg fix cis_level2_workstation
 # Remove AIDE
 sudo apt purge -y aide*
 
-# Allow su which is disabled by CIS 
+# Allow su which is disabled by CIS
 sudo sed -i 's/auth required pam_wheel.so use_uid group=sugroup//g' /etc/pam.d/su
 
 # Setting umask to 077
@@ -126,17 +126,12 @@ sudo snap remove firefox
 sudo apt install -y git-core gnome-text-editor
 sudo snap install eog
 
-# Randomize MAC address
-sudo bash -c 'cat > /etc/NetworkManager/conf.d/00-macrandomize.conf' <<-'EOF'
-[device]
-wifi.scan-rand-mac-address=yes
-[connection]
-wifi.cloned-mac-address=random
-ethernet.cloned-mac-address=random
-connection.stable-id=${CONNECTION}/${BOOT}
-EOF
-
-sudo systemctl restart NetworkManager
+# Setup Networking
+sudo curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/NetworkManager/conf.d/00-macrandomize.conf -o /etc/NetworkManager/conf.d/00-macrandomize.conf
+sudo curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/NetworkManager/conf.d/01-transient-hostname.conf -o /etc/NetworkManager/conf.d/01-transient-hostname.conf
+sudo nmcli general reload conf
+sudo hostnamectl hostname 'localhost'
+sudo hostnamectl --transient hostname ''
 
 # Enable fstrim.timer
 sudo apt install tuned -y
