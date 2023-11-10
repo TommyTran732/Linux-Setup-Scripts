@@ -96,7 +96,7 @@ sudo dconf update
 echo -e '[zram0]\nzram-fraction = 1\nmax-zram-size = 8192\ncompression-algorithm = zstd' | sudo tee /etc/systemd/zram-generator.conf
 
 # Speed up DNF
-echo -e 'fastestmirror=1\nmax_parallel_downloads=10\ndeltarpm=False\ndefaultyes=True\ninstall_weak_deps=False\ncountme=False' | sudo tee -a /etc/dnf/dnf.conf
+echo -e 'max_parallel_downloads=10\ndeltarpm=False\ndefaultyes=True\ninstall_weak_deps=False\ncountme=False' | sudo tee -a /etc/dnf/dnf.conf
 sudo sed -i 's/^metalink=.*/&\&protocol=https/g' /etc/yum.repos.d/*
 
 # Update packages and firmware
