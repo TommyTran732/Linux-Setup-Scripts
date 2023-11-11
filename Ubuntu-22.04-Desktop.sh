@@ -81,16 +81,8 @@ sudo mkdir -p /etc/systemd/system/irqbalance.service.d
 sudo curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/irqbalance.service.d/99-brace.conf -o /etc/systemd/system/irqbalance.service.d/99-brace.conf
 
 # Disable automount
-
-sudo mkdir -p /etc/dconf/db/local.d/locks/
-
-echo '[org/gnome/desktop/media-handling]
-automount=false
-automount-open=false' | sudo tee /etc/dconf/db/local.d/automount-disable
-
-echo 'org/gnome/desktop/media-handling/automount
-org/gnome/desktop/media-handling/automount-open' | sudo tee /etc/dconf/db/local.d/locks/automount-disable
-
+curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/dconf/db/local.d/automount-disable -o /etc/dconf/db/local.d/automount-disable
+curl curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/dconf/db/local.d/locks/automount-disable -o /etc/dconf/db/local.d/locks/automount-disable
 sudo dconf update
 
 # Disable crash reports

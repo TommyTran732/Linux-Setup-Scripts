@@ -83,13 +83,8 @@ sudo systemctl restart NetworkManager
 sudo systemctl restart irqbalance
 
 # Disable automount
-echo '[org/gnome/desktop/media-handling]
-automount=false
-automount-open=false' | sudo tee /etc/dconf/db/local.d/automount-disable
-
-echo 'org/gnome/desktop/media-handling/automount
-org/gnome/desktop/media-handling/automount-open' | sudo tee /etc/dconf/db/local.d/locks/automount-disable
-
+curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/dconf/db/local.d/automount-disable -o /etc/dconf/db/local.d/automount-disable
+curl curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/dconf/db/local.d/locks/automount-disable -o /etc/dconf/db/local.d/locks/automount-disable
 sudo dconf update
 
 # Setup ZRAM
