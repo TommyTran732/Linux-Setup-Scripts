@@ -14,8 +14,12 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
-#Meant to be run on Ubuntu Pro Minimal 
+#Meant to be run on Ubuntu Pro Minimal
 #The script assumes you already have Ubuntu Pro activated
+
+output(){
+    echo -e '\e[36m'$1'\e[0m';
+}
 
 #Compliance and updates
 sudo ua enable usg

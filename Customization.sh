@@ -16,6 +16,10 @@
 
 #Run this as your user to set the theme
 
+output(){
+    echo -e '\e[36m'$1'\e[0m';
+}
+
 #Enable Titlebar buttons
 gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
 

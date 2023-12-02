@@ -14,6 +14,10 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
+output(){
+    echo -e '\e[36m'$1'\e[0m';
+}
+
 # Setup NTS
 sudo rm -rf /etc/chrony/chrony.conf
 sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony/chrony.conf

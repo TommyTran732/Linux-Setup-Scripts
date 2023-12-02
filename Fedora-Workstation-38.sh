@@ -18,6 +18,10 @@
 #Customize it to your liking
 #Run this script as your admin user, NOT root
 
+output(){
+    echo -e '\e[36m'$1'\e[0m';
+}
+
 #Variables
 USER=$(whoami)
 PARTITIONID=$(sudo cat /etc/crypttab | awk '{print $1}')

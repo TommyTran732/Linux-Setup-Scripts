@@ -16,6 +16,10 @@
 
 #Assuming that you are using ANSSI-BP-028
 
+output(){
+    echo -e '\e[36m'$1'\e[0m';
+}
+
 # Setup NTS
 sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony.conf
 
