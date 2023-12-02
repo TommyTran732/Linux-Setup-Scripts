@@ -136,8 +136,10 @@ if [ "${MACHINE_TYPE}" == 'x86_64' ]; then
     sudo dnf config-manager --add-repo https://packages.microsoft.com/yumrepos/edge
     sudo dnf install -y microsoft-edge-stable
     sudo mkdir -p /etc/opt/edge/policies/managed/ /etc/opt/edge/policies/recommended/
+    sudo chmod 755 /etc/opt/edge/policies/managed/ /etc/opt/edge/policies/recommended/
     sudo curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/managed.json -o /etc/opt/edge/policies/managed/managed.json
     sudo curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/recommended.json -o /etc/opt/edge/policies/managed/recommended.json
+    sudo chmod 644 /etc/opt/edge/policies/managed/managed.json /etc/opt/edge/policies/managed/recommended.json
 fi
 
 # Enable auto TRIM
