@@ -128,6 +128,20 @@ sudo dnf config-manager --set-disabled fedora-cisco-openh264
 # Install packages that I use
 sudo dnf -y install gnome-console git-core gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo gnome-shell-extension-dash-to-dock gnome-shell-extension-no-overview
 
+# Install Microsoft Edge if x86_64
+MACHINE_TYPE=`uname -m`
+if [ "${MACHINE_TYPE}" == 'x86_64' ]; then
+    output "x86_64 machine, installing Microsoft edge."
+    curl -O https://packages.microsoft.com/keys/microsoft.asc
+    sudo rpm --import microsoft.asc
+    rm microsoft.asc
+    sudo dnf config-manager --add-repo https://packages.microsoft.com/yumrepos/edge
+    sudo dnf install -y microsoft-edge-stable
+    sudo mkdir -p /etc/opt/edge/policies/managed/ /etc/opt/edge/policies/recommended/
+    sudo curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/managed.json -o /etc/opt/edge/policies/managed/managed.json
+    sudo curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/recommended.json -o /etc/opt/edge/policies/managed/recommended.json
+fi
+
 # Enable auto TRIM
 sudo systemctl enable fstrim.timer
 
