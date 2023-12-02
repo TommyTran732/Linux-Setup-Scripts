@@ -17,11 +17,11 @@
 #Assuming that you are using ANSSI-BP-028
 
 output(){
-    echo -e '\e[36m'$1'\e[0m';
+  echo -e '\e[36m'$1'\e[0m';
 }
 
 unpriv(){
-    sudo -u nobody "$@"
+  sudo -u nobody "$@"
 }
 
 # Setup NTS
