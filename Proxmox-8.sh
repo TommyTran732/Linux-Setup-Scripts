@@ -25,7 +25,7 @@ systemctl restart chronyd
 echo 'GSSAPIAuthentication no
 VerifyHostKeyDNS yes' | tee /etc/ssh/ssh_config.d/10-custom.conf
 sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
-echo 'PasswordAuthentication no 
+echo 'PasswordAuthentication no
 KerberosAuthentication no
 GSSAPIAuthentication no' | sudo tee /etc/ssh/sshd_config.d/10-custom.conf
 sudo chmod 644 /etc/ssh/sshd_config.d/10-custom.conf
@@ -46,6 +46,8 @@ deb https://deb.debian.org/debian/ bookworm-updates main contrib non-free non-fr
 deb https://deb.debian.org/debian/ bookworm-backports main contrib non-free non-free-firmware
 
 deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription' | tee /etc/apt/sources.list
+
+echo 'deb http://download.proxmox.com/debian/ceph-quincy bookworm no-subscription' | tee /etc/apt/sources.list.d/ceph.list
 
 # Update and install packages
 apt update
