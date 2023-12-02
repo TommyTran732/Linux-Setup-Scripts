@@ -184,7 +184,7 @@ if [ "$virt_type" = "" ]; then
   sudo dracut -f
 fi
 
-#Setup fwupd
+# Setup fwupd
 if [ "$virt_type" = "" ]; then
   sudo dnf install fwupd -y
   echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
