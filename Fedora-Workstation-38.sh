@@ -98,15 +98,6 @@ echo -e '[zram0]\nzram-fraction = 1\nmax-zram-size = 8192\ncompression-algorithm
 sudo curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dnf/dnf.conf -o /etc/dnf/dnf.conf
 sudo sed -i 's/^metalink=.*/&\&protocol=https/g' /etc/yum.repos.d/*
 
-# Update packages and firmware
-sudo dnf upgrade -y
-echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
-sudo systemctl restart fwupd
-sudo fwupdmgr get-devices
-sudo fwupdmgr refresh --force
-sudo fwupdmgr get-updates -y
-sudo fwupdmgr update -y
-
 # Remove unneeded packages
 sudo dnf -y remove fedora-bookmarks fedora-chromium-config firefox mozilla-filesystem \
     #Network + hardware tools
@@ -173,6 +164,17 @@ if [ "$virt_type" = "" ]; then
     sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware
     sudo dnf install real-ucode
     sudo dracut -f
+fi
+
+#Setup fwupd
+if [ "$virt_type" = "" ]; then
+    sudo dnf install fwupd -y
+    echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
+    sudo systemctl restart fwupd
+    mkdir -p /etc/systemd/system/fwupd-refresh.service.d
+    sudo curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/system/fwupd-refresh.service.d/override.conf -o /etc/systemd/system/fwupd-refresh.service.d/override.conf
+    sudo systemctl daemon-reload
+    sudo systemctl enable --now fwupd-refresh.timer
 fi
 
 ## The script is done. You can also remove gnome-terminal since gnome-console will replace it.

@@ -147,16 +147,6 @@ sudo sed -i 's/test_scan: true/test_scan: false/' /etc/insights-client/malware-d
 sudo sed -i 's/apply_updates = no/apply_updates = yes\nreboot = when-needed/g' /etc/dnf/automatic.conf
 sudo systemctl enable --now dnf-automatic.timer
 
-#Setup fwupd
-sudo dnf install fwupd -y
-echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
-sudo systemctl restart fwupd
-mkdir -p /etc/systemd/system/fwupd-refresh.service.d
-echo '[Service]
-ExecStart=/usr/bin/fwupdmgr update' | tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
-sudo systemctl daemon-reload
-sudo systemctl enable --now fwupd-refresh.timer
-
 # Enable fstrim.timer
 sudo systemctl enable --now fstrim.timer
 
@@ -192,4 +182,15 @@ if [ "$virt_type" = "" ]; then
   sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware
   sudo dnf install real-ucode
   sudo dracut -f
+fi
+
+#Setup fwupd
+if [ "$virt_type" = "" ]; then
+  sudo dnf install fwupd -y
+  echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
+  sudo systemctl restart fwupd
+  mkdir -p /etc/systemd/system/fwupd-refresh.service.d
+  sudo curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/system/fwupd-refresh.service.d/override.conf -o /etc/systemd/system/fwupd-refresh.service.d/override.conf
+  sudo systemctl daemon-reload
+  sudo systemctl enable --now fwupd-refresh.timer
 fi
