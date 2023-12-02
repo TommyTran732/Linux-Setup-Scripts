@@ -131,6 +131,10 @@ sudo dnf -y install gnome-console git-core gnome-shell-extension-appindicator gn
 # Enable auto TRIM
 sudo systemctl enable fstrim.timer
 
+# Setup fwupd
+echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
+sudo systemctl restart fwupd
+
 ### Differentiating bare metal and virtual installs
 
 # Installing tuned first here because virt-what is 1 of its dependencies anyways
@@ -164,13 +168,6 @@ if [ "$virt_type" = "" ]; then
     sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware
     sudo dnf install real-ucode
     sudo dracut -f
-fi
-
-# Setup fwupd
-if [ "$virt_type" = "" ]; then
-    sudo dnf install fwupd -y
-    echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
-    sudo systemctl restart fwupd
 fi
 
 output "The script is done. You can also remove gnome-terminal since gnome-console will replace it."
