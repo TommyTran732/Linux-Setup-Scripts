@@ -153,9 +153,39 @@ ExecStart=/usr/bin/fwupdmgr update' | tee /etc/systemd/system/fwupd-refresh.serv
 sudo systemctl daemon-reload
 sudo systemctl enable --now fwupd-refresh.timer
 
-# Setup tuned
-sudo dnf install tuned -y
-sudo tuned-adm profile virtual-guest
-
 # Enable fstrim.timer
 sudo systemctl enable --now fstrim.timer
+
+### Differentiating bare metal and virtual installs
+
+# Installing tuned first here because virt-what is 1 of its dependencies anyways
+sudo dnf install tuned -y
+
+virt_type=$(echo $(virt-what))
+if [ "$virt_type" = "" ]; then
+    output "Virtualization: Bare Metal."
+elif [ "$virt_type" = "openvz lxc" ]; then
+    output "Virtualization: OpenVZ 7."
+elif [ "$virt_type" = "xen xen-hvm" ]; then
+    output "Virtualization: Xen-HVM."
+elif [ "$virt_type" = "xen xen-hvm aws" ]; then
+    output "Virtualization: Xen-HVM on AWS."
+else
+    output "Virtualization: $virt_type."
+fi
+
+# Setup tuned
+if [ "$virt_type" = "" ]; then
+  sudo tuned-adm profile latency-performance
+else
+  sudo tuned-adm profile virtual-guest
+fi
+
+# Setup real-ucode
+if [ "$virt_type" = "" ]; then
+    sudo dnf install 'https://divested.dev/rpm/fedora/divested-release-20230406-2.noarch.rpm'
+    sudo sed -i 's/^metalink=.*/&?protocol=https/g' /etc/yum.repos.d/divested-release.repo
+    sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware
+    sudo dnf install real-ucode
+    sudo dracut -f
+fi

@@ -136,4 +136,39 @@ sudo dnf -y install gnome-console git-core gnome-shell-extension-appindicator gn
 # Enable auto TRIM
 sudo systemctl enable fstrim.timer
 
+### Differentiating bare metal and virtual installs
+
+# Installing tuned first here because virt-what is 1 of its dependencies anyways
+sudo dnf install tuned -y
+
+virt_type=$(echo $(virt-what))
+if [ "$virt_type" = "" ]; then
+    output "Virtualization: Bare Metal."
+elif [ "$virt_type" = "openvz lxc" ]; then
+    output "Virtualization: OpenVZ 7."
+elif [ "$virt_type" = "xen xen-hvm" ]; then
+    output "Virtualization: Xen-HVM."
+elif [ "$virt_type" = "xen xen-hvm aws" ]; then
+    output "Virtualization: Xen-HVM on AWS."
+else
+    output "Virtualization: $virt_type."
+fi
+
+# Setup tuned
+if [ "$virt_type" = "" ]; then
+  # Don't know whether using tuned would be a good idea on a laptop, power-profiles-daemon should be handling performance tuning IMO.
+  sudo dnf remove tuned -y
+else
+  sudo tuned-adm profile virtual-guest
+fi
+
+# Setup real-ucode
+if [ "$virt_type" = "" ]; then
+    sudo dnf install 'https://divested.dev/rpm/fedora/divested-release-20230406-2.noarch.rpm'
+    sudo sed -i 's/^metalink=.*/&?protocol=https/g' /etc/yum.repos.d/divested-release.repo
+    sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware
+    sudo dnf install real-ucode
+    sudo dracut -f
+fi
+
 ## The script is done. You can also remove gnome-terminal since gnome-console will replace it.
