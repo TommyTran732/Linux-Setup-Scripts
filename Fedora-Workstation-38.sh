@@ -177,4 +177,4 @@ if [ "$virt_type" = "" ]; then
     sudo systemctl enable --now fwupd-refresh.timer
 fi
 
-## The script is done. You can also remove gnome-terminal since gnome-console will replace it.
+output "The script is done. You can also remove gnome-terminal since gnome-console will replace it."
