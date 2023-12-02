@@ -15,8 +15,6 @@
 # the License.
 
 #Please note that this is how I PERSONALLY setup my computer - I do some stuff such as not using anything to download GNOME extensions from extensions.gnome.org and installing the extensions as a package instead
-#Customize it to your liking
-#Run this script as your admin user, NOT root
 
 output(){
     echo -e '\e[36m'$1'\e[0m';
@@ -87,8 +85,8 @@ sudo systemctl restart NetworkManager
 sudo systemctl restart irqbalance
 
 # Disable automount
-curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/automount-disable -o /etc/dconf/db/local.d/automount-disable
-curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/locks/automount-disable -o /etc/dconf/db/local.d/locks/automount-disable
+sudo curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/automount-disable -o /etc/dconf/db/local.d/automount-disable
+sudo curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/locks/automount-disable -o /etc/dconf/db/local.d/locks/automount-disable
 sudo dconf update
 
 # Setup ZRAM
