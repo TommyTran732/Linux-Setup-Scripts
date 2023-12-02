@@ -39,7 +39,7 @@ sudo apt purge -y aide*
 # Setup NTS
 sudo systemctl disable --now systemd-timesyncd
 sudo apt install -y chrony
-sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony/chrony.conf
+unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony/chrony.conf
 sudo systemctl restart chronyd
 
 # Setup UFW
