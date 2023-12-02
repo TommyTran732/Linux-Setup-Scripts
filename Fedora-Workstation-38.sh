@@ -171,10 +171,6 @@ if [ "$virt_type" = "" ]; then
     sudo dnf install fwupd -y
     echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
     sudo systemctl restart fwupd
-    mkdir -p /etc/systemd/system/fwupd-refresh.service.d
-    sudo curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/system/fwupd-refresh.service.d/override.conf -o /etc/systemd/system/fwupd-refresh.service.d/override.conf
-    sudo systemctl daemon-reload
-    sudo systemctl enable --now fwupd-refresh.timer
 fi
 
 output "The script is done. You can also remove gnome-terminal since gnome-console will replace it."
