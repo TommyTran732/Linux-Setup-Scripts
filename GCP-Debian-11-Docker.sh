@@ -17,7 +17,7 @@
 #Run this after GCP-Debian-11.sh
 
 output(){
-    echo -e '\e[36m'$1'\e[0m';
+    echo -e '\e[36m'"$1"'\e[0m';
 }
 
 unpriv(){

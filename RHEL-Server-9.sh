@@ -17,7 +17,7 @@
 #Assuming that you are using ANSSI-BP-028
 
 output(){
-  echo -e '\e[36m'$1'\e[0m';
+  echo -e '\e[36m'"$1"'\e[0m';
 }
 
 unpriv(){
@@ -159,7 +159,7 @@ sudo systemctl enable --now fstrim.timer
 # Installing tuned first here because virt-what is 1 of its dependencies anyways
 sudo dnf install tuned -y
 
-virt_type=$(echo $(virt-what))
+virt_type=$(virt-what)
 if [ "$virt_type" = "" ]; then
   output "Virtualization: Bare Metal."
 elif [ "$virt_type" = "openvz lxc" ]; then

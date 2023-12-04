@@ -17,7 +17,7 @@
 # You need to add either the non-subscription repo or the testing repo from the Proxmox WebUI after running this script.
 
 output(){
-    echo -e '\e[36m'$1'\e[0m';
+    echo -e '\e[36m'"$1"'\e[0m';
 }
 
 # Setup NTS

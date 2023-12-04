@@ -17,17 +17,12 @@
 #Please note that this is how I PERSONALLY setup my computer - I do some stuff such as not using anything to download GNOME extensions from extensions.gnome.org and installing the extensions as a package instead
 
 output(){
-    echo -e '\e[36m'$1'\e[0m';
+    echo -e '\e[36m'"$1"'\e[0m';
 }
 
 unpriv(){
     sudo -u nobody "$@"
 }
-
-#Variables
-USER=$(whoami)
-PARTITIONID=$(sudo cat /etc/crypttab | awk '{print $1}')
-PARTITIONUUID=$(sudo blkid -s UUID -o value /dev/mapper/"${PARTITIONID}")
 
 # Moving to the home directory
 #Note that I always use /home/${USER} because gnome-terminal is wacky and sometimes doesn't load the environment variables in correctly (Right click somewhere in nautilus, click on open in terminal, then hit create new tab and you will see.)
@@ -96,29 +91,38 @@ echo -e '[zram0]\nzram-fraction = 1\nmax-zram-size = 8192\ncompression-algorithm
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dnf/dnf.conf | sudo tee /etc/dnf/dnf.conf
 sudo sed -i 's/^metalink=.*/&\&protocol=https/g' /etc/yum.repos.d/*
 
-# Remove unneeded packages
-sudo dnf -y remove fedora-bookmarks fedora-chromium-config firefox mozilla-filesystem \
-    #Network + hardware tools
-    *cups nmap-ncat nfs-utils nmap-ncat openssh-server net-snmp-libs net-tools opensc traceroute rsync tcpdump teamd geolite2* mtr dmidecode sgpio \
-    #Remove support for some languages and spelling
-    ibus-typing-booster *speech* *zhuyin* *pinyin* *kkc* *m17n* *hangul* *anthy* words \
-    #Remove codec + image + printers
-    openh264 ImageMagick* sane* simple-scan \
-    #Remove Active Directory + Sysadmin + reporting tools
-    sssd* realmd adcli cyrus-sasl-plain cyrus-sasl-gssapi mlocate quota* dos2unix kpartx sos abrt samba-client gvfs-smb \
-    #Remove vm and virtual stuff
-    podman* *libvirt* open-vm* qemu-guest-agent hyperv* spice-vdagent virtualbox-guest-additions vino xorg-x11-drv-vmware xorg-x11-drv-amdgpu \
-    #NetworkManager
-    NetworkManager-pptp-gnome NetworkManager-ssh-gnome NetworkManager-openconnect-gnome NetworkManager-openvpn-gnome NetworkManager-vpnc-gnome ppp* ModemManager\
-    #Remove Gnome apps
-    gnome-photos gnome-connections gnome-tour gnome-themes-extra gnome-screenshot gnome-remote-desktop gnome-font-viewer gnome-calculator gnome-calendar gnome-contacts \
+# Remove firefox packages
+sudo dnf -y remove fedora-bookmarks fedora-chromium-config firefox mozilla-filesystem
+
+# Remove Network + hardware tools packages
+sudo dnf -y remove '*cups' nmap-ncat nfs-utils nmap-ncat openssh-server net-snmp-libs net-tools opensc traceroute rsync tcpdump teamd geolite2* mtr dmidecode sgpio
+
+#Remove support for some languages and spelling
+sudo dnf -y remove ibus-typing-booster '*speech*' '*zhuyin*' '*pinyin*' '*kkc*' '*m17n*' '*hangul*' '*anthy*' words
+
+#Remove codec + image + printers
+sudo dnf -y remove openh264 ImageMagick* sane* simple-scan
+
+#Remove Active Directory + Sysadmin + reporting tools
+sudo dnf -y remove 'sssd*' realmd adcli cyrus-sasl-plain cyrus-sasl-gssapi mlocate quota* dos2unix kpartx sos abrt samba-client gvfs-smb
+
+#Remove vm and virtual stuff
+sudo dnf -y remove 'podman*' '*libvirt*' 'open-vm*' qemu-guest-agent 'hyperv*' spice-vdagent virtualbox-guest-additions vino xorg-x11-drv-vmware xorg-x11-drv-amdgpu
+
+#Remove NetworkManager
+sudo dnf -y remove NetworkManager-pptp-gnome NetworkManager-ssh-gnome NetworkManager-openconnect-gnome NetworkManager-openvpn-gnome NetworkManager-vpnc-gnome ppp* ModemManager
+
+#Remove Gnome apps
+sudo dnf remove -y gnome-photos gnome-connections gnome-tour gnome-themes-extra gnome-screenshot gnome-remote-desktop gnome-font-viewer gnome-calculator gnome-calendar gnome-contacts \
     gnome-maps gnome-weather gnome-logs gnome-boxes gnome-disk-utility gnome-clocks gnome-color-manager gnome-characters baobab totem \
     gnome-shell-extension-background-logo gnome-shell-extension-apps-menu gnome-shell-extension-launch-new-instance gnome-shell-extension-places-menu gnome-shell-extension-window-list \
-    gnome-classic* gnome-user* gnome-text-editor chrome-gnome-shell eog \
-    #Remove apps
-    rhythmbox yelp evince libreoffice* cheese file-roller* mediawriter \
-    #other
-    lvm2 rng-tools thermald *perl* yajl
+    gnome-classic* gnome-user* gnome-text-editor chrome-gnome-shell eog
+
+#Remove apps
+sudo dnf remove -y rhythmbox yelp evince libreoffice* cheese file-roller* mediawriter
+
+#Remove other packages
+ sudo dnf remove -y lvm2 rng-tools thermald '*perl*' yajl
 
 # Disable openh264 repo
 sudo dnf config-manager --set-disabled fedora-cisco-openh264
@@ -127,7 +131,7 @@ sudo dnf config-manager --set-disabled fedora-cisco-openh264
 sudo dnf -y install gnome-console git-core gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo gnome-shell-extension-dash-to-dock gnome-shell-extension-no-overview
 
 # Install Microsoft Edge if x86_64
-MACHINE_TYPE=`uname -m`
+MACHINE_TYPE=$(uname -m)
 if [ "${MACHINE_TYPE}" == 'x86_64' ]; then
     output "x86_64 machine, installing Microsoft edge."
     curl -O https://packages.microsoft.com/keys/microsoft.asc
@@ -154,7 +158,7 @@ sudo systemctl restart fwupd
 # Installing tuned first here because virt-what is 1 of its dependencies anyways
 sudo dnf install tuned -y
 
-virt_type=$(echo $(virt-what))
+virt_type=$(virt-what)
 if [ "$virt_type" = "" ]; then
     output "Virtualization: Bare Metal."
 elif [ "$virt_type" = "openvz lxc" ]; then
