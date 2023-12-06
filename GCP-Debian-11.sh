@@ -67,7 +67,7 @@ sudo sysctl -p
 sudo update-initramfs -u
 
 # Security limit
-echo "* hard core 0" | tee -a /etc/security/limits.conf
+echo '* hard core 0' | tee -a /etc/security/limits.conf
 
 # Setup unbound
 
@@ -147,4 +147,4 @@ sudo dnf install tuned -y
 sudo tuned-adm profile virtual-guest
 
 # Enable fstrim.timer
-sudo ystemctl enable --now fstrim.timer
+sudo systemctl enable --now fstrim.timer

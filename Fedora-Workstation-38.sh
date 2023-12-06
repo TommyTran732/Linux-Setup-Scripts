@@ -31,7 +31,7 @@ cd /home/"${USER}" || exit
 # Setting umask to 077
 umask 077
 sudo sed -i 's/umask 022/umask 077/g' /etc/bashrc
-echo "umask 077" | sudo tee -a /etc/bashrc
+echo 'umask 077' | sudo tee -a /etc/bashrc
 
 # Make home directory private
 chmod 700 /home/*
@@ -56,8 +56,8 @@ sudo firewall-cmd --reload
 sudo firewall-cmd --lockdown-on
 
 # Harden SSH
-echo "GSSAPIAuthentication no" | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
-echo "VerifyHostKeyDNS yes" | sudo tee -a /etc/ssh/ssh_config.d/10-custom.conf
+echo 'GSSAPIAuthentication no' | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
+echo 'VerifyHostKeyDNS yes' | sudo tee -a /etc/ssh/ssh_config.d/10-custom.conf
 sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 
 # Security kernel settings
@@ -66,7 +66,7 @@ unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/us
 unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_silent-kernel-printk.conf | sudo tee /etc/sysctl.d/30_silent-kernel-printk.conf
 unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_security-misc_kexec-disable.conf | sudo tee /etc/sysctl.d/30_security-misc_kexec-disable.conf
 sudo sed -i 's/kernel.yama.ptrace_scope=2/kernel.yama.ptrace_scope=1/g' /etc/sysctl.d/990-security-misc.conf
-sudo grubby --update-kernel=ALL --args='spectre_v2=on spec_store_bypass_disable=on l1tf=full,force mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force nosmt=force l1d_flush=on mmio_stale_data=full,nosmt random.trust_bootloader=off random.trust_cpu=off intel_iommu=on amd_iommu=on efi=disable_early_pci_dma iommu.passthrough=0 iommu.strict=1 slab_nomerge init_on_alloc=1 init_on_free=1 pti=on vsyscall=none page_alloc.shuffle=1 randomize_kstack_offset=on extra_latent_entropy debugfs=off'
+sudo grubby --update-kernel=ALL --args='spectre_v2=on spec_store_bypass_disable=on l1tf=full,force mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force nosmt=force l1d_flush=on mmio_stale_data=full,nosmt random.trust_bootloader=off random.trust_cpu=off intel_iommu=on amd_iommu=isolation_force efi=disable_early_pci_dma iommu=force iommu.passthrough=0 iommu.strict=1 slab_nomerge init_on_alloc=1 init_on_free=1 pti=on vsyscall=none page_alloc.shuffle=1 randomize_kstack_offset=on extra_latent_entropy debugfs=off'
 sudo dracut -f
 sudo sysctl -p
 
@@ -133,7 +133,7 @@ sudo dnf -y install gnome-console git-core gnome-shell-extension-appindicator gn
 # Install Microsoft Edge if x86_64
 MACHINE_TYPE=$(uname -m)
 if [ "${MACHINE_TYPE}" == 'x86_64' ]; then
-    output "x86_64 machine, installing Microsoft edge."
+    output 'x86_64 machine, installing Microsoft Edge.'
     curl -O https://packages.microsoft.com/keys/microsoft.asc
     sudo rpm --import microsoft.asc
     rm microsoft.asc
@@ -159,20 +159,20 @@ sudo systemctl restart fwupd
 sudo dnf install tuned -y
 
 virt_type=$(virt-what)
-if [ "$virt_type" = "" ]; then
-    output "Virtualization: Bare Metal."
-elif [ "$virt_type" = "openvz lxc" ]; then
-    output "Virtualization: OpenVZ 7."
-elif [ "$virt_type" = "xen xen-hvm" ]; then
-    output "Virtualization: Xen-HVM."
-elif [ "$virt_type" = "xen xen-hvm aws" ]; then
-    output "Virtualization: Xen-HVM on AWS."
+if [ "$virt_type" = '' ]; then
+    output 'Virtualization: Bare Metal.'
+elif [ "$virt_type" = 'openvz lxc' ]; then
+    output 'Virtualization: OpenVZ 7.'
+elif [ "$virt_type" = 'xen xen-hvm' ]; then
+    output 'Virtualization: Xen-HVM.'
+elif [ "$virt_type" = 'xen xen-hvm aws' ]; then
+    output 'Virtualization: Xen-HVM on AWS.'
 else
     output "Virtualization: $virt_type."
 fi
 
 # Setup tuned
-if [ "$virt_type" = "" ]; then
+if [ "$virt_type" = '' ]; then
   # Don't know whether using tuned would be a good idea on a laptop, power-profiles-daemon should be handling performance tuning IMO.
   sudo dnf remove tuned -y
 else
@@ -180,7 +180,7 @@ else
 fi
 
 # Setup real-ucode
-if [ "$virt_type" = "" ]; then
+if [ "$virt_type" = '' ]; then
     sudo dnf install 'https://divested.dev/rpm/fedora/divested-release-20230406-2.noarch.rpm'
     sudo sed -i 's/^metalink=.*/&?protocol=https/g' /etc/yum.repos.d/divested-release.repo
     sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware
@@ -188,4 +188,4 @@ if [ "$virt_type" = "" ]; then
     sudo dracut -f
 fi
 
-output "The script is done. You can also remove gnome-terminal since gnome-console will replace it."
+output 'The script is done. You can also remove gnome-terminal since gnome-console will replace it.'

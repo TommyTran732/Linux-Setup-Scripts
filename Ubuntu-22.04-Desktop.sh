@@ -44,7 +44,7 @@ umask 077
 sudo sed -ie '/^DIR_MODE=/ s/=[0-9]*\+/=0700/' /etc/adduser.conf
 sudo sed -ie '/^UMASK\s\+/ s/022/077/' /etc/login.defs
 sudo sed -i 's/USERGROUPS_ENAB yes/USERGROUPS_ENAB no/g' /etc/login.defs
-echo "umask 077" | sudo tee --append /etc/profile
+echo 'umask 077' | sudo tee --append /etc/profile
 
 # Setup NTS
 sudo systemctl disable systemd-timesyncd
@@ -59,8 +59,8 @@ sudo snap install ufw
 sudo ufw enable
 
 # Harden SSH
-echo "GSSAPIAuthentication no" | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
-echo "VerifyHostKeyDNS yes" | sudo tee -a /etc/ssh/ssh_config.d/10-custom.conf
+echo 'GSSAPIAuthentication no
+VerifyHostKeyDNS yes' | sudo tee -a /etc/ssh/ssh_config.d/10-custom.conf
 sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 
 # Kernel hardening

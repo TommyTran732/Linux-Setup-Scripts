@@ -172,13 +172,13 @@ sudo apt install tuned -y
 
 virt_type=$(virt-what)
 if [ "$virt_type" = "" ]; then
-  output "Virtualization: Bare Metal."
-elif [ "$virt_type" = "openvz lxc" ]; then
-  output "Virtualization: OpenVZ 7."
-elif [ "$virt_type" = "xen xen-hvm" ]; then
-  output "Virtualization: Xen-HVM."
-elif [ "$virt_type" = "xen xen-hvm aws" ]; then
-  output "Virtualization: Xen-HVM on AWS."
+  output 'Virtualization: Bare Metal.'
+elif [ "$virt_type" = 'openvz lxc' ]; then
+  output 'Virtualization: OpenVZ 7.'
+elif [ "$virt_type" = 'xen xen-hvm' ]; then
+  output 'Virtualization: Xen-HVM.'
+elif [ "$virt_type" = 'xen xen-hvm aws' ]; then
+  output 'Virtualization: Xen-HVM on AWS.'
 else
   output "Virtualization: $virt_type."
 fi
@@ -191,7 +191,7 @@ else
 fi
 
 # Setup fwupd
-if [ "$virt_type" = "" ]; then
+if [ "$virt_type" = '' ]; then
   sudo apt install fwupd -y
   echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
   sudo systemctl restart fwupd
