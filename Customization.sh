@@ -17,7 +17,7 @@
 #Run this as your user to set the theme
 
 output(){
-    echo -e '\e[36m'$1'\e[0m';
+    echo -e '\e[36m'"$1"'\e[0m';
 }
 
 #Enable Titlebar buttons
