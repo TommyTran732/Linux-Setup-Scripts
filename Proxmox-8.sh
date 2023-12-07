@@ -20,6 +20,9 @@ output(){
     echo -e '\e[36m'"$1"'\e[0m';
 }
 
+# Compliance
+sudo systemctl disable --now ctrl-alt-del.target
+
 # Setup NTS
 rm -rf /etc/chrony/chrony.conf
 curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | tee /etc/chrony/chrony.conf

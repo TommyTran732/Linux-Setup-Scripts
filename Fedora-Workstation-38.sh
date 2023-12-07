@@ -24,9 +24,8 @@ unpriv(){
     sudo -u nobody "$@"
 }
 
-# Moving to the home directory
-#Note that I always use /home/${USER} because gnome-terminal is wacky and sometimes doesn't load the environment variables in correctly (Right click somewhere in nautilus, click on open in terminal, then hit create new tab and you will see.)
-cd /home/"${USER}" || exit
+# Compliance
+sudo systemctl disable --now ctrl-alt-del.target
 
 # Setting umask to 077
 umask 077

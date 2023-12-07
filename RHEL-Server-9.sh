@@ -24,6 +24,9 @@ unpriv(){
   sudo -u nobody "$@"
 }
 
+# Compliance
+sudo systemctl disable --now ctrl-alt-del.target
+
 # Setup NTS
 sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony.conf
 
