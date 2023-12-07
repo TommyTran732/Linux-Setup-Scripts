@@ -74,14 +74,6 @@ sudo sysctl -p
 # Rebuild initramfs
 sudo update-initramfs -u
 
-# Disable telemetry
-sudo systemctl stop apport.service
-sudo systemctl disable apport.service
-sudo systemctl mask apport.service
-sudo systemctl stop whoopsie.service
-sudo systemctl disable whoopsie.service
-sudo systemctl mask whoopsie.service
-
 # Systemd Hardening
 sudo mkdir -p /etc/systemd/system/NetworkManager.service.d
 unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf | sudo tee /etc/systemd/system/NetworkManager.service.d/99-brace.conf
