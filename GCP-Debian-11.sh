@@ -26,6 +26,9 @@ unpriv(){
 sudo systemctl mask ctrl-alt-del.target
 sudo systemctl mask debug-shell.service
 
+# Make home directory private
+chmod 700 /home/*
+
 # Setup NTS
 sudo rm -rf /etc/chrony/chrony.conf
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony/chrony.conf

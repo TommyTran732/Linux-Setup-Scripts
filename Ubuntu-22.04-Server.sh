@@ -36,6 +36,9 @@ sudo usg fix cis_level2_server
 sudo systemctl mask ctrl-alt-del.target
 sudo systemctl mask debug-shell.service
 
+# Make home directory private
+chmod 700 /home/*
+
 # Remove AIDE
 sudo apt purge -y aide*
 
