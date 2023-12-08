@@ -25,7 +25,9 @@ unpriv(){
 }
 
 # Compliance
-sudo systemctl disable --now ctrl-alt-del.target
+sudo systemctl mask ctrl-alt-del.target
+sudo systemctl mask debug-shell.service
+sudo systemctl mask kdump.service
 
 # Setting umask to 077
 umask 077

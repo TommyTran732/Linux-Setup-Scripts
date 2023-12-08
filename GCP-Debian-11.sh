@@ -23,7 +23,8 @@ unpriv(){
 }
 
 # Compliance
-sudo systemctl disable --now ctrl-alt-del.target
+sudo systemctl mask ctrl-alt-del.target
+sudo systemctl mask debug-shell.service
 
 # Setup NTS
 sudo rm -rf /etc/chrony/chrony.conf

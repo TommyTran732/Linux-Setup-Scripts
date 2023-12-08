@@ -21,7 +21,8 @@ output(){
 }
 
 # Compliance
-sudo systemctl disable --now ctrl-alt-del.target
+systemctl mask ctrl-alt-del.target
+systemctl mask debug-shell.service
 
 # Setup NTS
 rm -rf /etc/chrony/chrony.conf
