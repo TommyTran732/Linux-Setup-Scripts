@@ -42,6 +42,7 @@ sudo systemctl restart chronyd
 
 sudo firewall-cmd --permanent --remove-service=cockpit
 sudo firewall-cmd --reload
+sudo firewall-cmd --lockdown-on
 
 # Harden SSH
 mkdir -p /etc/ssh/ssh_config.d /etc/ssh/sshd_config.d
