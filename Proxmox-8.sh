@@ -23,6 +23,7 @@ output(){
 # Compliance
 systemctl mask ctrl-alt-del.target
 systemctl mask debug-shell.service
+echo 'CtrlAltDelBurstAction=none' | tee -a /etc/systemd/system.conf
 
 # Setup NTS
 rm -rf /etc/chrony/chrony.conf

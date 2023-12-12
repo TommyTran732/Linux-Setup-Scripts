@@ -26,15 +26,16 @@ unpriv(){
 }
 
 #Compliance and updates
+sudo systemctl mask ctrl-alt-del.target
+sudo systemctl mask debug-shell.service
+echo 'CtrlAltDelBurstAction=none' | sudo tee -a /etc/systemd/system.conf
+
 sudo ua enable usg
 sudo apt update -y
 sudo apt full-upgrade -y
 sudo apt install -y usg curl libpam-pwquality
 sudo apt autoremove -y
 sudo usg fix cis_level2_server
-
-sudo systemctl mask ctrl-alt-del.target
-sudo systemctl mask debug-shell.service
 
 # Make home directory private
 chmod 700 /home/*

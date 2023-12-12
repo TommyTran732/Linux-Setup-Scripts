@@ -28,6 +28,7 @@ unpriv(){
 sudo systemctl mask ctrl-alt-del.target
 sudo systemctl mask debug-shell.service
 sudo systemctl mask kdump.service
+echo 'CtrlAltDelBurstAction=none' | sudo tee -a /etc/systemd/system.conf
 
 # Setting umask to 077
 umask 077
