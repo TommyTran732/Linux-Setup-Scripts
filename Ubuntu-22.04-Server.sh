@@ -87,9 +87,6 @@ sudo update-initramfs -u
 sudo systemctl stop apport.service
 sudo systemctl disable apport.service
 sudo systemctl mask apport.service
-sudo systemctl stop whoopsie.service
-sudo systemctl disable whoopsie.service
-sudo systemctl mask whoopsie.service
 
 #Setup fwupd
 sudo apt install fwupd -y
