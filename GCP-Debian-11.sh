@@ -77,8 +77,50 @@ sudo update-initramfs -u
 # Security limit
 echo '* hard core 0' | tee -a /etc/security/limits.conf
 
-# Setup unbound
+# Setup tuned
+sudo dnf install tuned -y
+sudo tuned-adm profile virtual-guest
 
+# Enable fstrim.timer
+sudo systemctl enable --now fstrim.timer
+
+### Differentiating bare metal and virtual installs
+
+# Installing tuned first here because virt-what is 1 of its dependencies anyways
+sudo apt install tuned -y
+
+virt_type=$(virt-what)
+if [ "$virt_type" = "" ]; then
+  output 'Virtualization: Bare Metal.'
+elif [ "$virt_type" = 'openvz lxc' ]; then
+  output 'Virtualization: OpenVZ 7.'
+elif [ "$virt_type" = 'xen xen-hvm' ]; then
+  output 'Virtualization: Xen-HVM.'
+elif [ "$virt_type" = 'xen xen-hvm aws' ]; then
+  output 'Virtualization: Xen-HVM on AWS.'
+else
+  output "Virtualization: $virt_type."
+fi
+
+# Setup tuned
+if [ "$virt_type" = "" ]; then
+  sudo tuned-adm profile latency-performance
+else
+  sudo tuned-adm profile virtual-guest
+fi
+
+# Setup fwupd
+if [ "$virt_type" = '' ]; then
+  sudo apt install fwupd -y
+  echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
+  sudo systemctl restart fwupd
+  mkdir -p /etc/systemd/system/fwupd-refresh.service.d
+  unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/system/fwupd-refresh.service.d/override.conf | sudo tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
+  sudo systemctl daemon-reload
+  sudo systemctl enable --now fwupd-refresh.timer
+fi
+
+# Setup unbound
 sudo apt instal unbound resolvconf -y
 
 echo 'server:
@@ -148,11 +190,5 @@ BindPaths=-/dev/log:@UNBOUND_CHROOT_DIR@/dev/log' | sudo tee /etc/systemd/system
 
 sudo systemctl daemon-reload
 sudo systemctl restart unbound
-sudo systemctl disable --now systemd-resolved
-
-# Setup tuned
-sudo dnf install tuned -y
-sudo tuned-adm profile virtual-guest
-
-# Enable fstrim.timer
-sudo systemctl enable --now fstrim.timer
+sudo systemctl disable systemd-resolved
+sudo reboot

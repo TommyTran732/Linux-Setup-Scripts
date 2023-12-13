@@ -15,7 +15,6 @@
 # the License.
 
 #Meant to be run on Ubuntu Pro Minimal
-#The script assumes you already have Ubuntu Pro activated
 
 output(){
   echo -e '\e[36m'"$1"'\e[0m';
@@ -29,13 +28,17 @@ unpriv(){
 sudo systemctl mask ctrl-alt-del.target
 sudo systemctl mask debug-shell.service
 echo 'CtrlAltDelBurstAction=none' | sudo tee -a /etc/systemd/system.conf
+echo 'Authorized uses only. All activity may be monitored and reported.' | sudo tee /etc/issue
+echo 'Authorized uses only. All activity may be monitored and reported.' | sudo tee /etc/issue.net
 
-sudo ua enable usg
+#USG CIS Server 2 Breaks Unbound right now.
+#sudo ua enable usg
 sudo apt update -y
 sudo apt full-upgrade -y
-sudo apt install -y usg curl libpam-pwquality
-sudo apt autoremove -y
-sudo usg fix cis_level2_server
+sudo apt install -y curl
+#sudo apt install -y usg curl libpam-pwquality
+#sudo apt autoremove -y
+#sudo usg fix cis_level2_server
 
 # Make home directory private
 chmod 700 /home/*
@@ -54,7 +57,7 @@ sudo systemctl restart chronyd
 sudo apt purge -y ufw
 sudo snap install ufw
 sudo ufw enable
-sudo ufw allow OpenSSH
+sudo ufw allow SSH
 
 # Harden SSH
 echo 'GSSAPIAuthentication no
@@ -66,6 +69,74 @@ sudo mkdir -p /etc/systemd/system/ssh.service.d
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/local.conf | sudo tee /etc/systemd/system/ssh.service.d/override.conf
 sudo systemctl daemon-reload
 sudo systemctl restart sshd
+
+# Kernel hardening
+unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf | sudo tee /etc/modprobe.d/30_security-misc.conf
+unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/990-security-misc.conf | sudo tee /etc/sysctl.d/990-security-misc.conf
+unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_silent-kernel-printk.conf | sudo tee /etc/sysctl.d/30_silent-kernel-printk.conf
+unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_security-misc_kexec-disable.conf | sudo tee /etc/sysctl.d/30_security-misc_kexec-disable.conf
+sudo sed -i 's/kernel.yama.ptrace_scope=2/kernel.yama.ptrace_scope=3/g' /etc/sysctl.d/990-security-misc.conf
+sudo sed -i 's/net.ipv4.icmp_echo_ignore_all=1/net.ipv4.icmp_echo_ignore_all=0/g' /etc/sysctl.d/990-security-misc.conf
+sudo sed -i 's/net.ipv6.icmp.echo_ignore_all=1/net.ipv6.icmp.echo_ignore_all=0/g' /etc/sysctl.d/990-security-misc.conf
+sudo sysctl -p
+
+# Rebuild initramfs
+sudo update-initramfs -u
+
+# Disable telemetry
+sudo systemctl stop apport.service
+sudo systemctl disable apport.service
+sudo systemctl mask apport.service
+sudo systemctl stop whoopsie.service
+sudo systemctl disable whoopsie.service
+sudo systemctl mask whoopsie.service
+
+#Setup fwupd
+sudo apt install fwupd -y
+mkdir -p /etc/systemd/system/fwupd-refresh.service.d
+echo '[Service]
+ExecStart=/usr/bin/fwupdmgr update' | tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
+sudo systemctl daemon-reload
+sudo systemctl enable --now fwupd-refresh.timer
+
+# Enable fstrim.timer
+sudo systemctl enable --now fstrim.timer
+
+### Differentiating bare metal and virtual installs
+
+# Installing tuned first here because virt-what is 1 of its dependencies anyways
+sudo apt install tuned -y
+
+virt_type=$(virt-what)
+if [ "$virt_type" = "" ]; then
+  output 'Virtualization: Bare Metal.'
+elif [ "$virt_type" = 'openvz lxc' ]; then
+  output 'Virtualization: OpenVZ 7.'
+elif [ "$virt_type" = 'xen xen-hvm' ]; then
+  output 'Virtualization: Xen-HVM.'
+elif [ "$virt_type" = 'xen xen-hvm aws' ]; then
+  output 'Virtualization: Xen-HVM on AWS.'
+else
+  output "Virtualization: $virt_type."
+fi
+
+# Setup tuned
+if [ "$virt_type" = "" ]; then
+  sudo tuned-adm profile latency-performance
+else
+  sudo tuned-adm profile virtual-guest
+fi
+
+# Setup fwupd
+if [ "$virt_type" = '' ]; then
+  sudo apt install fwupd -y
+  echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
+  sudo systemctl restart fwupd
+  mkdir -p /etc/systemd/system/fwupd-refresh.service.d
+  unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/system/fwupd-refresh.service.d/override.conf | sudo tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
+  sudo systemctl daemon-reload
+  sudo systemctl enable --now fwupd-refresh.timer
+fi
 
 # Setup unbound
 
@@ -138,72 +209,6 @@ BindPaths=-/dev/log:@UNBOUND_CHROOT_DIR@/dev/log' | sudo tee /etc/systemd/system
 
 sudo systemctl daemon-reload
 sudo systemctl restart unbound
-sudo systemctl disable --now systemd-resolved
+sudo systemctl disable systemd-resolved
 
-# Kernel hardening
-unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf | sudo tee /etc/modprobe.d/30_security-misc.conf
-unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/990-security-misc.conf | sudo tee /etc/sysctl.d/990-security-misc.conf
-unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_silent-kernel-printk.conf | sudo tee /etc/sysctl.d/30_silent-kernel-printk.conf
-unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_security-misc_kexec-disable.conf | sudo tee /etc/sysctl.d/30_security-misc_kexec-disable.conf
-sudo sed -i 's/kernel.yama.ptrace_scope=2/kernel.yama.ptrace_scope=3/g' /etc/sysctl.d/990-security-misc.conf
-sudo sed -i 's/net.ipv4.icmp_echo_ignore_all=1/net.ipv4.icmp_echo_ignore_all=0/g' /etc/sysctl.d/990-security-misc.conf
-sudo sed -i 's/net.ipv6.icmp.echo_ignore_all=1/net.ipv6.icmp.echo_ignore_all=0/g' /etc/sysctl.d/990-security-misc.conf
-sudo sysctl -p
-
-# Rebuild initramfs
-sudo update-initramfs -u
-
-# Disable telemetry
-sudo systemctl stop apport.service
-sudo systemctl disable apport.service
-sudo systemctl mask apport.service
-sudo systemctl stop whoopsie.service
-sudo systemctl disable whoopsie.service
-sudo systemctl mask whoopsie.service
-
-#Setup fwupd
-sudo apt install fwupd -y
-mkdir -p /etc/systemd/system/fwupd-refresh.service.d
-echo '[Service]
-ExecStart=/usr/bin/fwupdmgr update' | tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
-sudo systemctl daemon-reload
-sudo systemctl enable --now fwupd-refresh.timer
-
-# Enable fstrim.timer
-sudo systemctl enable --now fstrim.timer
-
-### Differentiating bare metal and virtual installs
-
-# Installing tuned first here because virt-what is 1 of its dependencies anyways
-sudo apt install tuned -y
-
-virt_type=$(virt-what)
-if [ "$virt_type" = "" ]; then
-  output 'Virtualization: Bare Metal.'
-elif [ "$virt_type" = 'openvz lxc' ]; then
-  output 'Virtualization: OpenVZ 7.'
-elif [ "$virt_type" = 'xen xen-hvm' ]; then
-  output 'Virtualization: Xen-HVM.'
-elif [ "$virt_type" = 'xen xen-hvm aws' ]; then
-  output 'Virtualization: Xen-HVM on AWS.'
-else
-  output "Virtualization: $virt_type."
-fi
-
-# Setup tuned
-if [ "$virt_type" = "" ]; then
-  sudo tuned-adm profile latency-performance
-else
-  sudo tuned-adm profile virtual-guest
-fi
-
-# Setup fwupd
-if [ "$virt_type" = '' ]; then
-  sudo apt install fwupd -y
-  echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
-  sudo systemctl restart fwupd
-  mkdir -p /etc/systemd/system/fwupd-refresh.service.d
-  unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/system/fwupd-refresh.service.d/override.conf | sudo tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
-  sudo systemctl daemon-reload
-  sudo systemctl enable --now fwupd-refresh.timer
-fi
+sudo reboot
