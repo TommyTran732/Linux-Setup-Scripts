@@ -23,10 +23,6 @@ output(){
 #Enable Titlebar buttons
 gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
 
-#Setting Legacy GTK theme
-gsettings set org.gnome.desktop.interface gtk-theme "Flat-Remix-GTK-Blue-Dark-Solid"
-flatpak upgrade -y
-
 #Setting icons
 git clone https://github.com/horst3180/arc-icon-theme.git
 mkdir /home/"${USER}"/.icons
