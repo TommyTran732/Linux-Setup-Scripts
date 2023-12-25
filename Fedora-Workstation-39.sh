@@ -76,11 +76,7 @@ sudo sysctl -p
 # Systemd Hardening
 sudo mkdir -p /etc/systemd/system/NetworkManager.service.d
 unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf | sudo tee /etc/systemd/system/NetworkManager.service.d/99-brace.conf
-sudo mkdir -p /etc/systemd/system/irqbalance.service.d
-unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/irqbalance.service.d/99-brace.conf | sudo tee /etc/systemd/system/irqbalance.service.d/99-brace.conf
-
 sudo systemctl restart NetworkManager
-sudo systemctl restart irqbalance
 
 # Disable automount
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/automount-disable | sudo tee /etc/dconf/db/local.d/automount-disable
