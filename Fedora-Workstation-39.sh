@@ -25,6 +25,7 @@ unpriv(){
 }
 
 # Compliance
+sudo rm /etc/systemd/system/ctrl-alt-del.target
 sudo systemctl mask ctrl-alt-del.target
 sudo systemctl mask debug-shell.service
 sudo systemctl mask kdump.service
