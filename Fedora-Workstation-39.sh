@@ -127,7 +127,7 @@ sudo dnf remove -y rhythmbox yelp evince libreoffice* cheese file-roller* mediaw
 sudo dnf config-manager --set-disabled fedora-cisco-openh264
 
 # Install packages that I use
-sudo dnf -y install gnome-console git-core gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo gnome-shell-extension-no-overview
+sudo dnf -y install gnome-console git-core gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo
 
 # Install Microsoft Edge if x86_64
 MACHINE_TYPE=$(uname -m)
