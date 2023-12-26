@@ -44,7 +44,7 @@ sudo apt install -y curl
 chmod 700 /home/*
 
 # Remove AIDE
-sudo apt purge -y aide*
+#sudo apt purge -y aide*
 
 # Setup NTS
 sudo systemctl disable --now systemd-timesyncd
