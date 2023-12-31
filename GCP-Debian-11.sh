@@ -28,7 +28,7 @@ sudo systemctl mask debug-shell.service
 echo 'CtrlAltDelBurstAction=none' | sudo tee -a /etc/systemd/system.conf
 
 # Make home directory private
-chmod 700 /home/*
+sudo chmod 700 /home/*
 
 # Setup NTS
 sudo rm -rf /etc/chrony/chrony.conf

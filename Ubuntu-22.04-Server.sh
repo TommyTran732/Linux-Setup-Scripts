@@ -41,7 +41,7 @@ sudo apt install -y curl
 #sudo usg fix cis_level2_server
 
 # Make home directory private
-chmod 700 /home/*
+sudo chmod 700 /home/*
 
 # Remove AIDE
 #sudo apt purge -y aide*

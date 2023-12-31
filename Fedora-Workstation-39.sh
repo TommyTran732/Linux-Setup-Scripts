@@ -37,7 +37,7 @@ sudo sed -i 's/umask 022/umask 077/g' /etc/bashrc
 echo 'umask 077' | sudo tee -a /etc/bashrc
 
 # Make home directory private
-chmod 700 /home/*
+sudo chmod 700 /home/*
 
 # Setup NTS
 sudo rm -rf /etc/chrony/chrony.conf

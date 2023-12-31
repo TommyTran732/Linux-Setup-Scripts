@@ -39,6 +39,9 @@ OPTIONS="-F 1"' | sudo tee /etc/sysconfig/chronyd
 
 sudo systemctl restart chronyd
 
+# Make home directory private
+sudo chmod 700 /home/*
+
 # Setup Firewalld
 
 sudo firewall-cmd --permanent --remove-service=cockpit

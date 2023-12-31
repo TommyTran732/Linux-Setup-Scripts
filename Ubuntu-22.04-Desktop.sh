@@ -38,7 +38,7 @@ sudo apt autoremove -y
 sudo usg fix cis_level2_workstation
 
 # Make home directory private
-chmod 700 /home/*
+sudo chmod 700 /home/*
 
 # Remove AIDE
 sudo apt purge -y aide*
