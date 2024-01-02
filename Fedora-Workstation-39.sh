@@ -124,7 +124,11 @@ sudo dnf remove -y rhythmbox yelp evince libreoffice* cheese file-roller* mediaw
 sudo dnf config-manager --set-disabled fedora-cisco-openh264
 
 # Install packages that I use
-sudo dnf -y install gnome-console git-core gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo
+sudo dnf -y install gnome-console gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo
+
+# Setup Flatpak
+flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak --user install fedora org.gnome.Extensions -y
 
 # Install Microsoft Edge if x86_64
 MACHINE_TYPE=$(uname -m)
