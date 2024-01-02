@@ -127,6 +127,7 @@ sudo dnf config-manager --set-disabled fedora-cisco-openh264
 sudo dnf -y install gnome-console gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo
 
 # Setup Flatpak
+flatpak override --system --nosocket=x11 --nosocket=fallback-x11 --nosocket=pulseaudio --unshare=network --unshare=ipc --nofilesystem=host:reset
 flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 flatpak --user install fedora org.gnome.Extensions -y
 
