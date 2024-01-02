@@ -25,11 +25,8 @@ unpriv(){
 }
 
 # Compliance
-sudo rm /etc/systemd/system/ctrl-alt-del.target
-sudo systemctl mask ctrl-alt-del.target
 sudo systemctl mask debug-shell.service
 sudo systemctl mask kdump.service
-echo 'CtrlAltDelBurstAction=none' | sudo tee -a /etc/systemd/system.conf
 
 # Setup NTS
 sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony.conf

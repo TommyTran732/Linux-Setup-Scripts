@@ -26,9 +26,7 @@ unpriv(){
 }
 
 #Compliance and updates
-sudo systemctl mask ctrl-alt-del.target
 sudo systemctl mask debug-shell.service
-echo 'CtrlAltDelBurstAction=none' | sudo tee -a /etc/systemd/system.conf
 
 sudo ua enable usg
 sudo apt update -y

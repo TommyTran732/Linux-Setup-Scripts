@@ -25,7 +25,6 @@ unpriv(){
 }
 
 #Compliance and updates
-sudo systemctl mask ctrl-alt-del.target
 sudo systemctl mask debug-shell.service
 echo 'CtrlAltDelBurstAction=none' | sudo tee -a /etc/systemd/system.conf
 echo 'Authorized uses only. All activity may be monitored and reported.' | sudo tee /etc/issue
