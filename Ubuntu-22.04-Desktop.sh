@@ -15,7 +15,6 @@
 # the License.
 
 #Please note that this is how I PERSONALLY setup my computer - I do some stuff such as not using anything to download GNOME extensions from extensions.gnome.org and installing the extensions as a package instead
-##The script assumes you already have Ubuntu Pro activated
 
 output(){
     echo -e '\e[36m'"$1"'\e[0m';
@@ -28,18 +27,18 @@ unpriv(){
 #Compliance and updates
 sudo systemctl mask debug-shell.service
 
-sudo ua enable usg
+#sudo ua enable usg
 sudo apt update -y
 sudo apt full-upgrade -y
-sudo apt install -y usg
+#sudo apt install -y usg
 sudo apt autoremove -y
-sudo usg fix cis_level2_workstation
+#sudo usg fix cis_level2_workstation
 
 # Make home directory private
 sudo chmod 700 /home/*
 
 # Remove AIDE
-sudo apt purge -y aide*
+#sudo apt purge -y aide*
 
 # Allow su which is disabled by CIS
 sudo sed -i 's/auth required pam_wheel.so use_uid group=sugroup//g' /etc/pam.d/su
