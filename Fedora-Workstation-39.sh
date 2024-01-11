@@ -128,14 +128,15 @@ sudo dnf remove -y rhythmbox yelp evince libreoffice* cheese file-roller* mediaw
 sudo dnf config-manager --set-disabled fedora-cisco-openh264
 
 # Install packages that I use
-sudo dnf -y install gnome-console gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo
+sudo dnf -y install adw-gtk3-theme gnome-console gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo
 
 # Setup Flatpak
 sudo flatpak override --system --nosocket=x11 --nosocket=fallback-x11 --nosocket=pulseaudio --unshare=network --unshare=ipc --nofilesystem=host:reset
 flatpak override --user --nosocket=x11 --nosocket=fallback-x11 --nosocket=pulseaudio --unshare=network --unshare=ipc --nofilesystem=host:reset
 flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-flatpak --user install fedora org.gnome.Extensions -y
-flatpak --user install flathub com.github.tchx84.Flatseal -y
+flatpak --user install org.gnome.Extensions -y
+flatpak --user install com.github.tchx84.Flatseal -y
+flatpak update -y
 
 # Install Microsoft Edge if x86_64
 MACHINE_TYPE=$(uname -m)
