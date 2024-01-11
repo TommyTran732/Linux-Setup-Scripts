@@ -187,13 +187,22 @@ else
   sudo tuned-adm profile virtual-guest
 fi
 
-# Setup real-ucode
-if [ "$virt_type" = "" ]; then
+# Setup real-ucode and hardened_malloc
+if [ "$virt_type" = '' ] || [ "${MACHINE_TYPE}" == 'x86_64' ]; then
   sudo dnf install 'https://divested.dev/rpm/fedora/divested-release-20231210-2.noarch.rpm' -y
   sudo sed -i 's/^metalink=.*/&?protocol=https/g' /etc/yum.repos.d/divested-release.repo
-  sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware
-  sudo dnf install real-ucode -y
-  sudo dracut -f
+  if [ "${MACHINE_TYPE}" != 'x86_64' ]; then
+    sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware
+    sudo dnf install real-ucode -y
+    sudo dracut -f
+  elif [ "$virt_type" != '' ]; then
+    sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,hardened_malloc
+    sudo dnf install hardened_malloc -y
+  else
+    sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware,hardened_malloc
+    sudo dnf install real-ucode hardened_malloc -y
+    sudo dracut -f
+  fi
 fi
 
 # Setup fwupd
