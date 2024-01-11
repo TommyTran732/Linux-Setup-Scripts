@@ -208,3 +208,6 @@ if [ "$virt_type" = '' ] || [ "${MACHINE_TYPE}" == 'x86_64' ]; then
 fi
 
 output 'The script is done. You can also remove gnome-terminal since gnome-console will replace it.'
+
+#Enable Titlebar buttons
+gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'

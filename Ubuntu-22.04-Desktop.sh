@@ -136,3 +136,6 @@ sudo hostnamectl --transient hostname ''
 # Enable fstrim.timer
 sudo apt install tuned -y
 sudo systemctl enable --now fstrim.timer
+
+#Enable Titlebar buttons
+gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
