@@ -131,8 +131,8 @@ sudo dnf config-manager --set-disabled fedora-cisco-openh264
 sudo dnf -y install adw-gtk3-theme gnome-console gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo
 
 # Setup Flatpak
-sudo flatpak override --system --nosocket=x11 --nosocket=fallback-x11 --nosocket=pulseaudio --unshare=network --unshare=ipc --nofilesystem=host:reset
-flatpak override --user --nosocket=x11 --nosocket=fallback-x11 --nosocket=pulseaudio --unshare=network --unshare=ipc --nofilesystem=host:reset
+sudo flatpak override --system --nosocket=x11 --nosocket=fallback-x11 --nosocket=pulseaudio --unshare=network --unshare=ipc --nofilesystem=host:reset --nodevice=input --nodevice=shm --nodevice=all
+flatpak override --user --nosocket=x11 --nosocket=fallback-x11 --nosocket=pulseaudio --unshare=network --unshare=ipc --nofilesystem=host:reset --nodevice=input --nodevice=shm --nodevice=all
 flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 flatpak --user install org.gnome.Extensions -y
 flatpak --user install com.github.tchx84.Flatseal -y
