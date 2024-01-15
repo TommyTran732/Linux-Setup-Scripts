@@ -136,6 +136,7 @@ flatpak override --user --nosocket=x11 --nosocket=fallback-x11 --nosocket=pulsea
 flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 flatpak --user install org.gnome.Extensions -y
 flatpak --user install com.github.tchx84.Flatseal -y
+flatpak --user override com.github.tchx84.Flatseal --filesystem=/var/lib/flatpak/app:ro --filesystem=xdg-data/flatpak/app:ro --filesystem=xdg-data/flatpak/overrides:create
 flatpak update -y
 
 # Install Microsoft Edge if x86_64
