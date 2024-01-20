@@ -114,7 +114,7 @@ sudo apt autoremove -y
 sudo snap remove firefox
 
 # Install packages that I use
-sudo apt install -y git-core gnome-text-editor
+sudo apt install -y gnome-text-editor
 sudo snap install eog
 
 # Setup Networking
