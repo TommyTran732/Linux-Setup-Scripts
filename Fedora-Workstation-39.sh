@@ -160,8 +160,7 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc' | sudo tee /etc/yum.re
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/managed.json | sudo tee /etc/opt/edge/policies/managed/managed.json
     sudo chmod 644 /etc/opt/edge/policies/managed/managed.json
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/recommended.json | sudo tee /etc/opt/edge/policies/recommended/recommended.json
-    sudo chmod 644 /etc/opt/edge/policies/managed/managed.json /etc/opt/edge/policies/managed/recommended.json
-    sudo chmod 644 /etc/opt/edge/policies/managed/recommended.json
+    sudo chmod 644 /etc/opt/edge/policies/managed/managed.json /etc/opt/edge/policies/recommended/recommended.json
 fi
 
 # Enable auto TRIM
