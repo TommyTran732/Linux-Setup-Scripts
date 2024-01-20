@@ -25,5 +25,12 @@ unpriv(){
   sudo -u nobody "$@"
 }
 
+# Update Kali
 sudo apt full-upgrade -y
+
+# Install all tools
 sudo apt install kali-linux-everything -y
+
+# Setup UFW
+sudo apt install ufw -y
+sudo ufw enable
