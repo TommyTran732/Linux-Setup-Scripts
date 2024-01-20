@@ -33,6 +33,10 @@ sudo apt update -y
 sudo apt full-upgrade -y
 sudo apt install -y curl
 
+# Default to gcc-12 instead of gcc-11
+sudo rm /usr/bin/gcc
+sudo ln -s /usr/bin/gcc-12 /usr/bin/gcc
+
 # Make home directory private
 sudo chmod 700 /home/*
 

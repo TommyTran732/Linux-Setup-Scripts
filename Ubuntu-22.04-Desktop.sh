@@ -31,6 +31,10 @@ sudo apt update -y
 sudo apt full-upgrade -y
 sudo apt autoremove -y
 
+# Default to gcc-12 instead of gcc-11
+sudo rm /usr/bin/gcc
+sudo ln -s /usr/bin/gcc-12 /usr/bin/gcc
+
 # Make home directory private
 sudo chmod 700 /home/*
 
@@ -113,13 +117,15 @@ sudo apt purge -y cups* eog gedit firefox* gnome-calculator gnome-characters* gn
 sudo apt autoremove -y
 sudo snap remove firefox
 
+sudo rm -rf /usr/share/hplip
+
 # Install packages that I use
 sudo apt install -y gnome-text-editor
 sudo snap install eog
 
 # Setup Networking
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/NetworkManager/conf.d/00-macrandomize.conf | sudo tee /etc/NetworkManager/conf.d/00-macrandomize.conf
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/NetworkManager/conf.d/01-transient-hostname.conf | sudo tee /etc/NetworkManager/conf.d/01-transient-hostname.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/00-macrandomize.conf | sudo tee /etc/NetworkManager/conf.d/00-macrandomize.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/01-transient-hostname.conf | sudo tee /etc/NetworkManager/conf.d/01-transient-hostname.conf
 sudo nmcli general reload conf
 sudo hostnamectl hostname 'localhost'
 sudo hostnamectl --transient hostname ''
@@ -143,6 +149,7 @@ fi
 if [ "$virt_type" = '' ]; then
   # Don't know whether using tuned would be a good idea on a laptop, power-profiles-daemon should be handling performance tuning IMO.
   sudo apt remove tuned -y
+  sudo apt autoremove -y
 else
   sudo tuned-adm profile virtual-guest
 fi
