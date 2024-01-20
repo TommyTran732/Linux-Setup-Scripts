@@ -29,20 +29,12 @@ sudo systemctl mask debug-shell.service
 echo 'Authorized uses only. All activity may be monitored and reported.' | sudo tee /etc/issue
 echo 'Authorized uses only. All activity may be monitored and reported.' | sudo tee /etc/issue.net
 
-#USG CIS Server 2 Breaks Unbound right now.
-#sudo ua enable usg
 sudo apt update -y
 sudo apt full-upgrade -y
 sudo apt install -y curl
-#sudo apt install -y usg curl libpam-pwquality
-#sudo apt autoremove -y
-#sudo usg fix cis_level2_server
 
 # Make home directory private
 sudo chmod 700 /home/*
-
-# Remove AIDE
-#sudo apt purge -y aide*
 
 # Setup NTS
 sudo systemctl disable --now systemd-timesyncd
