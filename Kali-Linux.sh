@@ -46,3 +46,29 @@ unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/us
 sudo chmod 644 /etc/sysctl.d/30_security-misc_kexec-disable.conf
 sudo sed -i 's/kernel.yama.ptrace_scope=2/kernel.yama.ptrace_scope=3/g' /etc/sysctl.d/990-security-misc.conf
 sudo sysctl -p
+
+# Installing tuned first here because virt-what is 1 of its dependencies anyways
+sudo apt install tuned -y
+virt_type=$(virt-what)
+if [ "$virt_type" = '' ]; then
+    output 'Virtualization: Bare Metal.'
+elif [ "$virt_type" = 'openvz lxc' ]; then
+    output 'Virtualization: OpenVZ 7.'
+elif [ "$virt_type" = 'xen xen-hvm' ]; then
+    output 'Virtualization: Xen-HVM.'
+elif [ "$virt_type" = 'xen xen-hvm aws' ]; then
+    output 'Virtualization: Xen-HVM on AWS.'
+else
+    output "Virtualization: $virt_type."
+fi
+
+# Setup tuned
+if [ "$virt_type" = '' ]; then
+  # Don't know whether using tuned would be a good idea on a laptop, power-profiles-daemon should be handling performance tuning IMO.
+  sudo apt remove tuned -y
+else
+  sudo tuned-adm profile virtual-guest
+fi
+
+# Enable fstrim.timer
+sudo systemctl enable --now fstrim.timer

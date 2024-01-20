@@ -123,6 +123,28 @@ sudo nmcli general reload conf
 sudo hostnamectl hostname 'localhost'
 sudo hostnamectl --transient hostname ''
 
-# Enable fstrim.timer
+# Installing tuned first here because virt-what is 1 of its dependencies anyways
 sudo apt install tuned -y
+virt_type=$(virt-what)
+if [ "$virt_type" = '' ]; then
+    output 'Virtualization: Bare Metal.'
+elif [ "$virt_type" = 'openvz lxc' ]; then
+    output 'Virtualization: OpenVZ 7.'
+elif [ "$virt_type" = 'xen xen-hvm' ]; then
+    output 'Virtualization: Xen-HVM.'
+elif [ "$virt_type" = 'xen xen-hvm aws' ]; then
+    output 'Virtualization: Xen-HVM on AWS.'
+else
+    output "Virtualization: $virt_type."
+fi
+
+# Setup tuned
+if [ "$virt_type" = '' ]; then
+  # Don't know whether using tuned would be a good idea on a laptop, power-profiles-daemon should be handling performance tuning IMO.
+  sudo apt remove tuned -y
+else
+  sudo tuned-adm profile virtual-guest
+fi
+
+# Enable fstrim.timer
 sudo systemctl enable --now fstrim.timer
