@@ -91,17 +91,13 @@ unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd
 # Disable automount
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/dconf/db/local.d/automount-disable | sudo tee /etc/dconf/db/local.d/automount-disable
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/dconf/db/local.d/locks/automount-disable | sudo tee /etc/dconf/db/local.d/locks/automount-disable
+
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/dconf/db/local.d/apport-disable | sudo tee /etc/dconf/db/local.d/apport-disable
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/dconf/db/local.d/locks/apport-disable | sudo tee /etc/dconf/db/local.d/locks/apport-disable
+
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/prefer-dark | sudo tee /etc/dconf/db/local.d/prefer-dark
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/button-layout | sudo tee /etc/dconf/db/local.d/button-layout
 sudo chmod 644 /etc/dconf/db/local.d/*
-sudo dconf update
-
-# Disable crash reports
-echo '[com/ubuntu/update-notifier]
-show-apport-crashes=false' | sudo tee /etc/dconf/db/local.d/disable-apport-crashes
-
-echo 'com/ubuntu/update-notifier/show-apport-crashes' | sudo tee /etc/dconf/db/local.d/locks/disable-apport-crashes
-
 sudo dconf update
 
 ubuntu-report -f send no

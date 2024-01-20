@@ -1,0 +1,2 @@
+[com/ubuntu/update-notifier]
+show-apport-crashes=false
