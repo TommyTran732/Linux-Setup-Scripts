@@ -130,6 +130,68 @@ sudo rm -rf /usr/share/hplip
 sudo apt install -y gnome-console
 sudo snap install gnome-text-editor loupe
 
+# Rosetta setup
+echo '# deb cdrom:[Ubuntu 22.04.3 LTS _Jammy Jellyfish_ - Release arm64 (20240119)]/ jammy main restricted
+
+# See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
+# newer versions of the distribution.
+deb [arch=arm64] http://us.ports.ubuntu.com/ubuntu-ports/ jammy main restricted
+deb [arch=amd64] http://us.ports.ubuntu.com/ubuntu-ports/ jammy main restricted
+# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ jammy main restricted
+
+## Major bug fix updates produced after the final release of the
+## distribution.
+deb [arch=arm64] http://us.ports.ubuntu.com/ubuntu-ports/ jammy-updates main restricted
+deb [arch=amd64] http://us.ports.ubuntu.com/ubuntu-ports/ jammy-updates main restricted
+# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ jammy-updates main restricted
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team. Also, please note that software in universe WILL NOT receive any
+## review or updates from the Ubuntu security team.
+deb [arch=arm64] http://us.ports.ubuntu.com/ubuntu-ports/ jammy universe
+deb [arch=amd64] http://us.ports.ubuntu.com/ubuntu-ports/ jammy universe
+# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ jammy universe
+deb [arch=arm64] http://us.ports.ubuntu.com/ubuntu-ports/ jammy-updates universe
+deb [arch=amd64] http://us.ports.ubuntu.com/ubuntu-ports/ jammy-updates universe
+# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ jammy-updates universe
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team, and may not be under a free licence. Please satisfy yourself as to
+## your rights to use the software. Also, please note that software in
+## multiverse WILL NOT receive any review or updates from the Ubuntu
+## security team.
+deb [arch=arm64] http://us.ports.ubuntu.com/ubuntu-ports/ jammy multiverse
+deb [arch=amd64] http://us.ports.ubuntu.com/ubuntu-ports/ jammy multiverse
+# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ jammy multiverse
+deb [arch=arm64] http://us.ports.ubuntu.com/ubuntu-ports/ jammy-updates multiverse
+deb [arch=amd64] http://us.ports.ubuntu.com/ubuntu-ports/ jammy-updates multiverse
+# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ jammy-updates multiverse
+
+## N.B. software from this repository may not have been tested as
+## extensively as that contained in the main release, although it includes
+## newer versions of some applications which may provide useful features.
+## Also, please note that software in backports WILL NOT receive any review
+## or updates from the Ubuntu security team.
+deb [arch=arm64] http://us.ports.ubuntu.com/ubuntu-ports/ jammy-backports main restricted universe multiverse
+deb [arch=amd64] http://us.ports.ubuntu.com/ubuntu-ports/ jammy-backports main restricted universe multiverse
+# deb-src http://us.ports.ubuntu.com/ubuntu-ports/ jammy-backports main restricted universe multiverse
+
+deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports jammy-security main restricted
+deb [arch=amd64] http://ports.ubuntu.com/ubuntu-ports jammy-security main restricted
+# deb-src http://ports.ubuntu.com/ubuntu-ports jammy-security main restricted
+deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports jammy-security universe
+deb [arch=amd64] http://ports.ubuntu.com/ubuntu-ports jammy-security universe
+# deb-src http://ports.ubuntu.com/ubuntu-ports jammy-security universe
+deb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports jammy-security multiverse
+deb [arch=amd64] http://ports.ubuntu.com/ubuntu-ports jammy-security multiverse
+# deb-src http://ports.ubuntu.com/ubuntu-ports jammy-security multiverse
+
+# This system was installed using small removable media
+# (e.g. netinst, live or single CD). The matching "deb cdrom"
+# entries were disabled at the end of the installation process.
+# For information about how to configure apt package sources,
+# see the sources.list(5) manual.' | sudo tee /etc/apt/sources.list
+
 # Install Microsoft Edge if x86_64
 MACHINE_TYPE=$(uname -m)
 if [ "${MACHINE_TYPE}" == 'x86_64' ] || [ -f /media/psf/RosettaLinux/rosetta ]; then
