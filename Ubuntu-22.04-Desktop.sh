@@ -192,6 +192,9 @@ deb [arch=amd64] http://ports.ubuntu.com/ubuntu-ports jammy-security multiverse
 # For information about how to configure apt package sources,
 # see the sources.list(5) manual.' | sudo tee /etc/apt/sources.list
 
+sudo dpkg --add-architecture amd64
+sudo apt update
+
 # Install Microsoft Edge if x86_64
 MACHINE_TYPE=$(uname -m)
 if [ "${MACHINE_TYPE}" == 'x86_64' ] || [ -f /media/psf/RosettaLinux/rosetta ]; then
