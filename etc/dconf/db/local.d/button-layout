@@ -1,0 +1,2 @@
+[org/gnome/desktop/wm/preferences]
+color-scheme='appmenu:minimize,maximize,close'

@@ -92,6 +92,8 @@ unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/dconf/db/local.d/automount-disable | sudo tee /etc/dconf/db/local.d/automount-disable
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/dconf/db/local.d/locks/automount-disable | sudo tee /etc/dconf/db/local.d/locks/automount-disable
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/prefer-dark | sudo tee /etc/dconf/db/local.d/prefer-dark
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/button-layout | sudo tee /etc/dconf/db/local.d/button-layout
+sudo chmod 644 /etc/dconf/db/local.d/*
 sudo dconf update
 
 # Disable crash reports
@@ -137,6 +139,3 @@ sudo hostnamectl --transient hostname ''
 # Enable fstrim.timer
 sudo apt install tuned -y
 sudo systemctl enable --now fstrim.timer
-
-#Enable Titlebar buttons
-gsettings set org.gnome.desktop.wm.preferences button-layout 'appmenu:minimize,maximize,close'
