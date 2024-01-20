@@ -24,7 +24,7 @@ unpriv(){
   sudo -u nobody "$@"
 }
 
-#Compliance and updates
+# Compliance and updates
 sudo systemctl mask debug-shell.service
 echo 'Authorized uses only. All activity may be monitored and reported.' | sudo tee /etc/issue
 echo 'Authorized uses only. All activity may be monitored and reported.' | sudo tee /etc/issue.net

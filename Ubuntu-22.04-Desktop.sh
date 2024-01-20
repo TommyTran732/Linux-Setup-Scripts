@@ -24,7 +24,7 @@ unpriv(){
     sudo -u nobody "$@"
 }
 
-#Compliance and updates
+# Compliance and updates
 sudo systemctl mask debug-shell.service
 
 sudo apt update -y
@@ -79,7 +79,7 @@ unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd
 sudo mkdir -p /etc/systemd/system/irqbalance.service.d
 unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/irqbalance.service.d/99-brace.conf | sudo tee /etc/systemd/system/irqbalance.service.d/99-brace.conf
 
-# Disable automount
+# Setup dconf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/dconf/db/local.d/automount-disable | sudo tee /etc/dconf/db/local.d/automount-disable
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/dconf/db/local.d/locks/automount-disable | sudo tee /etc/dconf/db/local.d/locks/automount-disable
 
