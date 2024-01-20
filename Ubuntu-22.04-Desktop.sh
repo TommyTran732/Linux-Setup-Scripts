@@ -51,6 +51,13 @@ sudo apt install -y curl chrony
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony/chrony.conf
 sudo systemctl restart chronyd
 
+# Setup Networking
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/00-macrandomize.conf | sudo tee /etc/NetworkManager/conf.d/00-macrandomize.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/01-transient-hostname.conf | sudo tee /etc/NetworkManager/conf.d/01-transient-hostname.conf
+sudo nmcli general reload conf
+sudo hostnamectl hostname 'localhost'
+sudo hostnamectl --transient hostname ''
+
 # Setup UFW
 #UFW Snap is strictly confined, unlike its .deb counterpart
 sudo apt purge -y ufw
@@ -123,12 +130,24 @@ sudo rm -rf /usr/share/hplip
 sudo apt install -y gnome-console
 sudo snap install gnome-text-editor loupe
 
-# Setup Networking
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/00-macrandomize.conf | sudo tee /etc/NetworkManager/conf.d/00-macrandomize.conf
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/01-transient-hostname.conf | sudo tee /etc/NetworkManager/conf.d/01-transient-hostname.conf
-sudo nmcli general reload conf
-sudo hostnamectl hostname 'localhost'
-sudo hostnamectl --transient hostname ''
+# Install Microsoft Edge if x86_64
+MACHINE_TYPE=$(uname -m)
+if [ "${MACHINE_TYPE}" == 'x86_64' ] || [ -f /media/psf/RosettaLinux/rosetta ]; then
+    output 'x86_64 machine, installing Microsoft Edge.'
+    unpriv curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+    sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
+    sudo apt install -y microsoft-edge-stable
+    sudo mkdir -p /etc/opt/edge/policies/managed/ /etc/opt/edge/policies/recommended/
+    sudo chmod -R 755 /etc/opt/edge
+    unpriv curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/managed.json | sudo tee /etc/opt/edge/policies/managed/managed.json
+    sudo chmod 644 /etc/opt/edge/policies/managed/managed.json
+    unpriv curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/recommended.json | sudo tee /etc/opt/edge/policies/recommended/recommended.json
+    sudo chmod 644 /etc/opt/edge/policies/managed/managed.json /etc/opt/edge/policies/managed/recommended.json
+    sudo chmod 644 /etc/opt/edge/policies/managed/recommended.json
+fi
+
+# Enable fstrim.timer
+sudo systemctl enable --now fstrim.timer
 
 # Installing tuned first here because virt-what is 1 of its dependencies anyways
 sudo apt install tuned -y
@@ -153,6 +172,3 @@ if [ "$virt_type" = '' ]; then
 else
   sudo tuned-adm profile virtual-guest
 fi
-
-# Enable fstrim.timer
-sudo systemctl enable --now fstrim.timer
