@@ -1,0 +1,2 @@
+deb [arch=arm64] http://us.ports.ubuntu.com/ubuntu-ports/ jammy-proposed main restricted
+deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ jammy-proposed main restricted
