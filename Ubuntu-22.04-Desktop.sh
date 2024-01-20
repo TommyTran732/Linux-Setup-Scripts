@@ -84,8 +84,10 @@ sudo mkdir -p /etc/systemd/system/irqbalance.service.d
 unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/irqbalance.service.d/99-brace.conf | sudo tee /etc/systemd/system/irqbalance.service.d/99-brace.conf
 
 # Setup dconf
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/dconf/db/local.d/automount-disable | sudo tee /etc/dconf/db/local.d/automount-disable
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/dconf/db/local.d/locks/automount-disable | sudo tee /etc/dconf/db/local.d/locks/automount-disable
+sudo mkdir -p /etc/dconf/db/local.d/
+
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/automount-disable | sudo tee /etc/dconf/db/local.d/automount-disable
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/locks/automount-disable | sudo tee /etc/dconf/db/local.d/locks/automount-disable
 
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/dconf/db/local.d/apport-disable | sudo tee /etc/dconf/db/local.d/apport-disable
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script/main/etc/dconf/db/local.d/locks/apport-disable | sudo tee /etc/dconf/db/local.d/locks/apport-disable
@@ -120,8 +122,8 @@ sudo snap remove firefox
 sudo rm -rf /usr/share/hplip
 
 # Install packages that I use
-sudo apt install -y gnome-text-editor
-sudo snap install eog
+sudo apt install -y gnome-console
+sudo snap install gnome-text-editor loupe
 
 # Setup Networking
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/00-macrandomize.conf | sudo tee /etc/NetworkManager/conf.d/00-macrandomize.conf
