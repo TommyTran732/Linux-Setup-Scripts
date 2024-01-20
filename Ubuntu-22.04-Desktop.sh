@@ -138,13 +138,18 @@ fi
 
 sudo dpkg --add-architecture amd64
 sudo apt update
+sudo apt full-upgrade -y
 
 # Install Microsoft Edge if x86_64
 MACHINE_TYPE=$(uname -m)
 if [ "${MACHINE_TYPE}" == 'x86_64' ] || [ -f /media/psf/RosettaLinux/rosetta ]; then
     output 'x86_64 machine, installing Microsoft Edge.'
-    unpriv curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-    sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main"
+    unpriv curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/microsoft.gpg
+    sudo chmod 644 /usr/share/keyrings/microsoft.gpg
+    unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/sources.list.d/microsoft-edge.list | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
+    sudo chmod 644 /etc/apt/sources.list.d/microsoft-edge.list
+    sudo apt update
+    sudo apt full-upgrade -y
     sudo apt install -y microsoft-edge-stable
     sudo mkdir -p /etc/opt/edge/policies/managed/ /etc/opt/edge/policies/recommended/
     sudo chmod -R 755 /etc/opt/edge

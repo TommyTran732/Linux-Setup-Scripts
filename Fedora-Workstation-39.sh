@@ -148,10 +148,12 @@ flatpak update -y
 MACHINE_TYPE=$(uname -m)
 if [ "${MACHINE_TYPE}" == 'x86_64' ]; then
     output 'x86_64 machine, installing Microsoft Edge.'
-    curl -O https://packages.microsoft.com/keys/microsoft.asc
-    sudo rpm --import microsoft.asc
-    rm microsoft.asc
-    sudo dnf config-manager --add-repo https://packages.microsoft.com/yumrepos/edge
+    echo '[microsoft-edge]
+name=microsoft-edge
+baseurl=https://packages.microsoft.com/yumrepos/edge/
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc' | sudo tee /etc/yum.repos.d/microsoft-edge.repo
     sudo dnf install -y microsoft-edge-stable
     sudo mkdir -p /etc/opt/edge/policies/managed/ /etc/opt/edge/policies/recommended/
     sudo chmod -R 755 /etc/opt/edge
