@@ -123,15 +123,23 @@ sudo fwupdmgr get-updates -y
 sudo fwupdmgr update -y
 
 # Remove unneeded packages
-sudo apt purge -y apport baobab cups* eog gedit firefox* gnome-calculator gnome-characters* gnome-clocks gnome-font-viewer gnome-logs gnome-power-manager gnome-shell-extension-prefs libreoffice* seahorse tcpdump whoopsie
+sudo apt purge -y apport baobab cups* eog gedit firefox* gnome-calculator gnome-characters* gnome-clocks gnome-font-viewer gnome-logs gnome-power-manager gnome-shell-extension-prefs gnome-text-editor libreoffice* seahorse tcpdump whoopsie
 sudo apt autoremove -y
-sudo snap remove firefox
+sudo snap remove firefox snap-store
 
 sudo rm -rf /usr/share/hplip
 
 # Install packages that I use
-sudo apt install -y gnome-console
+sudo apt install -y gnome-console gnome-software-plugin-flatpak
 sudo snap install gnome-text-editor loupe
+
+# Setup Flatpak
+sudo flatpak override --system --nosocket=x11 --nosocket=fallback-x11 --nosocket=pulseaudio --unshare=network --unshare=ipc --nofilesystem=host:reset --nodevice=input --nodevice=shm --nodevice=all
+flatpak override --user --nosocket=x11 --nosocket=fallback-x11 --nosocket=pulseaudio --unshare=network --unshare=ipc --nofilesystem=host:reset --nodevice=input --nodevice=shm --nodevice=all
+flatpak remote-add --if-not-exists --user flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak --user install org.gnome.Extensions com.github.tchx84.Flatseal org.gnome.Loupe -y
+flatpak --user override com.github.tchx84.Flatseal --filesystem=/var/lib/flatpak/app:ro --filesystem=xdg-data/flatpak/app:ro --filesystem=xdg-data/flatpak/overrides:create
+flatpak update -y
 
 # Rosetta setup
 if [ -f /media/psf/RosettaLinux/rosetta ]; then
