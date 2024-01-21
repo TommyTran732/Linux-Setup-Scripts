@@ -131,7 +131,7 @@ sudo rm -rf /usr/share/hplip
 
 # Install packages that I use
 sudo apt install -y gnome-console gnome-software-plugin-flatpak
-sudo snap install gnome-text-editor loupe
+sudo snap install gnome-text-editor
 
 # Setup Flatpak
 sudo flatpak override --system --nosocket=x11 --nosocket=fallback-x11 --nosocket=pulseaudio --unshare=network --unshare=ipc --nofilesystem=host:reset --nodevice=input --nodevice=shm --nodevice=all
