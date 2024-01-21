@@ -123,7 +123,7 @@ sudo fwupdmgr get-updates -y
 sudo fwupdmgr update -y
 
 # Remove unneeded packages
-sudo apt purge -y cups* eog gedit firefox* gnome-calculator gnome-characters* gnome-font-viewer gnome-logs gnome-power-manager gnome-shell-extension-prefs seahorse tcpdump whoopsie
+sudo apt purge -y apport cups* eog gedit firefox* gnome-calculator gnome-characters* gnome-clocks gnome-font-viewer gnome-logs gnome-power-manager gnome-shell-extension-prefs libreoffice* seahorse tcpdump whoopsie
 sudo apt autoremove -y
 sudo snap remove firefox
 
@@ -136,7 +136,7 @@ sudo snap install gnome-text-editor loupe
 # Rosetta setup
 if [ -f /media/psf/RosettaLinux/rosetta ]; then
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/rosetta-sources.list | sudo tee /etc/apt/sources.list
-    unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/sources.list.d/rosetta-proposed.list | sudo tee /etc/apt/sources.list.d/proposed.list
+    rm -rf /etc/apt/sources.list.d/proposed.list
 fi
 
 sudo dpkg --add-architecture amd64
