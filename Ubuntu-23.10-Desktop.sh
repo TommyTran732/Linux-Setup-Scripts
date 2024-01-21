@@ -123,7 +123,7 @@ sudo fwupdmgr get-updates -y
 sudo fwupdmgr update -y
 
 # Remove unneeded packages
-sudo apt purge -y apport cups* eog gedit firefox* gnome-calculator gnome-characters* gnome-clocks gnome-font-viewer gnome-logs gnome-power-manager gnome-shell-extension-prefs libreoffice* seahorse tcpdump whoopsie
+sudo apt purge -y apport baobab cups* eog gedit firefox* gnome-calculator gnome-characters* gnome-clocks gnome-font-viewer gnome-logs gnome-power-manager gnome-shell-extension-prefs libreoffice* seahorse tcpdump whoopsie
 sudo apt autoremove -y
 sudo snap remove firefox
 
