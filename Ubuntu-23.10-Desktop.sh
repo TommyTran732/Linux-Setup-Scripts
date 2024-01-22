@@ -147,11 +147,10 @@ flatpak update -y
 if [ -f /media/psf/RosettaLinux/rosetta ]; then
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/rosetta-sources.list | sudo tee /etc/apt/sources.list
     rm -rf /etc/apt/sources.list.d/proposed.list
+    sudo dpkg --add-architecture amd64
+    sudo apt update
+    sudo apt full-upgrade -y
 fi
-
-sudo dpkg --add-architecture amd64
-sudo apt update
-sudo apt full-upgrade -y
 
 # Install Microsoft Edge if x86_64
 MACHINE_TYPE=$(uname -m)
