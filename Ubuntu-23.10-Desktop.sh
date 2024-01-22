@@ -144,7 +144,10 @@ flatpak --user override com.github.tchx84.Flatseal --filesystem=/var/lib/flatpak
 flatpak update -y
 
 # Rosetta setup
-if [ -f /media/psf/RosettaLinux/rosetta ]; then
+if [ -f /media/psf/RosettaLinux/rosetta ] || [ -f /media/rosetta/rosetta ]; then
+    if [ -f /media/rosetta/rosetta ]; then
+        sudo /usr/sbin/update-binfmts --install rosetta /media/rosetta/rosetta --magic "\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00" --mask "\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff" --credentials yes --preserve no --fix-binary yes
+    fi
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/rosetta-sources.list | sudo tee /etc/apt/sources.list
     rm -rf /etc/apt/sources.list.d/proposed.list
     sudo dpkg --add-architecture amd64
@@ -154,7 +157,7 @@ fi
 
 # Install Microsoft Edge if x86_64
 MACHINE_TYPE=$(uname -m)
-if [ "${MACHINE_TYPE}" == 'x86_64' ] || [ -f /media/psf/RosettaLinux/rosetta ]; then
+if [ "${MACHINE_TYPE}" == 'x86_64' ] || [ -f /media/psf/RosettaLinux/rosetta ] || [ -f /media/rosetta/rosetta ]; then
     output 'x86_64 machine, installing Microsoft Edge.'
     unpriv curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/microsoft.gpg
     sudo chmod 644 /usr/share/keyrings/microsoft.gpg
