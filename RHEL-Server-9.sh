@@ -83,7 +83,7 @@ sudo systemctl restart irqbalance
 
 # Remove packages
 
-sudo dnf remove baobab firefox gedit gnome-calculator gnome-characters gnome-font-viewer gnome-screenshot gnome-tour yelp*
+sudo dnf remove baobab chrome-gnome-shell evince firefox gedit gnome-calculator gnome-characters gnome-font-viewer gnome-screenshot gnome-tour qemu-guest-agent 'sssd*' 'yelp*'
 
 # Setup dnf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dnf/dnf.conf | sudo tee /etc/dnf/dnf.conf
@@ -187,6 +187,9 @@ fi
 # Setup tuned
 if [ "$virt_type" = '' ]; then
   sudo tuned-adm profile latency-performance
+  if [ "$virt_type" = 'kvm' ]; then
+    sudo dnf install qemu-guest-agent -y
+  fi
 else
   sudo tuned-adm profile virtual-guest
 fi
