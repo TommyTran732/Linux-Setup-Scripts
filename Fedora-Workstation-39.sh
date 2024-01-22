@@ -193,10 +193,13 @@ fi
 
 # Setup tuned
 if [ "$virt_type" = '' ]; then
-  # Don't know whether using tuned would be a good idea on a laptop, power-profiles-daemon should be handling performance tuning IMO.
-  sudo dnf remove tuned -y
+    # Don't know whether using tuned would be a good idea on a laptop, power-profiles-daemon should be handling performance tuning IMO.
+    sudo dnf remove tuned -y
 else
-  sudo tuned-adm profile virtual-guest
+    if [ "$virt_type" = 'kvm' ]; then
+        sudo dnf install qemu-guest-agent -y
+    fi
+    sudo tuned-adm profile virtual-guest
 fi
 
 # Setup real-ucode and hardened_malloc

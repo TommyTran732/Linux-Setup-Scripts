@@ -194,9 +194,12 @@ fi
 
 # Setup tuned
 if [ "$virt_type" = '' ]; then
-  # Don't know whether using tuned would be a good idea on a laptop, power-profiles-daemon should be handling performance tuning IMO.
-  sudo apt remove tuned -y
-  sudo apt autoremove -y
+    # Don't know whether using tuned would be a good idea on a laptop, power-profiles-daemon should be handling performance tuning IMO.
+        sudo apt remove tuned -y
+        sudo apt autoremove -y
 else
-  sudo tuned-adm profile virtual-guest
+    if [ "$virt_type" = 'kvm' ]; then
+        sudo apt install qemu-guest-agent -y
+    fi
+    sudo tuned-adm profile virtual-guest
 fi

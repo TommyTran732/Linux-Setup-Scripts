@@ -123,6 +123,9 @@ fi
 if [ "$virt_type" = "" ]; then
   sudo tuned-adm profile latency-performance
 else
+  if [ "$virt_type" = 'kvm' ]; then
+    sudo apt install qemu-guest-agent -y
+  fi
   sudo tuned-adm profile virtual-guest
 fi
 
