@@ -14,8 +14,6 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
-#Assuming that you are using ANSSI-BP-028
-
 output(){
   echo -e '\e[36m'"$1"'\e[0m';
 }
@@ -82,6 +80,10 @@ sudo mkdir -p /etc/systemd/system/irqbalance.service.d
 unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/irqbalance.service.d/99-brace.conf | sudo tee /etc/systemd/system/irqbalance.service.d/99-brace.conf
 sudo systemctl daemon-reload
 sudo systemctl restart irqbalance
+
+# Remove packages
+
+sudo dnf remove baobab firefox gedit gnome-calculator gnome-characters gnome-font-viewer gnome-screenshot gnome-tour yelp*
 
 # Setup dnf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dnf/dnf.conf | sudo tee /etc/dnf/dnf.conf
