@@ -1,0 +1,5 @@
+Update-Manager::Always-Include-Phased-Updates;
+APT::Get::Always-Include-Phased-Updates;
+APT::Get::Upgrade-Allow-New;
+APT::Get::Install-Recommends "false";
+APT::Get::Install-Suggests "false";

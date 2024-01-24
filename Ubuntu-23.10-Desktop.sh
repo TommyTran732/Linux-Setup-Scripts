@@ -27,6 +27,11 @@ unpriv(){
 # Compliance and updates
 sudo systemctl mask debug-shell.service
 
+## Avoid phased updates
+sudo apt install curl -y
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/apt.conf.d/99sane-upgrades | sudo tee /etc/apt/apt.conf.d/99sane-upgrades
+sudo chmod 644 /etc/apt/apt.conf.d/99sane-upgrades
+
 sudo apt update -y
 sudo apt full-upgrade -y
 sudo apt autoremove -y
@@ -43,7 +48,7 @@ echo 'umask 077' | sudo tee --append /etc/profile
 
 # Setup NTS
 sudo systemctl disable systemd-timesyncd
-sudo apt install -y curl chrony
+sudo apt install -y chrony
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony/chrony.conf
 sudo systemctl restart chronyd
 

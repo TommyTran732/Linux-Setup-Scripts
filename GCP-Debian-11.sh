@@ -22,8 +22,16 @@ unpriv(){
   sudo -u nobody "$@"
 }
 
-# Compliance
+# Compliance and updates
 sudo systemctl mask debug-shell.service
+
+## Avoid phased updates
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/apt.conf.d/99sane-upgrades | sudo tee /etc/apt/apt.conf.d/99sane-upgrades
+sudo chmod 644 /etc/apt/apt.conf.d/99sane-upgrades
+
+sudo apt update
+sudo apt full-upgrade -y
+sudo apt autoremove -y
 
 # Make home directory private
 sudo chmod 700 /home/*
@@ -35,10 +43,6 @@ sudo systemctl restart chronyd
 
 # Setup repositories
 sudo find /etc/apt/sources.list.d -type f -exec sudo sed -i 's/http:/https:/g' {} \;
-
-# Update and install packages
-sudo apt update
-sudo apt upgrade -y
 
 # Setup ufw
 sudo apt install ufw -y

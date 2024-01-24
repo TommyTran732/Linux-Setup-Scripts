@@ -20,8 +20,16 @@ output(){
     echo -e '\e[36m'"$1"'\e[0m';
 }
 
-# Compliance
+# Compliance and updates
 systemctl mask debug-shell.service
+
+## Avoid phased updates
+curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/apt.conf.d/99sane-upgrades | sudo tee /etc/apt/apt.conf.d/99sane-upgrades
+chmod 644 /etc/apt/apt.conf.d/99sane-upgrades
+
+apt update
+apt full-upgrade -y
+apt autoremove -y
 
 # Setup NTS
 rm -rf /etc/chrony/chrony.conf
@@ -56,10 +64,8 @@ deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription' | tee /
 
 echo 'deb http://download.proxmox.com/debian/ceph-quincy bookworm no-subscription' | tee /etc/apt/sources.list.d/ceph.list
 
-# Update and install packages
-apt update
-apt upgrade -y
-apt install -y --no-install-recommends intel-microcode tuned fwupd dropbear-initramfs
+# Install packages
+apt install -y intel-microcode tuned fwupd dropbear-initramfs
 
 ### This part assumes that you are using systemd-boot
 echo -e "spectre_v2=on spec_store_bypass_disable=on l1tf=full,force mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force nosmt=force l1d_flush=on mmio_stale_data=full,nosmt random.trust_bootloader=off random.trust_cpu=off intel_iommu=on amd_iommu=force_isolation efi=disable_early_pci_dma iommu=force iommu.passthrough=0 iommu.strict=1 slab_nomerge init_on_alloc=1 init_on_free=1 pti=on vsyscall=none ia32_emulation=0 page_alloc.shuffle=1 randomize_kstack_offset=on extra_latent_entropy debugfs=off $(cat /etc/kernel/cmdline)" > /etc/kernel/cmdline
