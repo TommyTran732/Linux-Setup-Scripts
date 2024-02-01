@@ -27,10 +27,6 @@ systemctl mask debug-shell.service
 curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/apt.conf.d/99sane-upgrades | sudo tee /etc/apt/apt.conf.d/99sane-upgrades
 chmod 644 /etc/apt/apt.conf.d/99sane-upgrades
 
-apt update
-apt full-upgrade -y
-apt autoremove -y
-
 # Setup NTS
 rm -rf /etc/chrony/chrony.conf
 curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | tee /etc/chrony/chrony.conf
@@ -63,6 +59,12 @@ deb https://deb.debian.org/debian/ bookworm-backports main contrib non-free non-
 deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription' | tee /etc/apt/sources.list
 
 echo 'deb http://download.proxmox.com/debian/ceph-quincy bookworm no-subscription' | tee /etc/apt/sources.list.d/ceph.list
+
+
+# Update packages
+apt update
+apt full-upgrade -y
+apt autoremove -y
 
 # Install packages
 apt install -y intel-microcode tuned fwupd dropbear-initramfs
