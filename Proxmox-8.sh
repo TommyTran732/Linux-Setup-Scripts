@@ -24,7 +24,7 @@ output(){
 systemctl mask debug-shell.service
 
 ## Avoid phased updates
-curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/apt.conf.d/99sane-upgrades | sudo tee /etc/apt/apt.conf.d/99sane-upgrades
+curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/apt.conf.d/99sane-upgrades | tee /etc/apt/apt.conf.d/99sane-upgrades
 chmod 644 /etc/apt/apt.conf.d/99sane-upgrades
 
 # Setup NTS
