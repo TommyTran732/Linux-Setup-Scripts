@@ -46,7 +46,8 @@ systemctl daemon-reload
 systemctl restart sshd
 
 # Setup repositories
-sed -i '1 {s/^/#/}' /etc/apt/sources.list.d/pve-enterprise.list
+sed -i '1 {s/^/# /}' /etc/apt/sources.list.d/pve-enterprise.list
+sed -i '1 {s/^/# /}' /etc/apt/sources.list.d/ceph.list
 
 echo 'deb https://deb.debian.org/debian/ bookworm main contrib non-free non-free-firmware
 
@@ -58,7 +59,7 @@ deb https://deb.debian.org/debian/ bookworm-backports main contrib non-free non-
 
 deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription' | tee /etc/apt/sources.list
 
-echo 'deb http://download.proxmox.com/debian/ceph-quincy bookworm no-subscription' | tee /etc/apt/sources.list.d/ceph.list
+echo 'deb http://download.proxmox.com/debian/ceph-quincy bookworm no-subscription' | tee -a /etc/apt/sources.list.d/ceph.list
 
 
 # Update packages
