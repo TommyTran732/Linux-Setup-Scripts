@@ -33,13 +33,10 @@ curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.con
 systemctl restart chronyd
 
 # Harden SSH
-echo 'GSSAPIAuthentication no
-VerifyHostKeyDNS yes' | tee /etc/ssh/ssh_config.d/10-custom.conf
-chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
-echo 'PasswordAuthentication no
-KerberosAuthentication no
-GSSAPIAuthentication no' | tee /etc/ssh/sshd_config.d/10-custom.conf
+curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/ssh/sshd_config.d/10-custom.conf | tee /etc/ssh/sshd_config.d/10-custom.conf
 chmod 644 /etc/ssh/sshd_config.d/10-custom.conf
+curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/ssh/ssh_config.d/10-custom.conf | tee /etc/ssh/ssh_config.d/10-custom.conf
+chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 mkdir -p /etc/systemd/system/ssh.service.d
 curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/local.conf | tee /etc/systemd/system/ssh.service.d/override.conf
 systemctl daemon-reload

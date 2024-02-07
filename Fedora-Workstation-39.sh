@@ -55,8 +55,7 @@ sudo firewall-cmd --reload
 sudo firewall-cmd --lockdown-on
 
 # Harden SSH
-echo 'GSSAPIAuthentication no' | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
-echo 'VerifyHostKeyDNS yes' | sudo tee -a /etc/ssh/ssh_config.d/10-custom.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/ssh/ssh_config.d/10-custom.conf | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
 sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 
 # Security kernel settings
