@@ -27,10 +27,8 @@ sudo systemctl mask debug-shell.service
 sudo systemctl mask kdump.service
 
 # Setup NTS
-sudo curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf -o /etc/chrony.conf
-
-echo '# Command-line options for chronyd
-OPTIONS="-F 1"' | sudo tee /etc/sysconfig/chronyd
+unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysconfig/chronyd | sudo tee /etc/sysconfig/chronyd
 
 sudo systemctl restart chronyd
 
