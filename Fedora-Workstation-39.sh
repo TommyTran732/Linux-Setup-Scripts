@@ -54,6 +54,9 @@ sudo firewall-cmd --permanent --add-service=dhcpv6-client
 sudo firewall-cmd --reload
 sudo firewall-cmd --lockdown-on
 
+# Remove nullok
+sudo /usr/bin/sed -i 's/\s+nullok//g' /etc/pam.d/system-auth
+
 # Harden SSH
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/ssh/ssh_config.d/10-custom.conf | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
 sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
