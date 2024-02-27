@@ -210,6 +210,7 @@ if [ "$virt_type" = '' ] || [ "${MACHINE_TYPE}" == 'x86_64' ]; then
   else
     sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware,hardened_malloc
     sudo dnf install real-ucode hardened_malloc -y
+    echo 'libhardened_malloc.so' | sudo tee /etc/ld.so.preload
     sudo dracut -f
   fi
 fi
