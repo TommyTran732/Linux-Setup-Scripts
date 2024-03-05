@@ -213,6 +213,9 @@ if [ "$virt_type" = '' ] || [ "${MACHINE_TYPE}" == 'x86_64' ]; then
     echo 'libhardened_malloc.so' | sudo tee /etc/ld.so.preload
     sudo dracut -f
   fi
+elif [ "${MACHINE_TYPE}" == 'aarch64' ]; then
+  sudo dnf copr enable secureblue/hardened_malloc -y
+  sudo dnf install hardened_malloc -y
 fi
 
 # Setup fwupd
