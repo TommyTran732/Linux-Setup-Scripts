@@ -176,7 +176,6 @@ if [ "${MACHINE_TYPE}" == 'x86_64' ] || [ -f /media/psf/RosettaLinux/rosetta ] |
     sudo mkdir -p /etc/opt/edge/policies/managed/ /etc/opt/edge/policies/recommended/
     sudo chmod -R 755 /etc/opt/edge
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/managed.json | sudo tee /etc/opt/edge/policies/managed/managed.json
-    sudo chmod 644 /etc/opt/edge/policies/managed/managed.json
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/recommended.json | sudo tee /etc/opt/edge/policies/recommended/recommended.json
     sudo chmod 644 /etc/opt/edge/policies/managed/managed.json /etc/opt/edge/policies/recommended/recommended.json
 fi
