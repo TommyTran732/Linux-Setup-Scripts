@@ -135,7 +135,7 @@ if [ "$virt_type" = '' ]; then
 fi
 
 # Setup unbound
-sudo apt instal unbound resolvconf -y
+sudo apt install unbound resolvconf -y
 
 echo 'server:
   trust-anchor-signaling: yes
