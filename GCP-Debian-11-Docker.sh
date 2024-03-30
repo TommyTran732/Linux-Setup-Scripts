@@ -36,5 +36,5 @@ unpriv curl -fsSL https://gvisor.dev/archive.key | sudo gpg --dearmor -o /usr/sh
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/gvisor-archive-keyring.gpg] https://storage.googleapis.com/gvisor/releases release main" | sudo tee /etc/apt/sources.list.d/gvisor.list > /dev/null
 sudo apt update
 sudo apt -y --no-install-recommends install runsc
-sudo runsc install
+sudo runsc installl
 sudo systemctl restart docker
