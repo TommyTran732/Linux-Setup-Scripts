@@ -36,6 +36,7 @@ sudo ufw enable
 # Kernel hardening
 unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf | sudo tee /etc/modprobe.d/30_security-misc.conf
 sudo chmod 644 /etc/modprobe.d/30_security-misc.conf
+sudo sed -i 's/#install msr/install msr/g' /etc/modprobe.d/30_security-misc.conf
 unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/990-security-misc.conf | sudo tee /etc/sysctl.d/990-security-misc.conf
 sudo chmod 644 /etc/sysctl.d/990-security-misc.conf
 unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_silent-kernel-printk.conf | sudo tee /etc/sysctl.d/30_silent-kernel-printk.conf
