@@ -24,6 +24,9 @@ unpriv(){
     sudo -u nobody "$@"
 }
 
+# Increase compression level
+sudo sed -i 's/zstd:1/zstd:3/g' /etc/fstab
+
 # Compliance
 sudo systemctl mask debug-shell.service
 sudo systemctl mask kdump.service
