@@ -87,6 +87,12 @@ sudo mkdir -p /etc/systemd/system/NetworkManager.service.d
 unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf | sudo tee /etc/systemd/system/NetworkManager.service.d/99-brace.conf
 sudo systemctl restart NetworkManager
 
+# Disable XWayland
+umask 022
+sudo mkdir -p /etc/systemd/user/org.gnome.Shell@wayland.service.d
+unpriv curl https://raw.githubusercontent.com/TommyRean732/Linux-Setup-Scripts/main/etc/systemd/user/org.gnome.Shell@wayland.service.d/override.conf | sudo tee /etc/systemd/user/org.gnome.Shell@wayland.service.d/override.conf
+umask 077
+
 # Setup dconf
 umask 022
 
