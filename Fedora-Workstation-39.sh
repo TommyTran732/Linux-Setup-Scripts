@@ -164,6 +164,7 @@ flatpak update -y
 # Install Microsoft Edge if x86_64
 MACHINE_TYPE=$(uname -m)
 if [ "${MACHINE_TYPE}" == 'x86_64' ]; then
+    umask 022
     output 'x86_64 machine, installing Microsoft Edge.'
     echo '[microsoft-edge]
 name=microsoft-edge
@@ -173,10 +174,10 @@ gpgcheck=1
 gpgkey=https://packages.microsoft.com/keys/microsoft.asc' | sudo tee /etc/yum.repos.d/microsoft-edge.repo
     sudo dnf install -y microsoft-edge-stable
     sudo mkdir -p /etc/opt/edge/policies/managed/ /etc/opt/edge/policies/recommended/
-    sudo chmod -R 755 /etc/opt/edge
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/managed.json | sudo tee /etc/opt/edge/policies/managed/managed.json
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/recommended.json | sudo tee /etc/opt/edge/policies/recommended/recommended.json
-    sudo chmod 644 /etc/opt/edge/policies/managed/managed.json /etc/opt/edge/policies/recommended/recommended.json
+    sed 's/^Exec=\/usr\/bin\/microsoft-edge-stable/& --ozone-platform-hint=auto --start-maximized/g' /usr/share/applications/microsoft-edge.desktop | sudo tee /usr/local/share/applications/microsoft-edge.desktop
+    umask 077
 fi
 
 # Enable auto TRIM
