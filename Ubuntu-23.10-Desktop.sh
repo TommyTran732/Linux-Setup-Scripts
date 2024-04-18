@@ -183,7 +183,13 @@ if [ "${MACHINE_TYPE}" == 'x86_64' ] || [ -f /media/psf/RosettaLinux/rosetta ] |
     sudo mkdir -p /etc/opt/edge/policies/managed/ /etc/opt/edge/policies/recommended/
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/managed.json | sudo tee /etc/opt/edge/policies/managed/managed.json
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/recommended.json | sudo tee /etc/opt/edge/policies/recommended/recommended.json
-    sed 's/^Exec=\/usr\/bin\/microsoft-edge-stable/& --ozone-platform-hint=auto --start-maximized/g' /usr/share/applications/microsoft-edge.desktop | sudo tee /usr/local/share/applications/microsoft-edge.desktop
+    if [ -f /media/psf/RosettaLinux/rosetta ] || [ -f /media/rosetta/rosetta ]; then
+        #Edge does not seem to work on Wayland with Rosetta - dunno why yet. Probably missing libraries?
+        sudo rm -rf /etc/systemd/user/org.gnome.Shell@wayland.service.d
+    else
+        sudo mkdir -p /usr/local/share/applications
+        sed 's/^Exec=\/usr\/bin\/microsoft-edge-stable/& --ozone-platform-hint=auto --start-maximized/g' /usr/share/applications/microsoft-edge.desktop | sudo tee /usr/local/share/applications/microsoft-edge.desktop
+    fi
     umask 077
 fi
 

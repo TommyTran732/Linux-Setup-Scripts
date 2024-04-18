@@ -176,6 +176,7 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc' | sudo tee /etc/yum.re
     sudo mkdir -p /etc/opt/edge/policies/managed/ /etc/opt/edge/policies/recommended/
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/managed.json | sudo tee /etc/opt/edge/policies/managed/managed.json
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/recommended.json | sudo tee /etc/opt/edge/policies/recommended/recommended.json
+    sudo mkdir -p /usr/local/share/applications
     sed 's/^Exec=\/usr\/bin\/microsoft-edge-stable/& --ozone-platform-hint=auto --start-maximized/g' /usr/share/applications/microsoft-edge.desktop | sudo tee /usr/local/share/applications/microsoft-edge.desktop
     umask 077
 fi
