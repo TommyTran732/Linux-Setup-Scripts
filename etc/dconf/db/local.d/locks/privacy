@@ -1,0 +1,14 @@
+/org/gnome/system/location/enabled
+
+/org/gnome/desktop/privacy/remember-recent-files
+/org/gnome/desktop/privacy/remove-old-trash-files
+/org/gnome/desktop/privacy/remove-old-temp-files
+/org/gnome/desktop/privacy/report-technical-problems
+/org/gnome/desktop/privacy/send-software-usage-stats
+/org/gnome/desktop/privacy/remember-app-usage
+
+/org/gnome/online-accounts/whitelisted-providers
+
+/org/gnome/desktop/remote-desktop/rdp/enable
+
+/org/gnome/desktop/remote-desktop/vnc/enable

@@ -3,7 +3,6 @@ enabled=false
 
 [org/gnome/desktop/privacy]
 remember-recent-files=false
-old-files-age=uint32 30
 remove-old-trash-files=true
 remove-old-temp-files=true
 report-technical-problems=false
