@@ -150,6 +150,9 @@ sudo dnf remove -y rhythmbox yelp evince libreoffice* cheese file-roller* mediaw
 # Disable openh264 repo
 sudo dnf config-manager --set-disabled fedora-cisco-openh264
 
+# Update packages
+sudo dnf -y upgrade
+
 # Install packages that I use
 sudo dnf -y install adw-gtk3-theme gnome-console gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo
 
