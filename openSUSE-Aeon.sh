@@ -81,7 +81,7 @@ sudo mkdir -p /etc/systemd/user/org.gnome.Shell@wayland.service.d
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/user/org.gnome.Shell%40wayland.service.d/override.conf | sudo tee /etc/systemd/user/org.gnome.Shell@wayland.service.d/override.conf
 umask 077
 
-# Setup dconf (does not seem to work - need to double check why)
+# Setup dconf
 umask 022
 
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/automount-disable | sudo tee /etc/dconf/db/local.d/automount-disable
