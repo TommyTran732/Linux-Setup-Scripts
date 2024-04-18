@@ -191,7 +191,7 @@ if [ "${MACHINE_TYPE}" == 'x86_64' ] || [ -f /media/psf/RosettaLinux/rosetta ] |
         sudo rm -rf /etc/systemd/user/org.gnome.Shell@wayland.service.d
     else
         sudo mkdir -p /usr/local/share/applications
-        sed 's/^Exec=\/usr\/bin\/microsoft-edge-stable/& --ozone-platform-hint=auto --start-maximized/g' /usr/share/applications/microsoft-edge.desktop | sudo tee /usr/local/share/applications/microsoft-edge.desktop
+        sed 's/^Exec=\/usr\/bin\/microsoft-edge-stable/& --ozone-platform=wayland --start-maximized/g' /usr/share/applications/microsoft-edge.desktop | sudo tee /usr/local/share/applications/microsoft-edge.desktop
     fi
     umask 077
 fi
