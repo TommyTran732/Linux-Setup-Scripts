@@ -55,8 +55,8 @@ echo 'umask 077' | sudo tee -a /etc/bashrc
 sudo chmod 700 /home/*
 
 # Setup NTS
-sudo rm -rf /etc/chrony/chrony.conf
-unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony/chrony.conf
+sudo rm -rf /etc/chrony.conf
+unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony.conf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysconfig/chronyd | sudo tee /etc/sysconfig/chronyd
 
 sudo systemctl restart chronyd
