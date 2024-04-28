@@ -23,11 +23,37 @@ unpriv(){
   sudo -u nobody "$@"
 }
 
+install_options(){
+    output "Are you using a Parallels Virtual Machine?"
+    output "[1] Yes"
+    output "[2] No"
+    read -r choice
+    case $choice in
+        1 ) parallels=1
+            ;;
+        2 ) parallels=0
+            ;;
+        * ) output "You did not enter a valid selection."
+            install_options
+    esac
+}
+
+install_options
+
 # Update Kali
 sudo apt full-upgrade -y
 
 # Install all tools
 sudo apt install kali-linux-everything -y
+
+# Setup NTS
+sudo systemctl mask systemd-timesyncd
+
+if [ "${parallels}" = "0" ]; then
+    sudo apt install -y chrony
+    unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony/chrony.conf
+    sudo systemctl restart chronyd
+fi
 
 # Kernel hardening
 unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf | sudo tee /etc/modprobe.d/30_security-misc.conf

@@ -39,6 +39,8 @@ install_options(){
     esac
 }
 
+install_options
+
 # Increase compression level
 sudo sed -i 's/zstd:1/zstd:3/g' /etc/fstab
 
@@ -55,11 +57,15 @@ echo 'umask 077' | sudo tee -a /etc/bashrc
 sudo chmod 700 /home/*
 
 # Setup NTS
-sudo rm -rf /etc/chrony.conf
-unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony.conf
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysconfig/chronyd | sudo tee /etc/sysconfig/chronyd
+if [ "${parallels}" = "1" ]; then
+    sudo dnf -y remove chrony
+else
+    sudo rm -rf /etc/chrony.conf
+    unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony.conf
+    unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysconfig/chronyd | sudo tee /etc/sysconfig/chronyd
 
-sudo systemctl restart chronyd
+    sudo systemctl restart chronyd
+fi
 
 # Remove nullok
 sudo /usr/bin/sed -i 's/\s+nullok//g' /etc/pam.d/system-auth
@@ -81,8 +87,6 @@ unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/us
 sudo chmod 644 /etc/sysctl.d/30_security-misc_kexec-disable.conf
 sudo dracut -f
 sudo sysctl -p
-
-install_options
 
 if [ -d /boot/loader ]; then
     if [ "${parallels}" = "1" ]; then

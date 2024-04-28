@@ -24,6 +24,23 @@ unpriv(){
     sudo -u nobody "$@"
 }
 
+install_options(){
+    output "Are you using a Parallels Virtual Machine?"
+    output "[1] Yes"
+    output "[2] No"
+    read -r choice
+    case $choice in
+        1 ) parallels=1
+            ;;
+        2 ) parallels=0
+            ;;
+        * ) output "You did not enter a valid selection."
+            install_options
+    esac
+}
+
+install_options
+
 # Compliance and updates
 sudo systemctl mask debug-shell.service
 
@@ -47,10 +64,13 @@ sudo sed -i 's/USERGROUPS_ENAB yes/USERGROUPS_ENAB no/g' /etc/login.defs
 echo 'umask 077' | sudo tee --append /etc/profile
 
 # Setup NTS
-sudo systemctl disable systemd-timesyncd
-sudo apt install -y chrony
-unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony/chrony.conf
-sudo systemctl restart chronyd
+sudo systemctl mask systemd-timesyncd
+
+if [ "${parallels}" = "0" ]; then
+    sudo apt install -y chrony
+    unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony/chrony.conf
+    sudo systemctl restart chronyd
+fi
 
 # Harden SSH
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/ssh/ssh_config.d/10-custom.conf | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
