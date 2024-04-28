@@ -51,13 +51,6 @@ sudo apt install -y chrony
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony/chrony.conf
 sudo systemctl restart chronyd
 
-# Setup UFW
-# UFW Snap is strictly confined, unlike its .deb counterpart
-sudo apt purge -y ufw
-sudo snap install ufw
-sudo ufw enable
-sudo ufw allow SSH
-
 # Harden SSH
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/ssh/sshd_config.d/10-custom.conf | sudo tee /etc/ssh/sshd_config.d/10-custom.conf
 sudo chmod 644 /etc/ssh/sshd_config.d/10-custom.conf
@@ -221,5 +214,13 @@ BindPaths=-/dev/log:@UNBOUND_CHROOT_DIR@/dev/log' | sudo tee /etc/systemd/system
 sudo systemctl daemon-reload
 sudo systemctl restart unbound
 sudo systemctl disable systemd-resolved
+
+# Setup Networking
+
+# UFW Snap is strictly confined, unlike its .deb counterpart
+sudo apt purge -y ufw
+sudo snap install ufw
+sudo ufw enable
+sudo ufw allow SSH
 
 sudo reboot

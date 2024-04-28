@@ -52,19 +52,6 @@ sudo apt install -y chrony
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony/chrony.conf
 sudo systemctl restart chronyd
 
-# Setup Networking
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/00-macrandomize.conf | sudo tee /etc/NetworkManager/conf.d/00-macrandomize.conf
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/01-transient-hostname.conf | sudo tee /etc/NetworkManager/conf.d/01-transient-hostname.conf
-sudo nmcli general reload conf
-sudo hostnamectl hostname 'localhost'
-sudo hostnamectl --transient hostname ''
-
-# Setup UFW
-#UFW Snap is strictly confined, unlike its .deb counterpart
-sudo apt purge -y ufw
-sudo snap install ufw
-sudo ufw enable
-
 # Harden SSH
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/ssh/ssh_config.d/10-custom.conf | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
 sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
@@ -225,3 +212,21 @@ else
     fi
     sudo tuned-adm profile virtual-guest
 fi
+
+# Setup Networking
+
+# UFW Snap is strictly confined, unlike its .deb counterpart
+sudo apt purge -y ufw
+sudo snap install ufw
+sudo ufw enable
+
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/00-macrandomize.conf | sudo tee /etc/NetworkManager/conf.d/00-macrandomize.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/01-transient-hostname.conf | sudo tee /etc/NetworkManager/conf.d/01-transient-hostname.conf
+sudo nmcli general reload conf
+sudo hostnamectl hostname 'localhost'
+sudo hostnamectl --transient hostname ''
+
+sudo mkdir -p /etc/systemd/system/NetworkManager.service.d
+curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf | sudo tee /etc/systemd/system/NetworkManager.service.d/99-brace.conf
+sudo systemctl daemon-reload
+sudo systemctl restart NetworkManager

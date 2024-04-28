@@ -61,17 +61,6 @@ unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/m
 
 sudo systemctl restart chronyd
 
-# Setup Networking
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/00-macrandomize.conf | sudo tee /etc/NetworkManager/conf.d/00-macrandomize.conf
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/01-transient-hostname.conf | sudo tee /etc/NetworkManager/conf.d/01-transient-hostname.conf
-sudo nmcli general reload conf
-sudo hostnamectl hostname 'localhost'
-sudo hostnamectl --transient hostname ''
-sudo firewall-cmd --set-default-zone=block
-sudo firewall-cmd --permanent --add-service=dhcpv6-client
-sudo firewall-cmd --reload
-sudo firewall-cmd --lockdown-on
-
 # Remove nullok
 sudo /usr/bin/sed -i 's/\s+nullok//g' /etc/pam.d/system-auth
 
@@ -112,11 +101,6 @@ fi
 
 # Disable coredump
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/security/limits.d/30-disable-coredump.conf | sudo tee /etc/security/limits.d/30-disable-coredump.conf
-
-# Systemd Hardening
-sudo mkdir -p /etc/systemd/system/NetworkManager.service.d
-unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf | sudo tee /etc/systemd/system/NetworkManager.service.d/99-brace.conf
-sudo systemctl restart NetworkManager
 
 # Disable XWayland
 umask 022
@@ -276,5 +260,23 @@ elif [ "${MACHINE_TYPE}" == 'aarch64' ]; then
     sudo dnf copr enable secureblue/hardened_malloc -y
     sudo dnf install hardened_malloc -y
 fi
+
+# Setup Networking
+
+sudo hostnamectl hostname 'localhost'
+sudo hostnamectl --transient hostname ''
+sudo firewall-cmd --set-default-zone=block
+sudo firewall-cmd --permanent --add-service=dhcpv6-client
+sudo firewall-cmd --reload
+sudo firewall-cmd --lockdown-on
+
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/00-macrandomize.conf | sudo tee /etc/NetworkManager/conf.d/00-macrandomize.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/01-transient-hostname.conf | sudo tee /etc/NetworkManager/conf.d/01-transient-hostname.conf
+sudo nmcli general reload conf
+
+sudo mkdir -p /etc/systemd/system/NetworkManager.service.d
+unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf | sudo tee /etc/systemd/system/NetworkManager.service.d/99-brace.conf
+sudo systemctl daemon-reload
+sudo systemctl restart NetworkManager
 
 output 'The script is done. You can also remove gnome-terminal since gnome-console will replace it.'
