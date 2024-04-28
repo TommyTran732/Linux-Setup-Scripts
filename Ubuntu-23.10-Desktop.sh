@@ -81,8 +81,6 @@ echo 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX mitigations=auto,nosmt spectre_v2=
 sudo update-grub
 
 # Systemd Hardening
-sudo mkdir -p /etc/systemd/system/NetworkManager.service.d
-unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf | sudo tee /etc/systemd/system/NetworkManager.service.d/99-brace.conf
 sudo mkdir -p /etc/systemd/system/irqbalance.service.d
 unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/irqbalance.service.d/99-brace.conf | sudo tee /etc/systemd/system/irqbalance.service.d/99-brace.conf
 
