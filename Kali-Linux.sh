@@ -47,6 +47,7 @@ sudo apt full-upgrade -y
 sudo apt install kali-linux-everything -y
 
 # Setup NTS
+sudo systemctl disable --now systemd-timesyncd
 sudo systemctl mask systemd-timesyncd
 
 if [ "${parallels}" = "0" ]; then

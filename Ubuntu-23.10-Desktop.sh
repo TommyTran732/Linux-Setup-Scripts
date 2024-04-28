@@ -64,6 +64,7 @@ sudo sed -i 's/USERGROUPS_ENAB yes/USERGROUPS_ENAB no/g' /etc/login.defs
 echo 'umask 077' | sudo tee --append /etc/profile
 
 # Setup NTS
+sudo systemctl disable --now systemd-timesyncd
 sudo systemctl mask systemd-timesyncd
 
 if [ "${parallels}" = "0" ]; then

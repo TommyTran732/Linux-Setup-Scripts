@@ -47,6 +47,7 @@ sudo chmod 700 /home/*
 
 # Setup NTS
 sudo systemctl disable --now systemd-timesyncd
+sudo systemctl mask systemd-timesyncd
 sudo apt install -y chrony
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony/chrony.conf
 sudo systemctl restart chronyd
