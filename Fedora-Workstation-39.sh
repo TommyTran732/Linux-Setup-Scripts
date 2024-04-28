@@ -262,7 +262,6 @@ elif [ "${MACHINE_TYPE}" == 'aarch64' ]; then
 fi
 
 # Setup Networking
-
 sudo hostnamectl hostname 'localhost'
 sudo hostnamectl --transient hostname ''
 sudo firewall-cmd --set-default-zone=block
