@@ -142,31 +142,31 @@ sudo dnf -y remove fedora-bookmarks fedora-chromium-config firefox mozilla-files
 # Remove Network + hardware tools packages
 sudo dnf -y remove '*cups' nmap-ncat nfs-utils nmap-ncat openssh-server net-snmp-libs net-tools opensc traceroute rsync tcpdump teamd geolite2* mtr dmidecode sgpio
 
-#Remove support for some languages and spelling
+# Remove support for some languages and spelling
 sudo dnf -y remove ibus-typing-booster '*speech*' '*zhuyin*' '*pinyin*' '*m17n*' '*hangul*' '*anthy*' words
 
-#Remove codec + image + printers
+# Remove codec + image + printers
 sudo dnf -y remove openh264 ImageMagick* sane* simple-scan
 
-#Remove Active Directory + Sysadmin + reporting tools
+# Remove Active Directory + Sysadmin + reporting tools
 sudo dnf -y remove 'sssd*' realmd cyrus-sasl-gssapi quota* dos2unix kpartx sos samba-client gvfs-smb
 
-#Remove vm and virtual stuff
+# Remove vm and virtual stuff
 sudo dnf -y remove 'podman*' '*libvirt*' 'open-vm*' qemu-guest-agent 'hyperv*' spice-vdagent virtualbox-guest-additions vino xorg-x11-drv-vmware xorg-x11-drv-amdgpu
 
-#Remove NetworkManager
+# Remove NetworkManager
 sudo dnf -y remove NetworkManager-pptp-gnome NetworkManager-ssh-gnome NetworkManager-openconnect-gnome NetworkManager-openvpn-gnome NetworkManager-vpnc-gnome ppp* ModemManager
 
-#Remove Gnome apps
+# Remove Gnome apps
 sudo dnf remove -y chrome-gnome-shell eog gnome-photos gnome-connections gnome-tour gnome-themes-extra gnome-screenshot gnome-remote-desktop gnome-font-viewer gnome-calculator gnome-calendar gnome-contacts \
     gnome-maps gnome-weather gnome-logs gnome-boxes gnome-disk-utility gnome-clocks gnome-color-manager gnome-characters baobab totem \
     gnome-shell-extension-background-logo gnome-shell-extension-apps-menu gnome-shell-extension-launch-new-instance gnome-shell-extension-places-menu gnome-shell-extension-window-list \
     gnome-classic* gnome-user* gnome-text-editor loupe snapshot
 
-#Remove apps
+# Remove apps
 sudo dnf remove -y rhythmbox yelp evince libreoffice* cheese file-roller* mediawriter
 
-#Remove other packages
+# Remove other packages
  sudo dnf remove -y lvm2 rng-tools thermald '*perl*' yajl
 
 # Disable openh264 repo
