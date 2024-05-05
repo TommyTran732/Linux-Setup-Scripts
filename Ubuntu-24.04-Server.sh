@@ -56,7 +56,7 @@ sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 sudo mkdir -p /etc/systemd/system/ssh.service.d
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/local.conf | sudo tee /etc/systemd/system/ssh.service.d/override.conf
 sudo systemctl daemon-reload
-sudo systemctl restart sshd
+sudo systemctl restart ssh
 
 # Kernel hardening
 unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf | sudo tee /etc/modprobe.d/30_security-misc.conf
