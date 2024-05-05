@@ -38,6 +38,9 @@ sudo apt update -y
 sudo apt full-upgrade -y
 sudo apt autoremove -y
 
+## Install basic sysadmin tools
+sudo apt install nano iputils-ping
+
 # Make home directory private
 sudo chmod 700 /home/*
 
