@@ -88,8 +88,7 @@ if [ ! -d /boot/efi/EFI/ZBM ]; then
 fi
 
 # Disable telemetry
-sudo systemctl stop --now apport.service
-sudo systemctl disable apport.service
+sudo systemctl disable --now apport.service
 sudo systemctl mask apport.service
 
 #Setup fwupd

@@ -130,13 +130,11 @@ sudo dconf update
 umask 077
 
 ubuntu-report -f send no
-sudo systemctl stop apport.service
 sudo systemctl disable --now apport.service
 sudo systemctl mask apport.service
-sudo systemctl stop --now whoopsie.service
-sudo systemctl disable whoopsie.service
+sudo systemctl disable --now whoopsie.service
 sudo systemctl mask whoopsie.service
-sudo systemctl disable whoopsie.path
+sudo systemctl disable --now whoopsie.path
 sudo systemctl mask whoopsie.path
 
 # Update packages and firmware
