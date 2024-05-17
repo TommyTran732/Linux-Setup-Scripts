@@ -147,8 +147,7 @@ elif [ "${MACHINE_TYPE}" == 'aarch64' ]; then
 fi
 
 # Setup Networking
-sudo firewall-cmd --set-default-zone=block
-sudo firewall-cmd --permanent --add-service=dhcpv6-client
+sudo firewall-cmd --permanent --remove-service=cockpit
 sudo firewall-cmd --reload
 sudo firewall-cmd --lockdown-on
 
