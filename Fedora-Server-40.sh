@@ -82,7 +82,7 @@ fi
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/security/limits.d/30-disable-coredump.conf | sudo tee /etc/security/limits.d/30-disable-coredump.conf
 
 # Setup ZRAM
-echo -e '[zram0]\nzram-fraction = 1\nmax-zram-size = 8192\ncompression-algorithm = zstd' | sudo tee /etc/systemd/zram-generator.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/zram-generator.conf | sudo tee /etc/systemd/zram-generator.conf
 
 # Setup DNF
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dnf/dnf.conf | sudo tee /etc/dnf/dnf.conf
