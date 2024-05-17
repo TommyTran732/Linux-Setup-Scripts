@@ -44,24 +44,12 @@ install_options
 # Compliance and updates
 sudo systemctl mask debug-shell.service
 
-## Avoid phased updates
-sudo apt install curl -y
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/apt.conf.d/99sane-upgrades | sudo tee /etc/apt/apt.conf.d/99sane-upgrades
-sudo chmod 644 /etc/apt/apt.conf.d/99sane-upgrades
-
-sudo apt update -y
-sudo apt full-upgrade -y
-sudo apt autoremove -y
-
 # Make home directory private
 sudo chmod 700 /home/*
 
 # Setting umask to 077
 umask 077
-sudo sed -ie '/^DIR_MODE=/ s/=[0-9]*\+/=0700/' /etc/adduser.conf
-sudo sed -ie '/^UMASK\s\+/ s/022/077/' /etc/login.defs
-sudo sed -i 's/USERGROUPS_ENAB yes/USERGROUPS_ENAB no/g' /etc/login.defs
-echo 'umask 077' | sudo tee --append /etc/profile
+echo 'umask 077' | sudo tee -a /etc/bash.bashrc
 
 # Setup NTS
 sudo systemctl disable --now systemd-timesyncd
@@ -144,6 +132,16 @@ sudo fwupdmgr get-devices
 sudo fwupdmgr refresh --force
 sudo fwupdmgr get-updates -y
 sudo fwupdmgr update -y
+
+## Avoid phased updates
+sudo apt install curl -y
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/apt.conf.d/99sane-upgrades | sudo tee /etc/apt/apt.conf.d/99sane-upgrades
+sudo chmod 644 /etc/apt/apt.conf.d/99sane-upgrades
+
+# Update system
+sudo apt update -y
+sudo apt full-upgrade -y
+sudo apt autoremove -y
 
 # Remove unneeded packages
 sudo apt purge -y apport baobab cups* eog gedit firefox* gnome-calculator gnome-characters* gnome-clocks gnome-font-viewer gnome-logs gnome-power-manager gnome-shell-extension-prefs gnome-text-editor libreoffice* seahorse tcpdump whoopsie

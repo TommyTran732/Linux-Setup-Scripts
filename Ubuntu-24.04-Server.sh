@@ -29,18 +29,6 @@ sudo systemctl mask debug-shell.service
 echo 'Authorized uses only. All activity may be monitored and reported.' | sudo tee /etc/issue
 echo 'Authorized uses only. All activity may be monitored and reported.' | sudo tee /etc/issue.net
 
-## Avoid phased updates
-sudo apt install -y curl
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/apt.conf.d/99sane-upgrades | sudo tee /etc/apt/apt.conf.d/99sane-upgrades
-sudo chmod 644 /etc/apt/apt.conf.d/99sane-upgrades
-
-sudo apt update -y
-sudo apt full-upgrade -y
-sudo apt autoremove -y
-
-## Install basic sysadmin tools
-sudo apt install nano iputils-ping
-
 # Make home directory private
 sudo chmod 700 /home/*
 
@@ -90,6 +78,18 @@ fi
 # Disable telemetry
 sudo systemctl disable --now apport.service
 sudo systemctl mask apport.service
+
+## Avoid phased updates
+sudo apt install -y curl
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/apt.conf.d/99sane-upgrades | sudo tee /etc/apt/apt.conf.d/99sane-upgrades
+sudo chmod 644 /etc/apt/apt.conf.d/99sane-upgrades
+
+sudo apt update -y
+sudo apt full-upgrade -y
+sudo apt autoremove -y
+
+## Install basic sysadmin tools
+sudo apt install nano iputils-ping
 
 #Setup fwupd
 sudo apt install fwupd -y

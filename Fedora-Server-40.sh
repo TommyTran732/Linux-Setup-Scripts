@@ -88,12 +88,12 @@ unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/m
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dnf/dnf.conf | sudo tee /etc/dnf/dnf.conf
 sudo sed -i 's/^metalink=.*/&\&protocol=https/g' /etc/yum.repos.d/*
 
-# Enable auto TRIM
-sudo systemctl enable fstrim.timer
-
 # Setup fwupd
 echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
 sudo systemctl restart fwupd
+
+# Enable auto TRIM
+sudo systemctl enable fstrim.timer
 
 ### Differentiating bare metal and virtual installs
 

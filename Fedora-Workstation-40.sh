@@ -207,12 +207,12 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc' | sudo tee /etc/yum.re
     umask 077
 fi
 
-# Enable auto TRIM
-sudo systemctl enable fstrim.timer
-
 # Setup fwupd
 echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
 sudo systemctl restart fwupd
+
+# Enable auto TRIM
+sudo systemctl enable fstrim.timer
 
 ### Differentiating bare metal and virtual installs
 
