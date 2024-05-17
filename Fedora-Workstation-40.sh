@@ -218,6 +218,7 @@ sudo systemctl enable fstrim.timer
 
 # Installing tuned first here because virt-what is 1 of its dependencies anyways
 sudo dnf install tuned -y
+sudo systemctl enable --now tuned
 
 virt_type=$(virt-what)
 if [ "$virt_type" = '' ]; then
@@ -235,6 +236,7 @@ fi
 # Setup tuned
 if [ "$virt_type" = '' ]; then
     # Don't know whether using tuned would be a good idea on a laptop, power-profiles-daemon should be handling performance tuning IMO.
+    sudo systemctl disable --now tuned
     sudo dnf remove tuned -y
 else
     if [ "$virt_type" = 'kvm' ]; then

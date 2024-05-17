@@ -103,6 +103,7 @@ sudo systemctl enable fstrim.timer
 
 # Installing tuned first here because virt-what is 1 of its dependencies anyways
 sudo dnf install tuned -y
+sudo systemctl enable --now tuned
 
 virt_type=$(virt-what)
 if [ "$virt_type" = '' ]; then
