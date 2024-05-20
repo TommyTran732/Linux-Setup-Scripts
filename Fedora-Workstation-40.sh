@@ -57,7 +57,7 @@ echo 'umask 077' | sudo tee -a /etc/bashrc
 sudo chmod 700 /home/*
 
 # Setup NTS
-if [ "${parallels}" = "1" ]; then
+if [ "${parallels}" = '1' ]; then
     sudo dnf -y remove chrony
 else
     sudo rm -rf /etc/chrony.conf
@@ -88,15 +88,15 @@ sudo chmod 644 /etc/sysctl.d/30_security-misc_kexec-disable.conf
 sudo dracut -f
 sudo sysctl -p
 
-if [ -d /usr/lib/systemd/boot/efi ]; then
-    if [ "${parallels}" = "1" ]; then
+if sudo bootctl status | grep -q systemd-boot; then
+    if [ "${parallels}" = '1' ]; then
         sudo sed -i 's/quiet root/quiet mitigations=auto,nosmt spectre_v2=on spec_store_bypass_disable=on tsx=off kvm.nx_huge_pages=force nosmt=force l1d_flush=on spec_rstack_overflow=safe-ret random.trust_bootloader=off random.trust_cpu=off intel_iommu=on amd_iommu=force_isolation efi=disable_early_pci_dma iommu=force iommu.passthrough=0 iommu.strict=1 slab_nomerge init_on_alloc=1 init_on_free=1 pti=on vsyscall=none ia32_emulation=0 page_alloc.shuffle=1 randomize_kstack_offset=on debugfs=off root/g' /etc/kernel/cmdline
     else 
         sudo sed -i 's/quiet root/quiet mitigations=auto,nosmt spectre_v2=on spec_store_bypass_disable=on tsx=off kvm.nx_huge_pages=force nosmt=force l1d_flush=on spec_rstack_overflow=safe-ret random.trust_bootloader=off random.trust_cpu=off intel_iommu=on amd_iommu=force_isolation efi=disable_early_pci_dma iommu=force iommu.passthrough=0 iommu.strict=1 slab_nomerge init_on_alloc=1 init_on_free=1 pti=on vsyscall=none ia32_emulation=0 page_alloc.shuffle=1 randomize_kstack_offset=on debugfs=off lockdown=confidentiality module.sig_enforce=1 root/g' /etc/kernel/cmdline
     fi
     sudo dnf -y reinstall kernel-core
 else
-    if [ "${parallels}" = "1" ]; then
+    if [ "${parallels}" = '1' ]; then
         sudo grubby --update-kernel=ALL --args='mitigations=auto,nosmt spectre_v2=on spec_store_bypass_disable=on tsx=off kvm.nx_huge_pages=force nosmt=force l1d_flush=on spec_rstack_overflow=safe-ret random.trust_bootloader=off random.trust_cpu=off intel_iommu=on amd_iommu=force_isolation efi=disable_early_pci_dma iommu=force iommu.passthrough=0 iommu.strict=1 slab_nomerge init_on_alloc=1 init_on_free=1 pti=on vsyscall=none ia32_emulation=0 page_alloc.shuffle=1 randomize_kstack_offset=on debugfs=off'
     else
         sudo grubby --update-kernel=ALL --args='mitigations=auto,nosmt spectre_v2=on spec_store_bypass_disable=on tsx=off kvm.nx_huge_pages=force nosmt=force l1d_flush=on spec_rstack_overflow=safe-ret random.trust_bootloader=off random.trust_cpu=off intel_iommu=on amd_iommu=force_isolation efi=disable_early_pci_dma iommu=force iommu.passthrough=0 iommu.strict=1 slab_nomerge init_on_alloc=1 init_on_free=1 pti=on vsyscall=none ia32_emulation=0 page_alloc.shuffle=1 randomize_kstack_offset=on debugfs=off lockdown=confidentiality module.sig_enforce=1'
