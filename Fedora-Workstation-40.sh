@@ -157,13 +157,13 @@ sudo dnf -y remove 'podman*' '*libvirt*' 'open-vm*' qemu-guest-agent 'hyperv*' s
 sudo dnf -y remove NetworkManager-pptp-gnome NetworkManager-ssh-gnome NetworkManager-openconnect-gnome NetworkManager-openvpn-gnome NetworkManager-vpnc-gnome ppp* ModemManager
 
 # Remove Gnome apps
-sudo dnf remove -y chrome-gnome-shell eog gnome-photos gnome-connections gnome-tour gnome-themes-extra gnome-screenshot gnome-remote-desktop gnome-font-viewer gnome-calculator gnome-calendar gnome-contacts \
-    gnome-maps gnome-weather gnome-logs gnome-boxes gnome-disk-utility gnome-clocks gnome-color-manager gnome-characters baobab totem \
-    gnome-shell-extension-background-logo gnome-shell-extension-apps-menu gnome-shell-extension-launch-new-instance gnome-shell-extension-places-menu gnome-shell-extension-window-list \
-    gnome-classic* gnome-user* gnome-text-editor loupe snapshot
+sudo dnf remove -y baobab chrome-gnome-shell eog gnome-boxes gnome-calculator gnome-calendar gnome-characters gnome-classic* gnome-clocks gnome-color-manager gnome-connections \
+    gnome-contacts gnome-disk-utility gnome-font-viewer gnome-logs gnome-maps gnome-photos gnome-remote-desktop gnome-screenshot gnome-shell-extension-apps-menu \
+    gnome-shell-extension-background-logo gnome-shell-extension-launch-new-instance gnome-shell-extension-places-menu gnome-shell-extension-window-list gnome-text-editor \
+    gnome-themes-extra gnome-tour gnome-user* gnome-weather loupe snapshot totem
 
 # Remove apps
-sudo dnf remove -y rhythmbox yelp evince libreoffice* cheese file-roller* mediawriter
+sudo dnf remove -y cheese evince file-roller* libreoffice* mediawriter rhythmbox yelp
 
 # Remove other packages
  sudo dnf remove -y lvm2 rng-tools thermald '*perl*' yajl
