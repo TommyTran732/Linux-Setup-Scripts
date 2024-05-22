@@ -139,10 +139,10 @@ sudo sed -i 's/^metalink=.*/&\&protocol=https/g' /etc/yum.repos.d/*
 sudo dnf -y remove fedora-bookmarks fedora-chromium-config firefox mozilla-filesystem
 
 # Remove Network + hardware tools packages
-sudo dnf -y remove '*cups' nmap-ncat nfs-utils nmap-ncat openssh-server net-snmp-libs net-tools opensc traceroute rsync tcpdump teamd geolite2* mtr dmidecode sgpio
+sudo dnf -y remove avahi cifs* '*cups' dmidecode dnsmasq geolite2* mtr net-snmp-libs net-tools nfs-utils nmap-ncat nmap-ncat opensc openssh-server rsync rygel sgpio tcpdump teamd traceroute usb_modeswitch
 
 # Remove support for some languages and spelling
-sudo dnf -y remove ibus-typing-booster '*speech*' '*zhuyin*' '*pinyin*' '*m17n*' '*hangul*' '*anthy*' words
+sudo dnf -y remove '*anthy*' '*hangul*' ibus-typing-booster '*m17n*' '*pinyin*' '*speech*' texlive-libs words '*zhuyin*'
 
 # Remove codec + image + printers
 sudo dnf -y remove openh264 ImageMagick* sane* simple-scan
