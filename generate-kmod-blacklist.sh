@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Copyright (C) 2021-2024 Thien Tran
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may not
+# use this file except in compliance with the License. You may obtain a copy of
+# the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations under
+# the License.
+
+# List available modules
+# shellcheck disable=SC2010
+{
+    ls -R /lib/modules/"$(uname -r)"/kernel/drivers | grep "\.ko" | sed 's/.ko.xz//g'
+    ls -R /lib/modules/"$(uname -r)"/kernel/fs | grep "\.ko" | sed 's/.ko.xz//g'
+    ls -R /lib/modules/"$(uname -r)"/kernel/net | grep "\.ko" | sed 's/.ko.xz//g'
+    ls -R /lib/modules/"$(uname -r)"/kernel/sound | grep "\.ko" | sed 's/.ko.xz//g'
+}  > blacklist.txt
+
+# List actively used modules
+lsmod | awk '{ print $1 }' > necessary.txt
+
+# Create the list to blacklist 
+while read -r KMOD; do
+sed -i "s/^${KMOD}$//g" blacklist.txt
+done < necessary.txt
+
+# Delete empty lines
+sed -i '/^$/d' blacklist.txt
+
+# Create final blacklist config
+while read -r KMOD; do
+echo "blacklist ${KMOD}" >> blacklist.conf
+echo "install ${KMOD} /bin/false" >> blacklist.conf
+done < blacklist.txt
+
+# Cleanup
+rm necessary.txt blacklist.txt 
