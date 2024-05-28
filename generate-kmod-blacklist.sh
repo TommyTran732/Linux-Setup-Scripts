@@ -16,12 +16,7 @@
 
 # List available modules
 # shellcheck disable=SC2010
-{
-    ls -R /lib/modules/"$(uname -r)"/kernel/drivers | grep "\.ko" | sed 's/.ko.xz//g'
-    ls -R /lib/modules/"$(uname -r)"/kernel/fs | grep "\.ko" | sed 's/.ko.xz//g'
-    ls -R /lib/modules/"$(uname -r)"/kernel/net | grep "\.ko" | sed 's/.ko.xz//g'
-    ls -R /lib/modules/"$(uname -r)"/kernel/sound | grep "\.ko" | sed 's/.ko.xz//g'
-}  > blacklist.txt
+ls -R /lib/modules/"$(uname -r)"/kernel/{drivers,fs,net,sound} | grep "\.ko" | sed 's/.ko.xz//g' > blacklist.txt
 
 # List actively used modules
 lsmod | awk '{ print $1 }' > necessary.txt
