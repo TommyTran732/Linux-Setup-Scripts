@@ -212,7 +212,7 @@ sudo systemctl enable fstrim.timer
 if [ "$virtualization" = 'none' ]; then
     output "Bare Metal installation. Tuned will not be set up here - PPD should take care of it."
 else
-    sudo dnf remove power-profiles-daemon
+    sudo dnf remove -y power-profiles-daemon
     sudo dnf install -y tuned
     sudo systemctl enable --now tuned
     sudo tuned-adm profile virtual-guest
