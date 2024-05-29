@@ -128,9 +128,6 @@ sudo systemctl enable --now tuned
 if [ "$virtualization" = 'none' ]; then
     sudo tuned-adm profile latency-performance
 else
-    if [ "$virtualization" = 'kvm' ]; then
-        sudo dnf install -y qemu-guest-agent
-    fi
     sudo tuned-adm profile virtual-guest
 fi
 

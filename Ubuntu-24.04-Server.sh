@@ -110,24 +110,24 @@ sudo systemctl enable --now fstrim.timer
 ### Differentiating bare metal and virtual installs
 
 # Setup tuned
+sudo apt install -y tuned
+sudo systemctl enable --now tuned
+
 if [ "$virtualization" = 'none' ]; then
-    output "Bare Metal installation. Tuned will not be set up here - PPD should take care of it."
+    sudo tuned-adm profile latency-performance
 else
-    sudo apt purge -y power-profiles-daemon
-    sudo apt install -y tuned
-    systemctl enable --now tuned
     sudo tuned-adm profile virtual-guest
 fi
 
 # Setup fwupd
 if [ "$virtualization" = 'none' ]; then
-  sudo apt install -y fwupd
-  echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
-  sudo systemctl restart fwupd
-  mkdir -p /etc/systemd/system/fwupd-refresh.service.d
-  unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/system/fwupd-refresh.service.d/override.conf | sudo tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
-  sudo systemctl daemon-reload
-  sudo systemctl enable --now fwupd-refresh.timer
+    sudo apt install -y fwupd
+    echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
+    sudo systemctl restart fwupd
+    mkdir -p /etc/systemd/system/fwupd-refresh.service.d
+    unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/system/fwupd-refresh.service.d/override.conf | sudo tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
+    sudo systemctl daemon-reload
+    sudo systemctl enable --now fwupd-refresh.timer
 fi
 
 # Setup unbound
