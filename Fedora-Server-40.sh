@@ -110,6 +110,13 @@ if [ "$virtualization" = 'kvm' ]; then
     sudo dnf install -y qemu-guest-agent
 fi
 
+# Setup unbound
+sudo dnf install unbound -y
+unpriv curl https://github.com/TommyTran732/Fedora-CoreOS-Ignition/blob/main/etc/unbound/unbound.conf | sudo tee /etc/unbound/unbound.conf
+sudo mkdir /etc/systemd/system/unbound.service.d
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Fedora-CoreOS-Ignition/main/etc/systemd/system/unbound.service.d/override.conf | sudo tee /etc/systemd/system/unbound.service.d/override.conf
+sudo systemctl enable --now unbound
+
 # Setup fwupd
 if [ "$virtualization" = 'none' ]; then
     sudo dnf install -y fwupd
