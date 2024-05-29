@@ -151,7 +151,7 @@ sudo dnf remove -y baobab chrome-gnome-shell eog gnome-boxes gnome-calculator gn
     gnome-themes-extra gnome-tour gnome-user* gnome-weather loupe snapshot totem
 
 # Remove apps
-sudo dnf remove -y cheese evince file-roller* libreoffice* mediawriter rhythmbox yelp
+sudo dnf remove -y abrt cheese evince file-roller* libreoffice* mediawriter rhythmbox yelp
 
 # Remove other packages
  sudo dnf remove -y lvm2 rng-tools thermald '*perl*' yajl
