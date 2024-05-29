@@ -24,6 +24,8 @@ unpriv(){
   sudo -u nobody "$@"
 }
 
+virtualization=$(systemd-detect-virt)
+
 # Compliance and updates
 sudo systemctl mask debug-shell.service
 echo 'Authorized uses only. All activity may be monitored and reported.' | sudo tee /etc/issue
@@ -95,50 +97,31 @@ sudo apt full-upgrade -y
 sudo apt autoremove -y
 
 ## Install basic sysadmin tools
-sudo apt install nano iputils-ping
+sudo apt install -y nano iputils-ping
 
-#Setup fwupd
-sudo apt install fwupd -y
-mkdir -p /etc/systemd/system/fwupd-refresh.service.d
-echo '[Service]
-ExecStart=/usr/bin/fwupdmgr update' | tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
-sudo systemctl daemon-reload
-sudo systemctl enable --now fwupd-refresh.timer
+# Install appropriate virtualization drivers
+if [ "$virtualization" = 'kvm' ]; then
+    sudo apt install -y qemu-guest-agent
+fi
 
 # Enable fstrim.timer
 sudo systemctl enable --now fstrim.timer
 
 ### Differentiating bare metal and virtual installs
 
-# Installing tuned first here because virt-what is 1 of its dependencies anyways
-sudo apt install tuned -y
-
-virt_type=$(virt-what)
-if [ "$virt_type" = "" ]; then
-  output 'Virtualization: Bare Metal.'
-elif [ "$virt_type" = 'openvz lxc' ]; then
-  output 'Virtualization: OpenVZ 7.'
-elif [ "$virt_type" = 'xen xen-hvm' ]; then
-  output 'Virtualization: Xen-HVM.'
-elif [ "$virt_type" = 'xen xen-hvm aws' ]; then
-  output 'Virtualization: Xen-HVM on AWS.'
-else
-  output "Virtualization: $virt_type."
-fi
-
 # Setup tuned
-if [ "$virt_type" = "" ]; then
-  sudo tuned-adm profile latency-performance
+if [ "$virtualization" = 'none' ]; then
+    output "Bare Metal installation. Tuned will not be set up here - PPD should take care of it."
 else
-  if [ "$virt_type" = 'kvm' ]; then
-    sudo apt install qemu-guest-agent -y
-  fi
-  sudo tuned-adm profile virtual-guest
+    sudo apt purge -y power-profiles-daemon
+    sudo apt install -y tuned
+    systemctl enable --now tuned
+    sudo tuned-adm profile virtual-guest
 fi
 
 # Setup fwupd
-if [ "$virt_type" = '' ]; then
-  sudo apt install fwupd -y
+if [ "$virtualization" = 'none' ]; then
+  sudo apt install -y fwupd
   echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
   sudo systemctl restart fwupd
   mkdir -p /etc/systemd/system/fwupd-refresh.service.d

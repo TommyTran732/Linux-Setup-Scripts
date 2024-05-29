@@ -24,22 +24,7 @@ unpriv(){
     sudo -u nobody "$@"
 }
 
-install_options(){
-    output "Are you using a Parallels Virtual Machine?"
-    output "[1] Yes"
-    output "[2] No"
-    read -r choice
-    case $choice in
-        1 ) parallels=1
-            ;;
-        2 ) parallels=0
-            ;;
-        * ) output "You did not enter a valid selection."
-            install_options
-    esac
-}
-
-install_options
+virtualization=$(systemd-detect-virt)
 
 # Increase compression level
 sudo sed -i 's/zstd:1/zstd:3/g' /etc/fstab
@@ -59,7 +44,7 @@ sudo sed -i 's/umask 022/umask 077/g' /etc/bashrc
 sudo chmod 700 /home/*
 
 # Setup NTS
-if [ "${parallels}" = '1' ]; then
+if [ "${virtualization}" = 'parallels' ]; then
     sudo dnf -y remove chrony
 else
     sudo rm -rf /etc/chrony.conf
@@ -91,14 +76,14 @@ sudo dracut -f
 sudo sysctl -p
 
 if sudo bootctl status | grep -q systemd-boot; then
-    if [ "${parallels}" = '1' ]; then
+    if [ "${virtualization}" = 'parallels' ]; then
         sudo sed -i 's/quiet root/quiet mitigations=auto,nosmt spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on tsx=off kvm.nx_huge_pages=force nosmt=force l1d_flush=on spec_rstack_overflow=safe-ret gather_data_sampling=force reg_file_data_sampling=on random.trust_bootloader=off random.trust_cpu=off intel_iommu=on amd_iommu=force_isolation efi=disable_early_pci_dma iommu=force iommu.passthrough=0 iommu.strict=1 slab_nomerge init_on_alloc=1 init_on_free=1 pti=on vsyscall=none ia32_emulation=0 page_alloc.shuffle=1 randomize_kstack_offset=on debugfs=off root/g' /etc/kernel/cmdline
     else 
         sudo sed -i 's/quiet root/quiet mitigations=auto,nosmt spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on tsx=off kvm.nx_huge_pages=force nosmt=force l1d_flush=on spec_rstack_overflow=safe-ret gather_data_sampling=force reg_file_data_sampling=on random.trust_bootloader=off random.trust_cpu=off intel_iommu=on amd_iommu=force_isolation efi=disable_early_pci_dma iommu=force iommu.passthrough=0 iommu.strict=1 slab_nomerge init_on_alloc=1 init_on_free=1 pti=on vsyscall=none ia32_emulation=0 page_alloc.shuffle=1 randomize_kstack_offset=on debugfs=off lockdown=confidentiality module.sig_enforce=1 root/g' /etc/kernel/cmdline
     fi
     sudo dnf reinstall -y kernel-core
 else
-    if [ "${parallels}" = '1' ]; then
+    if [ "${virtualization}" = 'parallels' ]; then
         sudo grubby --update-kernel=ALL --args='mitigations=auto,nosmt spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on tsx=off kvm.nx_huge_pages=force nosmt=force l1d_flush=on spec_rstack_overflow=safe-ret gather_data_sampling=force reg_file_data_sampling=on random.trust_bootloader=off random.trust_cpu=off intel_iommu=on amd_iommu=force_isolation efi=disable_early_pci_dma iommu=force iommu.passthrough=0 iommu.strict=1 slab_nomerge init_on_alloc=1 init_on_free=1 pti=on vsyscall=none ia32_emulation=0 page_alloc.shuffle=1 randomize_kstack_offset=on debugfs=off'
     else
         sudo grubby --update-kernel=ALL --args='mitigations=auto,nosmt spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on tsx=off kvm.nx_huge_pages=force nosmt=force l1d_flush=on spec_rstack_overflow=safe-ret gather_data_sampling=force reg_file_data_sampling=on random.trust_bootloader=off random.trust_cpu=off intel_iommu=on amd_iommu=force_isolation efi=disable_early_pci_dma iommu=force iommu.passthrough=0 iommu.strict=1 slab_nomerge init_on_alloc=1 init_on_free=1 pti=on vsyscall=none ia32_emulation=0 page_alloc.shuffle=1 randomize_kstack_offset=on debugfs=off lockdown=confidentiality module.sig_enforce=1'
@@ -180,6 +165,11 @@ sudo dnf -y upgrade
 # Install packages that I use
 sudo dnf -y install adw-gtk3-theme gnome-console gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo
 
+# Install appropriate virtualization drivers
+if [ "$virtualization" = 'kvm' ]; then
+    sudo dnf install -y qemu-guest-agent spice-vdagent
+fi
+
 # Setup Flatpak
 sudo flatpak override --system --nosocket=x11 --nosocket=fallback-x11 --nosocket=pulseaudio --nosocket=session-bus --nosocket=system-bus --unshare=network --unshare=ipc --nofilesystem=host:reset --nodevice=input --nodevice=shm --nodevice=all --no-talk-name=org.freedesktop.Flatpak --no-talk-name=org.freedesktop.systemd1 --no-talk-name=ca.desrt.dconf --no-talk-name=org.gnome.Shell.Extensions
 flatpak override --user --nosocket=x11 --nosocket=fallback-x11 --nosocket=pulseaudio --nosocket=session-bus --nosocket=system-bus --unshare=network --unshare=ipc --nofilesystem=host:reset --nodevice=input --nodevice=shm --nodevice=all --no-talk-name=org.freedesktop.Flatpak --no-talk-name=org.freedesktop.systemd1 --no-talk-name=ca.desrt.dconf --no-talk-name=org.gnome.Shell.Extensions
@@ -218,55 +208,36 @@ sudo systemctl enable fstrim.timer
 
 ### Differentiating bare metal and virtual installs
 
-# Installing tuned first here because virt-what is 1 of its dependencies anyways
-sudo dnf install tuned -y
-sudo systemctl enable --now tuned
-
-virt_type=$(virt-what)
-if [ "$virt_type" = '' ]; then
-    output 'Virtualization: Bare Metal.'
-elif [ "$virt_type" = 'openvz lxc' ]; then
-    output 'Virtualization: OpenVZ 7.'
-elif [ "$virt_type" = 'xen xen-hvm' ]; then
-    output 'Virtualization: Xen-HVM.'
-elif [ "$virt_type" = 'xen xen-hvm aws' ]; then
-    output 'Virtualization: Xen-HVM on AWS.'
-else
-    output "Virtualization: $virt_type."
-fi
-
 # Setup tuned
-if [ "$virt_type" = '' ]; then
-    # Don't know whether using tuned would be a good idea on a laptop, power-profiles-daemon should be handling performance tuning IMO.
-    sudo systemctl disable --now tuned
-    sudo dnf remove tuned -y
+if [ "$virtualization" = 'none' ]; then
+    output "Bare Metal installation. Tuned will not be set up here - PPD should take care of it."
 else
-    if [ "$virt_type" = 'kvm' ]; then
-        sudo dnf install qemu-guest-agent -y
-    fi
+    sudo dnf remove power-profiles-daemon
+    sudo dnf install -y tuned
+    sudo systemctl enable --now tuned
     sudo tuned-adm profile virtual-guest
 fi
 
 # Setup real-ucode and hardened_malloc
-if [ "$virt_type" = '' ] || [ "${MACHINE_TYPE}" == 'x86_64' ]; then
-    sudo dnf install 'https://divested.dev/rpm/fedora/divested-release-20231210-2.noarch.rpm' -y
+if [ "$virtualization" = 'none' ] || [ "${MACHINE_TYPE}" == 'x86_64' ]; then
+    sudo dnf install -y 'https://divested.dev/rpm/fedora/divested-release-20231210-2.noarch.rpm'
     sudo sed -i 's/^metalink=.*/&?protocol=https/g' /etc/yum.repos.d/divested-release.repo
     if [ "${MACHINE_TYPE}" != 'x86_64' ]; then
         sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware
-        sudo dnf install real-ucode -y
+        sudo dnf install -y real-ucode
         sudo dracut -f
-    elif [ "$virt_type" != '' ]; then
+    elif [ "$virtualization" != 'none' ]; then
         sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,hardened_malloc
-        sudo dnf install hardened_malloc -y
+        sudo dnf install -y hardened_malloc
     else
         sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware,hardened_malloc
-        sudo dnf install real-ucode hardened_malloc -y
+        sudo dnf install -y real-ucode hardened_malloc
         echo 'libhardened_malloc.so' | sudo tee /etc/ld.so.preload
         sudo dracut -f
     fi
 elif [ "${MACHINE_TYPE}" == 'aarch64' ]; then
     sudo dnf copr enable secureblue/hardened_malloc -y
-    sudo dnf install hardened_malloc -y
+    sudo dnf install -y hardened_malloc
 fi
 
 # Setup Networking

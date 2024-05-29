@@ -24,22 +24,7 @@ unpriv(){
     sudo -u nobody "$@"
 }
 
-install_options(){
-    output "Are you using a Parallels Virtual Machine?"
-    output "[1] Yes"
-    output "[2] No"
-    read -r choice
-    case $choice in
-        1 ) parallels=1
-            ;;
-        2 ) parallels=0
-            ;;
-        * ) output "You did not enter a valid selection."
-            install_options
-    esac
-}
-
-install_options
+virtualization=$(systemd-detect-virt)
 
 # Compliance and updates
 sudo systemctl mask debug-shell.service
@@ -57,7 +42,7 @@ sudo chmod 700 /home/*
 sudo systemctl disable --now systemd-timesyncd
 sudo systemctl mask systemd-timesyncd
 
-if [ "${parallels}" = "0" ]; then
+if [ "${virtualization}" = "parallels" ]; then
     sudo apt install -y chrony
     unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony/chrony.conf
     sudo systemctl restart chronyd
@@ -126,16 +111,12 @@ sudo systemctl mask whoopsie.service
 sudo systemctl disable --now whoopsie.path
 sudo systemctl mask whoopsie.path
 
-# Update packages and firmware
+# Update packages
 sudo apt update -y
 sudo apt full-upgrade -y
-sudo fwupdmgr get-devices
-sudo fwupdmgr refresh --force
-sudo fwupdmgr get-updates -y
-sudo fwupdmgr update -y
 
 ## Avoid phased updates
-sudo apt install curl -y
+sudo apt install -y curl 
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/apt.conf.d/99sane-upgrades | sudo tee /etc/apt/apt.conf.d/99sane-upgrades
 sudo chmod 644 /etc/apt/apt.conf.d/99sane-upgrades
 
@@ -154,6 +135,11 @@ sudo rm -rf /usr/share/hplip
 # Install packages that I use
 sudo apt install -y gnome-console gnome-software-plugin-flatpak
 sudo snap install gnome-text-editor
+
+# Install appropriate virtualization drivers
+if [ "$virtualization" = 'kvm' ]; then
+    sudo apt install -y qemu-guest-agent spice-vdagent
+fi
 
 # Setup Flatpak
 sudo flatpak override --system --nosocket=x11 --nosocket=fallback-x11 --nosocket=pulseaudio --nosocket=session-bus --nosocket=system-bus --unshare=network --unshare=ipc --nofilesystem=host:reset --nodevice=shm --nodevice=all --no-talk-name=org.freedesktop.Flatpak --no-talk-name=org.freedesktop.systemd1 --no-talk-name=ca.desrt.dconf --no-talk-name=org.gnome.Shell.Extensions
@@ -202,32 +188,21 @@ fi
 # Enable fstrim.timer
 sudo systemctl enable --now fstrim.timer
 
-# Installing tuned first here because virt-what is 1 of its dependencies anyways
-sudo apt install tuned -y
-virt_type=$(virt-what)
-if [ "$virt_type" = '' ]; then
-    output 'Virtualization: Bare Metal.'
-elif [ "$virt_type" = 'openvz lxc' ]; then
-    output 'Virtualization: OpenVZ 7.'
-elif [ "$virt_type" = 'xen xen-hvm' ]; then
-    output 'Virtualization: Xen-HVM.'
-elif [ "$virt_type" = 'xen xen-hvm aws' ]; then
-    output 'Virtualization: Xen-HVM on AWS.'
-else
-    output "Virtualization: $virt_type."
-fi
+### Differentiating bare metal and virtual installs
 
 # Setup tuned
-if [ "$virt_type" = '' ]; then
-    # Don't know whether using tuned would be a good idea on a laptop, power-profiles-daemon should be handling performance tuning IMO.
-        sudo apt remove tuned -y
-        sudo apt autoremove -y
+if [ "$virtualization" = 'none' ]; then
+    output "Bare Metal installation. Tuned will not be set up here - PPD should take care of it."
 else
-    if [ "$virt_type" = 'kvm' ]; then
-        sudo apt install qemu-guest-agent -y
-    fi
+    sudo apt purge -y power-profiles-daemon
+    sudo apt install -y tuned
+    systemctl enable --now tuned
     sudo tuned-adm profile virtual-guest
 fi
+
+# Setup fwupd
+echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
+sudo systemctl restart fwupd
 
 # Setup Networking
 

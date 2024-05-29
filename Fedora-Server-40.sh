@@ -24,6 +24,8 @@ unpriv(){
     sudo -u nobody "$@"
 }
 
+virtualization=$(systemd-detect-virt)
+
 # Increase compression level
 sudo sed -i 's/zstd:1/zstd:3/g' /etc/fstab
 
@@ -98,63 +100,62 @@ sudo sed -i 's/^metalink=.*/&\&protocol=https/g' /etc/yum.repos.d/*
 # Remove unnecessary packages
 sudo dnf remove -y cockpit*
 
+# Install appropriate virtualization drivers
+if [ "$virtualization" = 'kvm' ]; then
+    sudo dnf install -y qemu-guest-agent
+fi
+
 # Setup fwupd
-echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
-sudo systemctl restart fwupd
+if [ "$virtualization" = 'none' ]; then
+  sudo dnf install -y fwupd
+  echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
+  sudo systemctl restart fwupd
+  mkdir -p /etc/systemd/system/fwupd-refresh.service.d
+  unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/system/fwupd-refresh.service.d/override.conf | sudo tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
+  sudo systemctl daemon-reload
+  sudo systemctl enable --now fwupd-refresh.timer
+fi
 
 # Enable auto TRIM
 sudo systemctl enable fstrim.timer
 
 ### Differentiating bare metal and virtual installs
 
-# Installing tuned first here because virt-what is 1 of its dependencies anyways
-sudo dnf install tuned -y
+# Setup tuned
+sudo dnf install -y tuned
 sudo systemctl enable --now tuned
 
-virt_type=$(virt-what)
-if [ "$virt_type" = '' ]; then
-    output 'Virtualization: Bare Metal.'
-elif [ "$virt_type" = 'openvz lxc' ]; then
-    output 'Virtualization: OpenVZ 7.'
-elif [ "$virt_type" = 'xen xen-hvm' ]; then
-    output 'Virtualization: Xen-HVM.'
-elif [ "$virt_type" = 'xen xen-hvm aws' ]; then
-    output 'Virtualization: Xen-HVM on AWS.'
-else
-    output "Virtualization: $virt_type."
-fi
-
-# Setup tuned
-if [ "$virt_type" = '' ]; then
+if [ "$virtualization" = 'none' ]; then
     sudo tuned-adm profile latency-performance
 else
-    if [ "$virt_type" = 'kvm' ]; then
-        sudo dnf install qemu-guest-agent -y
+    if [ "$virtualization" = 'kvm' ]; then
+        sudo dnf install -y qemu-guest-agent
     fi
     sudo tuned-adm profile virtual-guest
 fi
 
+
 # Setup real-ucode and hardened_malloc
 MACHINE_TYPE=$(uname -m)
-if [ "$virt_type" = '' ] || [ "${MACHINE_TYPE}" == 'x86_64' ]; then
-    sudo dnf install 'https://divested.dev/rpm/fedora/divested-release-20231210-2.noarch.rpm' -y
+if [ "$virtualization" = 'none' ] || [ "${MACHINE_TYPE}" == 'x86_64' ]; then
+    sudo dnf install -y 'https://divested.dev/rpm/fedora/divested-release-20231210-2.noarch.rpm'
     sudo sed -i 's/^metalink=.*/&?protocol=https/g' /etc/yum.repos.d/divested-release.repo
     if [ "${MACHINE_TYPE}" != 'x86_64' ]; then
         sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware
-        sudo dnf install real-ucode -y
+        sudo dnf install -y real-ucode
         sudo dracut -f
-    elif [ "$virt_type" != '' ]; then
+    elif [ "$virtualization" != 'none' ]; then
         sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,hardened_malloc
-        sudo dnf install hardened_malloc -y
+        sudo dnf install -y hardened_malloc
     else
         sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware,hardened_malloc
-        sudo dnf install real-ucode hardened_malloc -y
+        sudo dnf install -y real-ucode hardened_malloc
         echo 'libhardened_malloc.so' | sudo tee /etc/ld.so.preload
         sudo dracut -f
     fi
 elif [ "${MACHINE_TYPE}" == 'aarch64' ]; then
     sudo dnf copr enable secureblue/hardened_malloc -y
-    sudo dnf install hardened_malloc -y
+    sudo dnf install -y hardened_malloc
 fi
 
 # Setup Networking
