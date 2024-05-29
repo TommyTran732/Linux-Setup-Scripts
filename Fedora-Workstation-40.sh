@@ -50,8 +50,10 @@ sudo systemctl mask kdump.service
 
 # Setting umask to 077
 umask 077
+sudo sed -i 's/^UMASK.*/UMASK 077/g' /etc/login.defs
+sudo sed -i 's/^HOME_MODE/#HOME_MODE/g' /etc/login.defs
+sudo sed -i 's/^USERGROUPS_ENAB.*/USERGROUPS_ENAB no/g' /etc/login.defs
 sudo sed -i 's/umask 022/umask 077/g' /etc/bashrc
-echo 'umask 077' | sudo tee -a /etc/bashrc
 
 # Make home directory private
 sudo chmod 700 /home/*
