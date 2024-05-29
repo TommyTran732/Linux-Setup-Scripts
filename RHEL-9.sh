@@ -84,6 +84,7 @@ unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/m
 sudo sed -i 's/^metalink=.*/&\&protocol=https/g' /etc/yum.repos.d/*
 
 # Setup automatic updates
+sudo dnf install -y dnf-automatic
 sudo sed -i 's/apply_updates = no/apply_updates = yes\nreboot = when-needed/g' /etc/dnf/automatic.conf
 sudo systemctl enable --now dnf-automatic.timer
 
