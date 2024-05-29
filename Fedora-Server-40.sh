@@ -107,13 +107,13 @@ fi
 
 # Setup fwupd
 if [ "$virtualization" = 'none' ]; then
-  sudo dnf install -y fwupd
-  echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
-  sudo systemctl restart fwupd
-  mkdir -p /etc/systemd/system/fwupd-refresh.service.d
-  unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/system/fwupd-refresh.service.d/override.conf | sudo tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
-  sudo systemctl daemon-reload
-  sudo systemctl enable --now fwupd-refresh.timer
+    sudo dnf install -y fwupd
+    echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
+    sudo systemctl restart fwupd
+    mkdir -p /etc/systemd/system/fwupd-refresh.service.d
+    unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/system/fwupd-refresh.service.d/override.conf | sudo tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
+    sudo systemctl daemon-reload
+    sudo systemctl enable --now fwupd-refresh.timer
 fi
 
 # Enable auto TRIM
