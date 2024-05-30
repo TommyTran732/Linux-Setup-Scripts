@@ -116,6 +116,7 @@ unpriv curl https://raw.githubusercontent.com/TommyTran732/Fedora-CoreOS-Ignitio
 sudo mkdir /etc/systemd/system/unbound.service.d
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Fedora-CoreOS-Ignition/main/etc/systemd/system/unbound.service.d/override.conf | sudo tee /etc/systemd/system/unbound.service.d/override.conf
 sudo systemctl enable --now unbound
+sudo systemctl disable systemd-resolved
 
 # Setup fwupd
 if [ "$virtualization" = 'none' ]; then
