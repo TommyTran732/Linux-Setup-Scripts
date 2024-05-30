@@ -218,3 +218,8 @@ sudo systemctl restart NetworkManager
 # Setup notices
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/issue | sudo tee /etc/issue
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/issue | sudo tee /etc/issue.net
+
+# Final notes to the user
+output 'Server setup complete. To use unbound for DNS, you need to run the following commands:'
+output 'nmcli con mod <interface name> ipv4.dns 127.0.0.1'
+output 'nmcli con mod <interface name> ipv6.dns ::1'
