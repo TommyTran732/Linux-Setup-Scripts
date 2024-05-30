@@ -203,7 +203,7 @@ sudo systemctl daemon-reload
 sudo systemctl restart unbound
 sudo systemctl disable systemd-resolved
 
-# Setup Networking
+# Setup networking
 
 # UFW Snap is strictly confined, unlike its .deb counterpart
 sudo apt purge -y ufw

@@ -240,7 +240,7 @@ elif [ "${MACHINE_TYPE}" == 'aarch64' ]; then
     sudo dnf install -y hardened_malloc
 fi
 
-# Setup Networking
+# Setup networking
 sudo firewall-cmd --set-default-zone=block
 sudo firewall-cmd --permanent --add-service=dhcpv6-client
 sudo firewall-cmd --reload

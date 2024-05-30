@@ -205,7 +205,7 @@ elif [ "${MACHINE_TYPE}" == 'aarch64' ]; then
   sudo dnf install hardened_malloc -y
 fi
 
-# Setup Networking
+# Setup networking
 sudo firewall-cmd --permanent --remove-service=cockpit
 sudo firewall-cmd --reload
 sudo firewall-cmd --lockdown-on
@@ -215,7 +215,7 @@ unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd
 sudo systemctl daemon-reload
 sudo systemctl restart NetworkManager
 
-# irqbalance Hardening
+# irqbalance hardening
 sudo mkdir -p /etc/systemd/system/irqbalance.service.d
 unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/irqbalance.service.d/99-brace.conf | sudo tee /etc/systemd/system/irqbalance.service.d/99-brace.conf
 sudo systemctl daemon-reload

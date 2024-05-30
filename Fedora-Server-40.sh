@@ -167,7 +167,7 @@ elif [ "${MACHINE_TYPE}" == 'aarch64' ]; then
     sudo dnf install -y hardened_malloc
 fi
 
-# Setup Networking
+# Setup networking
 sudo firewall-cmd --permanent --remove-service=cockpit
 sudo firewall-cmd --reload
 sudo firewall-cmd --lockdown-on

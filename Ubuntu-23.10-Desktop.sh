@@ -204,7 +204,7 @@ fi
 echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
 sudo systemctl restart fwupd
 
-# Setup Networking
+# Setup networking
 
 # UFW Snap is strictly confined, unlike its .deb counterpart
 sudo apt purge -y ufw
