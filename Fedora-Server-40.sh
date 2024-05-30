@@ -187,3 +187,6 @@ sudo systemctl restart irqbalance
 # Setup notices
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/issue | sudo tee /etc/issue
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/issue | sudo tee /etc/issue.net
+
+# Final notes to the user
+output 'Server setup complete. To use unbound for DNS, you need to reboot.'
