@@ -78,9 +78,9 @@ sudo sed -i 's/#install msr/install msr/g' /etc/modprobe.d/30_security-misc.conf
 sed -i 's/# install bluetooth/install bluetooth/g' /etc/modprobe.d/30_security-misc.conf
 sed -i 's/# install btusb/install btusb/g' /etc/modprobe.d/30_security-misc.conf
 curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/990-security-misc.conf -o /etc/sysctl.d/990-security-misc.conf
-sed -i 's/kernel.yama.ptrace_scope[[:space:]]*=.*/kernel.yama.ptrace_scope=3/g' /etc/sysctl.d/990-security-misc.conf
-sed -i 's/net.ipv4.icmp_echo_ignore_all[[:space:]]*=.*/net.ipv4.icmp_echo_ignore_all=0/g' /etc/sysctl.d/990-security-misc.conf
-sed -i 's/net.ipv6.icmp.echo_ignore_all[[:space:]]*=.*/net.ipv6.icmp.echo_ignore_all=0/g' /etc/sysctl.d/990-security-misc.conf
+sed -i 's/kernel\.yama\.ptrace_scope[[:space:]]*=.*/kernel.yama.ptrace_scope=3/g' /etc/sysctl.d/990-security-misc.conf
+sed -i 's/net\.ipv4\.icmp_echo_ignore_all[[:space:]]*=.*/net.ipv4.icmp_echo_ignore_all=0/g' /etc/sysctl.d/990-security-misc.conf
+sed -i 's/net\.ipv6\.icmp.echo_ignore_all[[:space:]]*=.*/net.ipv6.icmp.echo_ignore_all=0/g' /etc/sysctl.d/990-security-misc.conf
 curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_silent-kernel-printk.conf -o /etc/sysctl.d/30_silent-kernel-printk.conf
 curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_security-misc_kexec-disable.conf -o /etc/sysctl.d/30_security-misc_kexec-disable.conf
 sysctl -p

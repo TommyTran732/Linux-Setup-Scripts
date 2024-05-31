@@ -62,7 +62,7 @@ unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/us
 sudo chmod 644 /etc/sysctl.d/30_silent-kernel-printk.conf
 unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_security-misc_kexec-disable.conf | sudo tee /etc/sysctl.d/30_security-misc_kexec-disable.conf
 sudo chmod 644 /etc/sysctl.d/30_security-misc_kexec-disable.conf
-sudo sed -i 's/kernel.yama.ptrace_scope[[:space:]]*=.*/kernel.yama.ptrace_scope=3/g' /etc/sysctl.d/990-security-misc.conf
+sudo sed -i 's/kernel\.yama\.ptrace_scope[[:space:]]*=.*/kernel.yama.ptrace_scope=3/g' /etc/sysctl.d/990-security-misc.conf
 sudo sysctl -p
 
 # Rebuild initramfs
