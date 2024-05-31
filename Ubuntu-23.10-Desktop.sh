@@ -218,6 +218,6 @@ sudo hostnamectl hostname 'localhost'
 sudo hostnamectl --transient hostname ''
 
 sudo mkdir -p /etc/systemd/system/NetworkManager.service.d
-curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf | sudo tee /etc/systemd/system/NetworkManager.service.d/99-brace.conf
+unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf | sudo tee /etc/systemd/system/NetworkManager.service.d/99-brace.conf
 sudo systemctl daemon-reload
 sudo systemctl restart NetworkManager
