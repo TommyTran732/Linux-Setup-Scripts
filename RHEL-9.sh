@@ -59,9 +59,9 @@ sudo systemctl restart sshd
 # Security kernel settings
 unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf | sudo tee /etc/modprobe.d/30_security-misc.conf
 sudo chmod 644 /etc/modprobe.d/30_security-misc.conf
-sudo sed -i 's/#install msr/install msr/g' /etc/modprobe.d/30_security-misc.conf
-sudo sed -i 's/# install bluetooth/install bluetooth/g' /etc/modprobe.d/30_security-misc.conf
-sudo sed -i 's/# install btusb/install btusb/g' /etc/modprobe.d/30_security-misc.conf
+sudo sed -i 's/#[[:space:]]*install msr/install msr/g' /etc/modprobe.d/30_security-misc.conf
+sudo sed -i 's/#[[:space:]]*install bluetooth/install bluetooth/g' /etc/modprobe.d/30_security-misc.conf
+sudo sed -i 's/#[[:space:]]*install btusb/install btusb/g' /etc/modprobe.d/30_security-misc.conf
 unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/990-security-misc.conf | sudo tee /etc/sysctl.d/990-security-misc.conf
 sudo chmod 644 /etc/sysctl.d/990-security-misc.conf
 sudo sed -i 's/kernel\.yama\.ptrace_scope[[:space:]]*=.*/kernel.yama.ptrace_scope=3/g' /etc/sysctl.d/990-security-misc.conf
