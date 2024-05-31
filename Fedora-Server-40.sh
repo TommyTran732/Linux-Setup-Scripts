@@ -27,7 +27,7 @@ unpriv(){
 virtualization=$(systemd-detect-virt)
 
 # Increase compression level
-sudo sed -i 's/zstd:1/zstd:3/g' /etc/fstab
+sudo sed -i 's/zstd:1/zstd/g' /etc/fstab
 
 # Compliance
 sudo systemctl mask debug-shell.service
