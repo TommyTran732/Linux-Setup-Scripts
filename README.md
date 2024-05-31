@@ -1,4 +1,7 @@
 # Linux Setup Scripts
+
+[![ShellCheck](https://github.com/TommyTran732/Linux-Setup-Scripts/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/TommyTran732/Linux-Setup-Scripts/actions/workflows/shellcheck.yml)
+
 My setup scripts for my workstations. You should edit the scripts to your liking before running it.
 Please run the scripts as your actual user and not root. Provide sudo password when it asks you to. Flatpak packages and themes/icons are only installed for your user and not system wide. <br />
 
