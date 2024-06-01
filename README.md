@@ -7,7 +7,7 @@ Please run the scripts as your actual user and not root. Provide sudo password w
 
 The printing stack (cups) is removed as I do not use it.
 
-Visit my Matrix group: https://matrix.to/#/#tommytran732:matrix.org
+Visit my Matrix group: https://invite.arcticfoxes.net/#/#tommy:arcticfoxes.net
 
 ## Notes on DNS handling
 
