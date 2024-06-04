@@ -62,16 +62,14 @@ unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/m
 sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 
 # Security kernel settings
-unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf | sudo tee /etc/modprobe.d/30_security-misc.conf
-sudo chmod 644 /etc/modprobe.d/30_security-misc.conf
-sudo sed -i 's/#[[:space:]]*install msr/install msr/g' /etc/modprobe.d/30_security-misc.conf
-unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/990-security-misc.conf | sudo tee /etc/sysctl.d/990-security-misc.conf
-sudo chmod 644 /etc/sysctl.d/990-security-misc.conf
-sudo sed -i 's/kernel\.yama\.ptrace_scope[[:space:]]*=.*/kernel.yama.ptrace_scope=3/g' /etc/sysctl.d/990-security-misc.conf
-unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_silent-kernel-printk.conf | sudo tee /etc/sysctl.d/30_silent-kernel-printk.conf
-sudo chmod 644 /etc/sysctl.d/30_silent-kernel-printk.conf
-unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_security-misc_kexec-disable.conf | sudo tee /etc/sysctl.d/30_security-misc_kexec-disable.conf
-sudo chmod 644 /etc/sysctl.d/30_security-misc_kexec-disable.conf
+if [ "${virtualization}" = 'parallels' ]; then
+    unpriv curl https://raw.githubusercontent.com/TommyTran732/Kernel-Module-Blacklist/main/etc/modprobe.d/workstation-blacklist.conf | sudo tee /etc/modprobe.d/workstation-blacklist.conf
+else
+    unpriv curl https://raw.githubusercontent.com/secureblue/secureblue/live/config/files/usr/etc/modprobe.d/blacklist.conf | sudo tee /etc/modprobe.d/workstation-blacklist.conf
+fi
+sudo chmod 644 /etc/modprobe.d/workstation-blacklist.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysctl.d/99-workstation.conf | sudo tee /etc/sysctl.d/99-workstation.conf
+sudo chmod 644 /etc/sysctl.d/99-workstation.conf
 sudo dracut -f
 sudo sysctl -p
 
@@ -91,7 +89,11 @@ else
 fi
 
 # Disable coredump
+umask 022
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/security/limits.d/30-disable-coredump.conf | sudo tee /etc/security/limits.d/30-disable-coredump.conf
+mkdir -p /etc/systemd/coredump.conf.d
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/coredump.conf.d/disable.conf | sudo tee /etc/systemd/coredump.conf.d/disable.conf
+umask 077
 
 # Disable XWayland
 umask 022
@@ -162,6 +164,10 @@ sudo dnf config-manager --set-disabled fedora-cisco-openh264
 # Update packages
 sudo dnf -y upgrade
 
+# Install hardened_malloc
+sudo dnf copr enable secureblue/hardened_malloc -y
+sudo dnf install -y hardened_malloc
+
 # Install packages that I use
 sudo dnf -y install adw-gtk3-theme gnome-console gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo
 
@@ -218,26 +224,13 @@ else
     sudo tuned-adm profile virtual-guest
 fi
 
-# Setup real-ucode and hardened_malloc
+# Setup real-ucode
 if [ "$virtualization" = 'none' ] || [ "${MACHINE_TYPE}" == 'x86_64' ]; then
     sudo dnf install -y 'https://divested.dev/rpm/fedora/divested-release-20231210-2.noarch.rpm'
     sudo sed -i 's/^metalink=.*/&?protocol=https/g' /etc/yum.repos.d/divested-release.repo
-    if [ "${MACHINE_TYPE}" != 'x86_64' ]; then
-        sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware
-        sudo dnf install -y real-ucode
-        sudo dracut -f
-    elif [ "$virtualization" != 'none' ]; then
-        sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,hardened_malloc
-        sudo dnf install -y hardened_malloc
-    else
-        sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware,hardened_malloc
-        sudo dnf install -y real-ucode hardened_malloc
-        echo 'libhardened_malloc.so' | sudo tee /etc/ld.so.preload
-        sudo dracut -f
-    fi
-elif [ "${MACHINE_TYPE}" == 'aarch64' ]; then
-    sudo dnf copr enable secureblue/hardened_malloc -y
-    sudo dnf install -y hardened_malloc
+    sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware
+    sudo dnf install -y real-ucode
+    sudo dracut -f
 fi
 
 # Setup networking
