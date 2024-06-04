@@ -70,7 +70,7 @@ sudo update-initramfs -u
 # Disable coredump
 umask 022
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/security/limits.d/30-disable-coredump.conf | sudo tee /etc/security/limits.d/30-disable-coredump.conf
-mkdir -p /etc/systemd/coredump.conf.d
+sudo mkdir -p /etc/systemd/coredump.conf.d
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/coredump.conf.d/disable.conf | sudo tee /etc/systemd/coredump.conf.d/disable.conf
 umask 077
 
