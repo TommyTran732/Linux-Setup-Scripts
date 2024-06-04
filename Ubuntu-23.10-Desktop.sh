@@ -52,24 +52,27 @@ fi
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/ssh/ssh_config.d/10-custom.conf | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
 sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 
-# Kernel hardening
-unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf | sudo tee /etc/modprobe.d/30_security-misc.conf
-sudo chmod 644 /etc/modprobe.d/30_security-misc.conf
-sudo sed -i 's/#[[:space:]]*install msr/install msr/g' /etc/modprobe.d/30_security-misc.conf
-unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/990-security-misc.conf | sudo tee /etc/sysctl.d/990-security-misc.conf
-sudo chmod 644 /etc/sysctl.d/990-security-misc.conf
-unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_silent-kernel-printk.conf | sudo tee /etc/sysctl.d/30_silent-kernel-printk.conf
-sudo chmod 644 /etc/sysctl.d/30_silent-kernel-printk.conf
-unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_security-misc_kexec-disable.conf | sudo tee /etc/sysctl.d/30_security-misc_kexec-disable.conf
-sudo chmod 644 /etc/sysctl.d/30_security-misc_kexec-disable.conf
-sudo sed -i 's/kernel\.yama\.ptrace_scope[[:space:]]*=.*/kernel.yama.ptrace_scope=3/g' /etc/sysctl.d/990-security-misc.conf
+# Security kernel settings
+if [ "${virtualization}" = 'parallels' ]; then
+    unpriv curl https://raw.githubusercontent.com/TommyTran732/Kernel-Module-Blacklist/main/etc/modprobe.d/workstation-blacklist.conf | sudo tee /etc/modprobe.d/workstation-blacklist.conf
+else
+    unpriv curl https://raw.githubusercontent.com/secureblue/secureblue/live/config/files/usr/etc/modprobe.d/blacklist.conf | sudo tee /etc/modprobe.d/workstation-blacklist.conf
+fi
+sudo chmod 644 /etc/modprobe.d/workstation-blacklist.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysctl.d/99-workstation.conf | sudo tee /etc/sysctl.d/99-workstation.conf
+sudo chmod 644 /etc/sysctl.d/99-workstation.conf
+sudo dracut -f
 sudo sysctl -p
 
 # Rebuild initramfs
 sudo update-initramfs -u
 
 # Disable coredump
+umask 022
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/security/limits.d/30-disable-coredump.conf | sudo tee /etc/security/limits.d/30-disable-coredump.conf
+mkdir -p /etc/systemd/coredump.conf.d
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/coredump.conf.d/disable.conf | sudo tee /etc/systemd/coredump.conf.d/disable.conf
+umask 077
 
 # Update GRUB config
 sed -i 's/splash/splash mitigations=auto,nosmt spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on tsx=off kvm.nx_huge_pages=force nosmt=force l1d_flush=on spec_rstack_overflow=safe-ret gather_data_sampling=force reg_file_data_sampling=on random.trust_bootloader=off random.trust_cpu=off intel_iommu=on amd_iommu=force_isolation efi=disable_early_pci_dma iommu=force iommu.passthrough=0 iommu.strict=1 slab_nomerge init_on_alloc=1 init_on_free=1 pti=on vsyscall=none ia32_emulation=0 page_alloc.shuffle=1 randomize_kstack_offset=on debugfs=off/g' /etc/default/grub

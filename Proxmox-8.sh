@@ -73,23 +73,23 @@ proxmox-boot-tool refresh
 ###
 
 # Kernel hardening
-curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf -o /etc/modprobe.d/30_security-misc.conf
-sudo sed -i 's/#[[:space:]]*install msr/install msr/g' /etc/modprobe.d/30_security-misc.conf
-sed -i 's/#[[:space:]]*install bluetooth/install bluetooth/g' /etc/modprobe.d/30_security-misc.conf
-sed -i 's/#[[:space:]]*install btusb/install btusb/g' /etc/modprobe.d/30_security-misc.conf
-curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/990-security-misc.conf -o /etc/sysctl.d/990-security-misc.conf
-sed -i 's/kernel\.yama\.ptrace_scope[[:space:]]*=.*/kernel.yama.ptrace_scope=3/g' /etc/sysctl.d/990-security-misc.conf
-sed -i 's/net\.ipv4\.icmp_echo_ignore_all[[:space:]]*=.*/net.ipv4.icmp_echo_ignore_all=0/g' /etc/sysctl.d/990-security-misc.conf
-sed -i 's/net\.ipv6\.icmp.echo_ignore_all[[:space:]]*=.*/net.ipv6.icmp.echo_ignore_all=0/g' /etc/sysctl.d/990-security-misc.conf
-curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_silent-kernel-printk.conf -o /etc/sysctl.d/30_silent-kernel-printk.conf
-curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_security-misc_kexec-disable.conf -o /etc/sysctl.d/30_security-misc_kexec-disable.conf
+curl https://raw.githubusercontent.com/secureblue/secureblue/live/config/files/usr/etc/modprobe.d/blacklist.conf | tee /etc/modprobe.d/server-blacklist.conf
+chmod 644 /etc/modprobe.d/server-blacklist.conf
+sed -i 's/kernel_io_uring_disable = 2/#ernel_io_uring_disable = 2/g'
+curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysctl.d/99-server.conf | tee /etc/sysctl.d/99-server.conf
+chmod 644 /etc/sysctl.d/99-server.conf
+dracut -f
 sysctl -p
 
 # Rebuild initramfs
 update-initramfs -u
 
 # Disable coredump
-curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/security/limits.d/30-disable-coredump.conf | sudo tee /etc/security/limits.d/30-disable-coredump.conf
+umask 022
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/security/limits.d/30-disable-coredump.conf | sudo tee /etc/security/limits.d/30-disable-coredump.conf
+mkdir -p /etc/systemd/coredump.conf.d
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/coredump.conf.d/disable.conf | sudo tee /etc/systemd/coredump.conf.d/disable.conf
+umask 077
 
 # Harden SSH
 sed -i 's/#GSSAPIAuthentication no/GSSAPIAuthentication no/g' /etc/ssh/sshd_config

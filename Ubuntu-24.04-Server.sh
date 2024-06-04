@@ -57,24 +57,23 @@ unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/sys
 sudo systemctl daemon-reload
 sudo systemctl restart ssh
 
-# Kernel hardening
-unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/etc/modprobe.d/30_security-misc.conf | sudo tee /etc/modprobe.d/30_security-misc.conf
-sudo sed -i 's/#[[:space:]]*install msr/install msr/g' /etc/modprobe.d/30_security-misc.conf
-sudo sed -i 's/#[[:space:]]*install bluetooth/install bluetooth/g' /etc/modprobe.d/30_security-misc.conf
-sudo sed -i 's/#[[:space:]]*install btusb/install btusb/g' /etc/modprobe.d/30_security-misc.conf
-unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/990-security-misc.conf | sudo tee /etc/sysctl.d/990-security-misc.conf
-sudo sed -i 's/kernel.yama.ptrace_scope[[:space:]]*=.*/kernel.yama.ptrace_scope=3/g' /etc/sysctl.d/990-security-misc.conf
-sudo sed -i 's/net\.ipv4\.icmp_echo_ignore_all[[:space:]]*=.*/net.ipv4.icmp_echo_ignore_all=0/g' /etc/sysctl.d/990-security-misc.conf
-sudo sed -i 's/net\.ipv6\.icmp.echo_ignore_all[[:space:]]*=.*/net.ipv6.icmp.echo_ignore_all=0/g' /etc/sysctl.d/990-security-misc.conf
-unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_silent-kernel-printk.conf | sudo tee /etc/sysctl.d/30_silent-kernel-printk.conf
-unpriv curl https://raw.githubusercontent.com/Kicksecure/security-misc/master/usr/lib/sysctl.d/30_security-misc_kexec-disable.conf | sudo tee /etc/sysctl.d/30_security-misc_kexec-disable.conf
+# Security kernel settings
+unpriv curl https://raw.githubusercontent.com/secureblue/secureblue/live/config/files/usr/etc/modprobe.d/blacklist.conf | sudo tee /etc/modprobe.d/server-blacklist.conf
+sudo chmod 644 /etc/modprobe.d/server-blacklist.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysctl.d/99-server.conf | sudo tee /etc/sysctl.d/99-server.conf
+sudo chmod 644 /etc/sysctl.d/99-server.conf
+sudo dracut -f
 sudo sysctl -p
 
 # Rebuild initramfs
 sudo update-initramfs -u
 
 # Disable coredump
+umask 022
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/security/limits.d/30-disable-coredump.conf | sudo tee /etc/security/limits.d/30-disable-coredump.conf
+mkdir -p /etc/systemd/coredump.conf.d
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/coredump.conf.d/disable.conf | sudo tee /etc/systemd/coredump.conf.d/disable.conf
+umask 077
 
 # Update GRUB config
 if [ ! -d /boot/efi/EFI/ZBM ]; then
