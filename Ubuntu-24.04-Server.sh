@@ -62,7 +62,6 @@ unpriv curl https://raw.githubusercontent.com/secureblue/secureblue/live/config/
 sudo chmod 644 /etc/modprobe.d/server-blacklist.conf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysctl.d/99-server.conf | sudo tee /etc/sysctl.d/99-server.conf
 sudo chmod 644 /etc/sysctl.d/99-server.conf
-sudo dracut -f
 sudo sysctl -p
 
 # Rebuild initramfs

@@ -61,7 +61,6 @@ fi
 sudo chmod 644 /etc/modprobe.d/workstation-blacklist.conf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysctl.d/99-workstation.conf | sudo tee /etc/sysctl.d/99-workstation.conf
 sudo chmod 644 /etc/sysctl.d/99-workstation.conf
-sudo dracut -f
 sudo sysctl -p
 
 # Rebuild initramfs

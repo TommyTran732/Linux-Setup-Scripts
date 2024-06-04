@@ -78,7 +78,6 @@ chmod 644 /etc/modprobe.d/server-blacklist.conf
 sed -i 's/kernel_io_uring_disable = 2/#ernel_io_uring_disable = 2/g'
 curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysctl.d/99-server.conf | tee /etc/sysctl.d/99-server.conf
 chmod 644 /etc/sysctl.d/99-server.conf
-dracut -f
 sysctl -p
 
 # Rebuild initramfs
