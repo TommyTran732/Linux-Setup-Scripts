@@ -46,7 +46,9 @@ sudo chmod 700 /home/*
 # Setup NTS
 sudo rm -rf /etc/chrony.conf
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony.conf
+sudp chmod 644 /etc/chrony.conf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysconfig/chronyd | sudo tee /etc/sysconfig/chronyd
+sudo chmod 544 /etc/sysconfig/chronyd
 
 sudo systemctl restart chronyd
 
@@ -57,8 +59,10 @@ sudo /usr/bin/sed -i 's/\s+nullok//g' /etc/pam.d/system-auth
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/ssh/ssh_config.d/10-custom.conf | sudo tee /etc/ssh/ssh_config.d/10-custom.conf
 sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/ssh/sshd_config.d/10-custom.conf | sudo tee /etc/ssh/sshd_config.d/10-custom.conf
+sudo chmod 644 /etc/ssh/sshd_config.d/10-custom.conf
 sudo mkdir -p /etc/systemd/system/sshd.service.d/
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/local.conf | sudo tee /etc/systemd/system/sshd.service.d/override.conf
+sudo chmod 644 /etc/systemd/system/sshd.service.d/override.conf
 sudo systemctl daemon-reload
 sudo systemctl restart sshd
 
@@ -78,17 +82,21 @@ else
 fi
 
 # Disable coredump
-umask 022
+
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/security/limits.d/30-disable-coredump.conf | sudo tee /etc/security/limits.d/30-disable-coredump.conf
+sudo chmod 644 /etc/security/limits.d/30-disable-coredump.conf
 sudo mkdir -p /etc/systemd/coredump.conf.d
+sudo chmod 755 /etc/systemd/coredump.conf.d
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/coredump.conf.d/disable.conf | sudo tee /etc/systemd/coredump.conf.d/disable.conf
-umask 077
+sudo chmod 644 /etc/systemd/coredump.conf.d/disable.conf
 
 # Setup ZRAM
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/zram-generator.conf | sudo tee /etc/systemd/zram-generator.conf
+sudo chmod 644 /etc/systemd/zram-generator.conf
 
 # Setup DNF
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dnf/dnf.conf | sudo tee /etc/dnf/dnf.conf
+sudo chmod 644 /etc/dnf/dnf.conf
 sudo sed -i 's/^metalink=.*/&\&protocol=https/g' /etc/yum.repos.d/*
 
 # Setup automatic updates
@@ -111,8 +119,10 @@ fi
 # Setup unbound
 sudo dnf install unbound -y
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Fedora-CoreOS-Ignition/main/etc/unbound/unbound.conf | sudo tee /etc/unbound/unbound.conf
+sudo chmod 644 /etc/unbound/unbound.conf
 sudo mkdir /etc/systemd/system/unbound.service.d
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Fedora-CoreOS-Ignition/main/etc/systemd/system/unbound.service.d/override.conf | sudo tee /etc/systemd/system/unbound.service.d/override.conf
+sudo chmod 644 /etc/systemd/system/unbound.service.d/override.conf
 sudo systemctl enable --now unbound
 sudo systemctl disable systemd-resolved
 
@@ -123,6 +133,7 @@ if [ "$virtualization" = 'none' ]; then
     sudo systemctl restart fwupd
     mkdir -p /etc/systemd/system/fwupd-refresh.service.d
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/system/fwupd-refresh.service.d/override.conf | sudo tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
+    sudo chmod 644 /etc/systemd/system/fwupd-refresh.service.d/override.conf
     sudo systemctl daemon-reload
     sudo systemctl enable --now fwupd-refresh.timer
 fi
@@ -160,18 +171,22 @@ sudo firewall-cmd --lockdown-on
 
 sudo mkdir -p /etc/systemd/system/NetworkManager.service.d
 unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf | sudo tee /etc/systemd/system/NetworkManager.service.d/99-brace.conf
+sudo chmod 644 /etc/systemd/system/NetworkManager.service.d/99-brace.conf
 sudo systemctl daemon-reload
 sudo systemctl restart NetworkManager
 
 # irqbalance hardening
 sudo mkdir -p /etc/systemd/system/irqbalance.service.d
 unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/irqbalance.service.d/99-brace.conf | sudo tee /etc/systemd/system/irqbalance.service.d/99-brace.conf
+sudo chmod 644 /etc/systemd/system/irqbalance.service.d/99-brace.conf
 sudo systemctl daemon-reload
 sudo systemctl restart irqbalance
 
 # Setup notices
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/issue | sudo tee /etc/issue
+sudo chmod 644 https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/issue
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/issue | sudo tee /etc/issue.net
+sudo chmod 644 /etc/issue.net
 
 # Final notes to the user
 output 'Server setup complete. To use unbound for DNS, you need to reboot.'

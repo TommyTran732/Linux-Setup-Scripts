@@ -49,8 +49,9 @@ if [ "${virtualization}" = 'parallels' ]; then
 else
     sudo rm -rf /etc/chrony.conf
     unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony.conf
+    sudo chmod 644 /etc/chrony.conf
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysconfig/chronyd | sudo tee /etc/sysconfig/chronyd
-
+    sudo chmod 644 /etc/sysconfig/chronyd
     sudo systemctl restart chronyd
 fi
 
@@ -64,8 +65,10 @@ sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 # Security kernel settings
 if [ "${virtualization}" = 'parallels' ]; then
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Kernel-Module-Blacklist/main/etc/modprobe.d/workstation-blacklist.conf | sudo tee /etc/modprobe.d/workstation-blacklist.conf
+    sudo chmod 644 /etc/modprobe.d/workstation-blacklist.conf
 else
     unpriv curl https://raw.githubusercontent.com/secureblue/secureblue/live/config/files/usr/etc/modprobe.d/blacklist.conf | sudo tee /etc/modprobe.d/workstation-blacklist.conf
+    sudo chmod 644 /etc/modprobe.d/workstation-blacklist.conf
 fi
 sudo chmod 644 /etc/modprobe.d/workstation-blacklist.conf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysctl.d/99-workstation.conf | sudo tee /etc/sysctl.d/99-workstation.conf
@@ -89,40 +92,46 @@ else
 fi
 
 # Disable coredump
-umask 022
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/security/limits.d/30-disable-coredump.conf | sudo tee /etc/security/limits.d/30-disable-coredump.conf
+sudo chmod 644 /etc/security/limits.d/30-disable-coredump.conf
 sudo mkdir -p /etc/systemd/coredump.conf.d
+sudo chmod 755 /etc/systemd/coredump.conf.d
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/coredump.conf.d/disable.conf | sudo tee /etc/systemd/coredump.conf.d/disable.conf
-umask 077
+sudo chmod 644 /etc/systemd/coredump.conf.d/disable.conf
 
 # Disable XWayland
-umask 022
 sudo mkdir -p /etc/systemd/user/org.gnome.Shell@wayland.service.d
+sudo chmod 755 /etc/systemd/user/org.gnome.Shell@wayland.service.d
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/user/org.gnome.Shell%40wayland.service.d/override.conf | sudo tee /etc/systemd/user/org.gnome.Shell@wayland.service.d/override.conf
-umask 077
+sudo chmod 644 /etc/systemd/user/org.gnome.Shell@wayland.service.d/override.conf
 
 # Setup dconf
-umask 022
-mkdir -p /etc/dconf/db/local.d/locks
-
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/locks/automount-disable | sudo tee /etc/dconf/db/local.d/locks/automount-disable
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/locks/privacy | sudo tee /etc/dconf/db/local.d/locks/privacy
-
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/adw-gtk3-dark | sudo tee /etc/dconf/db/local.d/adw-gtk3-dark
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/automount-disable | sudo tee /etc/dconf/db/local.d/automount-disable
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/button-layout | sudo tee /etc/dconf/db/local.d/button-layout
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/prefer-dark | sudo tee /etc/dconf/db/local.d/prefer-dark
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/privacy | sudo tee /etc/dconf/db/local.d/privacy
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/touchpad | sudo tee /etc/dconf/db/local.d/touchpad
+sudo chmod 644 /etc/dconf/db/local.d/
 
+mkdir -p /etc/dconf/db/local.d/locks
+sudo chmod 755 /etc/dconf/db/local.d/locks
+
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/locks/automount-disable | sudo tee /etc/dconf/db/local.d/locks/automount-disable
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/locks/privacy | sudo tee /etc/dconf/db/local.d/locks/privacy
+sudo chmod 644 /etc/dconf/db/local.d/locks/*
+
+umask 022
 sudo dconf update
 umask 077
 
 # Setup ZRAM
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/zram-generator.conf | sudo tee /etc/systemd/zram-generator.conf
+sudo chmod 644 /etc/systemd/zram-generator.conf
 
 # Setup DNF
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dnf/dnf.conf | sudo tee /etc/dnf/dnf.conf
+sudo chmod 644 /etc/dnf/dnf.conf
 sudo sed -i 's/^metalink=.*/&\&protocol=https/g' /etc/yum.repos.d/*
 
 # Remove firefox packages
@@ -188,7 +197,6 @@ flatpak update -y
 # Install Microsoft Edge if x86_64
 MACHINE_TYPE=$(uname -m)
 if [ "${MACHINE_TYPE}" == 'x86_64' ]; then
-    umask 022
     output 'x86_64 machine, installing Microsoft Edge.'
     echo '[microsoft-edge]
 name=microsoft-edge
@@ -196,13 +204,16 @@ baseurl=https://packages.microsoft.com/yumrepos/edge/
 enabled=1
 gpgcheck=1
 gpgkey=https://packages.microsoft.com/keys/microsoft.asc' | sudo tee /etc/yum.repos.d/microsoft-edge.repo
+    sudo chmod 644 /etc/yum.repos.d/microsoft-edge.repo
     sudo dnf install -y microsoft-edge-stable
     sudo mkdir -p /etc/opt/edge/policies/managed/ /etc/opt/edge/policies/recommended/
+    sudo chmod 755 /etc/opt/edge/policies/managed/ /etc/opt/edge/policies/recommended/
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/managed.json | sudo tee /etc/opt/edge/policies/managed/managed.json
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/recommended.json | sudo tee /etc/opt/edge/policies/recommended/recommended.json
+    sudo chmod 644 /etc/opt/edge/policies/managed/managed.json /etc/opt/edge/policies/recommended/recommended.json
     sudo mkdir -p /usr/local/share/applications
     sed 's/^Exec=\/usr\/bin\/microsoft-edge-stable/& --ozone-platform=wayland --start-maximized/g' /usr/share/applications/microsoft-edge.desktop | sudo tee /usr/local/share/applications/microsoft-edge.desktop
-    umask 077
+    sudo chmod 644 /usr/local/share/applications/microsoft-edge.desktop
 fi
 
 # Setup fwupd
@@ -240,13 +251,16 @@ sudo firewall-cmd --reload
 sudo firewall-cmd --lockdown-on
 
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/00-macrandomize.conf | sudo tee /etc/NetworkManager/conf.d/00-macrandomize.conf
+sudo chmod 644 /etc/NetworkManager/conf.d/00-macrandomize.conf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/01-transient-hostname.conf | sudo tee /etc/NetworkManager/conf.d/01-transient-hostname.conf
+sudo chmod 644 /etc/NetworkManager/conf.d/01-transient-hostname.conf
 sudo nmcli general reload conf
 sudo hostnamectl hostname 'localhost'
 sudo hostnamectl --transient hostname ''
 
 sudo mkdir -p /etc/systemd/system/NetworkManager.service.d
 unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf | sudo tee /etc/systemd/system/NetworkManager.service.d/99-brace.conf
+sudo chmod 644 /etc/systemd/system/NetworkManager.service.d/99-brace.conf
 sudo systemctl daemon-reload
 sudo systemctl restart NetworkManager
 
