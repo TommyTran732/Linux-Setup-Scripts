@@ -25,7 +25,6 @@ systemctl mask debug-shell.service
 
 ## Avoid phased updates
 curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/apt.conf.d/99sane-upgrades | tee /etc/apt/apt.conf.d/99sane-upgrades
-chmod 644 /etc/apt/apt.conf.d/99sane-upgrades
 
 # Setup NTS
 rm -rf /etc/chrony/chrony.conf
@@ -34,9 +33,7 @@ systemctl restart chronyd
 
 # Harden SSH
 curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/ssh/sshd_config.d/10-custom.conf | tee /etc/ssh/sshd_config.d/10-custom.conf
-chmod 644 /etc/ssh/sshd_config.d/10-custom.conf
 curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/ssh/ssh_config.d/10-custom.conf | tee /etc/ssh/ssh_config.d/10-custom.conf
-chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 mkdir -p /etc/systemd/system/ssh.service.d
 curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/local.conf | tee /etc/systemd/system/ssh.service.d/override.conf
 systemctl daemon-reload
@@ -74,21 +71,17 @@ proxmox-boot-tool refresh
 
 # Kernel hardening
 curl https://raw.githubusercontent.com/secureblue/secureblue/live/config/files/usr/etc/modprobe.d/blacklist.conf | tee /etc/modprobe.d/server-blacklist.conf
-chmod 644 /etc/modprobe.d/server-blacklist.conf
 sed -i 's/kernel_io_uring_disable = 2/#ernel_io_uring_disable = 2/g'
 curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysctl.d/99-server.conf | tee /etc/sysctl.d/99-server.conf
-chmod 644 /etc/sysctl.d/99-server.conf
 sysctl -p
 
 # Rebuild initramfs
 update-initramfs -u
 
 # Disable coredump
-umask 022
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/security/limits.d/30-disable-coredump.conf | tee /etc/security/limits.d/30-disable-coredump.conf
 mkdir -p /etc/systemd/coredump.conf.d
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/coredump.conf.d/disable.conf | tee /etc/systemd/coredump.conf.d/disable.conf
-umask 077
 
 # Harden SSH
 sed -i 's/#GSSAPIAuthentication no/GSSAPIAuthentication no/g' /etc/ssh/sshd_config
