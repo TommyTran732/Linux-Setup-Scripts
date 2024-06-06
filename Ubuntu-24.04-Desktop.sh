@@ -138,7 +138,7 @@ sudo apt full-upgrade -y
 sudo apt autoremove -y
 
 # Remove unneeded packages
-sudo apt purge -y apport baobab cups* eog gedit firefox* gnome-calculator gnome-characters* gnome-clocks gnome-font-viewer gnome-logs gnome-power-manager gnome-shell-extension-prefs gnome-system-monitor gnome-text-editor libreoffice* seahorse tcpdump whoopsie
+sudo apt purge -y apport baobab cups* eog evince* gedit firefox* gnome-calculator gnome-characters* gnome-clocks gnome-font-viewer gnome-logs gnome-power-manager gnome-shell-extension-prefs gnome-system-monitor gnome-text-editor libreoffice* seahorse tcpdump whoopsie
 sudo apt autoremove -y
 sudo snap remove firefox gnome-text-editor snap-store
 
