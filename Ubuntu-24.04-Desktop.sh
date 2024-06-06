@@ -173,7 +173,7 @@ if [ "${MACHINE_TYPE}" == 'x86_64' ] || [ -f /media/psf/RosettaLinux/rosetta ] |
     umask 022
     output 'x86_64 machine, installing Microsoft Edge.'
     unpriv curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/microsoft.gpg
-    unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/sources.list.d/microsoft-edge.list | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
+    unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/sources.list.d/microsoft-edge.sources | sudo tee /etc/apt/sources.list.d/microsoft-edge.sources
     sudo apt update
     sudo apt full-upgrade -y
     sudo apt install -y microsoft-edge-stable
