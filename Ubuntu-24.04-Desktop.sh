@@ -160,6 +160,7 @@ if [ -f /media/psf/RosettaLinux/rosetta ] || [ -f /media/rosetta/rosetta ]; then
     if [ -f /media/rosetta/rosetta ]; then
         sudo /usr/sbin/update-binfmts --install rosetta /media/rosetta/rosetta --magic "\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00" --mask "\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff" --credentials yes --preserve no --fix-binary yes
     fi
+    sed -i 's/fs.binfmt_misc.status = 0/#fs.binfmt_misc.status = 0/g' /etc/sysctl.d/99-workstation.conf
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/sources.list.d/rosetta.sources | sudo tee /etc/apt/sources.list.d/ubuntu.sources
     sudo dpkg --add-architecture amd64
     sudo apt update
