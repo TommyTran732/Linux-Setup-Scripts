@@ -45,6 +45,7 @@ sudo systemctl disable --now systemd-timesyncd
 sudo systemctl mask systemd-timesyncd
 sudo apt install -y chrony
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony/chrony.conf
+sudo chmod 644 /etc/chrony/chrony.conf
 sudo systemctl restart chronyd
 
 # Harden SSH
@@ -54,6 +55,7 @@ unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/m
 sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 sudo mkdir -p /etc/systemd/system/ssh.service.d
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/local.conf | sudo tee /etc/systemd/system/ssh.service.d/override.conf
+sudo chmod 644 /etc/systemd/system/ssh.service.d/override.conf
 sudo systemctl daemon-reload
 sudo systemctl restart ssh
 
@@ -68,11 +70,12 @@ sudo sysctl -p
 sudo update-initramfs -u
 
 # Disable coredump
-umask 022
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/security/limits.d/30-disable-coredump.conf | sudo tee /etc/security/limits.d/30-disable-coredump.conf
+sudo chmod 644 /etc/security/limits.d/30-disable-coredump.conf
 sudo mkdir -p /etc/systemd/coredump.conf.d
+sudo chmod 755 /etc/systemd/coredump.conf.d
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/coredump.conf.d/disable.conf | sudo tee /etc/systemd/coredump.conf.d/disable.conf
-umask 077
+sudo chmod 644 /etc/systemd/coredump.conf.d/disable.conf
 
 # Update GRUB config
 if [ ! -d /boot/efi/EFI/ZBM ]; then
@@ -124,6 +127,7 @@ if [ "$virtualization" = 'none' ]; then
     sudo systemctl restart fwupd
     mkdir -p /etc/systemd/system/fwupd-refresh.service.d
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/system/fwupd-refresh.service.d/override.conf | sudo tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
+    sudo chmod 644 /etc/systemd/system/fwupd-refresh.service.d/override.conf
     sudo systemctl daemon-reload
     sudo systemctl enable --now fwupd-refresh.timer
 fi
@@ -165,6 +169,8 @@ forward-zone:
   forward-addr: 2606:4700:4700::1112@853#security.cloudflare-dns.com
   forward-addr: 2606:4700:4700::1002@853#security.cloudflare-dns.com' | sudo tee /etc/unbound/unbound.conf.d/custom.conf
 
+sudo chmod 644 /etc/unbound/unbound.conf.d/custom.conf
+
 mkdir -p /etc/systemd/system/unbound.service.d
 echo $'[Service]
 CapabilityBoundingSet=CAP_NET_BIND_SERVICE CAP_SETGID CAP_SETUID CAP_SYS_CHROOT CAP_SYS_RESOURCE CAP_NET_RAW
@@ -196,6 +202,8 @@ TemporaryFileSystem=@UNBOUND_CHROOT_DIR@/run:ro
 BindReadOnlyPaths=-/run/systemd/notify:@UNBOUND_CHROOT_DIR@/run/systemd/notify
 BindReadOnlyPaths=-/dev/urandom:@UNBOUND_CHROOT_DIR@/dev/urandom
 BindPaths=-/dev/log:@UNBOUND_CHROOT_DIR@/dev/log' | sudo tee /etc/systemd/system/unbound.service.d/override.conf
+
+sudo chmod 644 /etc/systemd/system/unbound.service.d/override.conf
 
 sudo systemctl daemon-reload
 sudo systemctl restart unbound

@@ -45,6 +45,7 @@ sudo systemctl mask systemd-timesyncd
 if [ "${virtualization}" = "parallels" ]; then
     sudo apt install -y chrony
     unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony/chrony.conf
+    sudo chmod 644 /etc/chrony/chrony.conf
     sudo systemctl restart chronyd
 fi
 
@@ -55,8 +56,10 @@ sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 # Security kernel settings
 if [ "${virtualization}" = 'parallels' ]; then
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Kernel-Module-Blacklist/main/etc/modprobe.d/workstation-blacklist.conf | sudo tee /etc/modprobe.d/workstation-blacklist.conf
+    sudo chmod 644 /etc/modprobe.d/workstation-blacklist.conf
 else
     unpriv curl https://raw.githubusercontent.com/secureblue/secureblue/live/config/files/usr/etc/modprobe.d/blacklist.conf | sudo tee /etc/modprobe.d/workstation-blacklist.conf
+    sudo chmod 644 /etc/modprobe.d/workstation-blacklist.conf
 fi
 sudo chmod 644 /etc/modprobe.d/workstation-blacklist.conf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysctl.d/99-workstation.conf | sudo tee /etc/sysctl.d/99-workstation.conf
@@ -67,11 +70,12 @@ sudo sysctl -p
 sudo update-initramfs -u
 
 # Disable coredump
-umask 022
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/security/limits.d/30-disable-coredump.conf | sudo tee /etc/security/limits.d/30-disable-coredump.conf
+sudo chmod 644 /etc/security/limits.d/30-disable-coredump.conf
 sudo mkdir -p /etc/systemd/coredump.conf.d
+sudo chmod 755 /etc/systemd/coredump.conf.d
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/coredump.conf.d/disable.conf | sudo tee /etc/systemd/coredump.conf.d/disable.conf
-umask 077
+sudo chmod 644 /etc/systemd/coredump.conf.d/disable.conf
 
 # Update GRUB config
 sed -i 's/splash/splash mitigations=auto,nosmt spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on tsx=off kvm.nx_huge_pages=force nosmt=force l1d_flush=on spec_rstack_overflow=safe-ret gather_data_sampling=force reg_file_data_sampling=on random.trust_bootloader=off random.trust_cpu=off intel_iommu=on amd_iommu=force_isolation efi=disable_early_pci_dma iommu=force iommu.passthrough=0 iommu.strict=1 slab_nomerge init_on_alloc=1 init_on_free=1 pti=on vsyscall=none ia32_emulation=0 page_alloc.shuffle=1 randomize_kstack_offset=on debugfs=off/g' /etc/default/grub
@@ -79,23 +83,18 @@ sudo update-grub
 
 # Systemd Hardening
 sudo mkdir -p /etc/systemd/system/irqbalance.service.d
+sudo chmod 755 /etc/systemd/system/irqbalance.service.d
 unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/irqbalance.service.d/99-brace.conf | sudo tee /etc/systemd/system/irqbalance.service.d/99-brace.conf
+sudo chmod 644 /etc/systemd/system/irqbalance.service.d/99-brace.conf
 
 # Disable XWayland
-umask 022
 sudo mkdir -p /etc/systemd/user/org.gnome.Shell@wayland.service.d
+sudo chmod 755 /etc/systemd/user/org.gnome.Shell@wayland.service.d
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/user/org.gnome.Shell%40wayland.service.d/override.conf | sudo tee /etc/systemd/user/org.gnome.Shell@wayland.service.d/override.conf
-umask 077
+sudo chmod 644 /etc/systemd/user/org.gnome.Shell@wayland.service.d/override.conf
 
 # Setup dconf
 # Does not work - need to investigate
-
-umask 022
-
-sudo mkdir -p /etc/dconf/db/local.d/locks
-
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/locks/apport-disable | sudo tee /etc/dconf/db/local.d/locks/apport-disable
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/locks/automount-disable | sudo tee /etc/dconf/db/local.d/locks/automount-disable
 
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/apport-disable | sudo tee /etc/dconf/db/local.d/apport-disable
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/automount-disable | sudo tee /etc/dconf/db/local.d/automount-disable
@@ -103,7 +102,16 @@ unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/m
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/prefer-dark | sudo tee /etc/dconf/db/local.d/prefer-dark
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/privacy | sudo tee /etc/dconf/db/local.d/privacy
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/touchpad | sudo tee /etc/dconf/db/local.d/touchpad
+sudo chmod 644 /etc/dconf/db/local.d/*
 
+sudo mkdir -p /etc/dconf/db/local.d/locks
+chmod 755 /etc/dconf/db/local.d/locks
+
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/locks/apport-disable | sudo tee /etc/dconf/db/local.d/locks/apport-disable
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/locks/automount-disable | sudo tee /etc/dconf/db/local.d/locks/automount-disable
+sudo chmod 644 /etc/dconf/db/local.d/locks/*
+
+umask 022
 sudo dconf update
 umask 077
 
@@ -156,40 +164,42 @@ flatpak update -y
 
 # Rosetta setup
 if [ -f /media/psf/RosettaLinux/rosetta ] || [ -f /media/rosetta/rosetta ]; then
-    umask 022
     if [ -f /media/rosetta/rosetta ]; then
         sudo /usr/sbin/update-binfmts --install rosetta /media/rosetta/rosetta --magic "\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00" --mask "\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff" --credentials yes --preserve no --fix-binary yes
     fi
     sed -i 's/fs.binfmt_misc.status = 0/#fs.binfmt_misc.status = 0/g' /etc/sysctl.d/99-workstation.conf
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/sources.list.d/rosetta.sources | sudo tee /etc/apt/sources.list.d/ubuntu.sources
+    sudo chmod 644 /etc/apt/sources.list.d/ubuntu.sources
     sudo dpkg --add-architecture amd64
     sudo apt update
     sudo apt full-upgrade -y
-    umask 077
 fi
 
 # Install Microsoft Edge if x86_64
 MACHINE_TYPE=$(uname -m)
 if [ "${MACHINE_TYPE}" == 'x86_64' ] || [ -f /media/psf/RosettaLinux/rosetta ] || [ -f /media/rosetta/rosetta ]; then
-    umask 022
     output 'x86_64 machine, installing Microsoft Edge.'
     unpriv curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/microsoft.gpg
     chmod 644  /usr/share/keyrings/microsoft.gpg
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/sources.list.d/microsoft-edge.sources | sudo tee /etc/apt/sources.list.d/microsoft-edge.sources
+    sudo chmod 644 /etc/apt/sources.list.d/microsoft-edge.sources
     sudo apt update
     sudo apt full-upgrade -y
     sudo apt install -y microsoft-edge-stable
     sudo mkdir -p /etc/opt/edge/policies/managed/ /etc/opt/edge/policies/recommended/
+    sudo chmod 755  /etc/opt/edge/policies/managed/ /etc/opt/edge/policies/recommended/
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/managed.json | sudo tee /etc/opt/edge/policies/managed/managed.json
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/recommended.json | sudo tee /etc/opt/edge/policies/recommended/recommended.json
+    sudo chmod 644 /etc/opt/edge/policies/managed/managed.json /etc/opt/edge/policies/recommended/recommended.json
     if [ -f /media/psf/RosettaLinux/rosetta ] || [ -f /media/rosetta/rosetta ]; then
         #Edge does not seem to work on Wayland with Rosetta - dunno why yet. Probably missing libraries?
         sudo rm -rf /etc/systemd/user/org.gnome.Shell@wayland.service.d
     else
         sudo mkdir -p /usr/local/share/applications
+        sudo chmod 755 /usr/local/share/applications
         sed 's/^Exec=\/usr\/bin\/microsoft-edge-stable/& --ozone-platform=wayland --start-maximized/g' /usr/share/applications/microsoft-edge.desktop | sudo tee /usr/local/share/applications/microsoft-edge.desktop
+        chmod 644 /usr/local/share/applications/microsoft-edge.desktop
     fi
-    umask 077
 fi
 
 # Enable fstrim.timer
@@ -219,12 +229,15 @@ sudo snap install ufw
 sudo ufw enable
 
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/00-macrandomize.conf | sudo tee /etc/NetworkManager/conf.d/00-macrandomize.conf
+sudo chmod 644 /etc/NetworkManager/conf.d/00-macrandomize.conf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/01-transient-hostname.conf | sudo tee /etc/NetworkManager/conf.d/01-transient-hostname.conf
+sudo chmod 644 /etc/NetworkManager/conf.d/01-transient-hostname.conf
 sudo nmcli general reload conf
 sudo hostnamectl hostname 'localhost'
 sudo hostnamectl --transient hostname ''
 
 sudo mkdir -p /etc/systemd/system/NetworkManager.service.d
 unpriv curl https://gitlab.com/divested/brace/-/raw/master/brace/usr/lib/systemd/system/NetworkManager.service.d/99-brace.conf | sudo tee /etc/systemd/system/NetworkManager.service.d/99-brace.conf
+sudo chmod 644 /etc/systemd/system/NetworkManager.service.d/99-brace.conf
 sudo systemctl daemon-reload
 sudo systemctl restart NetworkManager
