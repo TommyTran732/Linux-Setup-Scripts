@@ -110,6 +110,8 @@ sudo dnf remove -y cockpit*
 # Install hardened_malloc
 sudo dnf copr enable secureblue/hardened_malloc -y
 sudo dnf install -y hardened_malloc
+echo 'libhardened_malloc.so' | sudo tee /etc/ld.so.preload
+chmod 644 /etc/ld.so.preload
 
 # Install appropriate virtualization drivers
 if [ "$virtualization" = 'kvm' ]; then
