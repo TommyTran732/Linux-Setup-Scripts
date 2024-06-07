@@ -177,7 +177,7 @@ sudo dnf -y upgrade
 sudo dnf copr enable secureblue/hardened_malloc -y
 sudo dnf install -y hardened_malloc
 echo 'libhardened_malloc.so' | sudo tee /etc/ld.so.preload
-chmod 644 /etc/ld.so.preload
+sudo chmod 644 /etc/ld.so.preload
 
 # Install packages that I use
 sudo dnf -y install adw-gtk3-theme gnome-console gnome-shell-extension-appindicator gnome-shell-extension-blur-my-shell gnome-shell-extension-background-logo
