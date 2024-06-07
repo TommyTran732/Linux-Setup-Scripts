@@ -156,7 +156,7 @@ else
 fi
 
 
-# Setup real-ucode and hardened_malloc
+# Setup real-ucode
 MACHINE_TYPE=$(uname -m)
 if [ "$virtualization" = 'none' ] || [ "${MACHINE_TYPE}" == 'x86_64' ]; then
     sudo dnf install -y 'https://divested.dev/rpm/fedora/divested-release-20231210-2.noarch.rpm'

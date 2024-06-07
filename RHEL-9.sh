@@ -88,6 +88,12 @@ sudo systemctl enable --now dnf-automatic.timer
 # Remove unnecessary packages
 sudo dnf remove -y cockpit*
 
+# Install hardened_malloc
+sudo dnf copr enable secureblue/hardened_malloc -y
+sudo dnf install -y hardened_malloc
+echo 'libhardened_malloc.so' | sudo tee /etc/ld.so.preload
+sudo chmod 644 /etc/ld.so.preload
+
 # Install appropriate virtualization drivers
 if [ "$virtualization" = 'kvm' ]; then
     sudo dnf install -y qemu-guest-agent
@@ -185,26 +191,14 @@ else
     sudo tuned-adm profile virtual-guest
 fi
 
-# Setup real-ucode and hardened_malloc
+# Setup real-ucode
+MACHINE_TYPE=$(uname -m)
 if [ "$virtualization" = 'none' ] || [ "${MACHINE_TYPE}" == 'x86_64' ]; then
-  sudo dnf install 'https://divested.dev/rpm/fedora/divested-release-20231210-2.noarch.rpm' -y
-  sudo sed -i 's/^metalink=.*/&?protocol=https/g' /etc/yum.repos.d/divested-release.repo
-  if [ "${MACHINE_TYPE}" != 'x86_64' ]; then
+    sudo dnf install -y 'https://divested.dev/rpm/fedora/divested-release-20231210-2.noarch.rpm'
+    sudo sed -i 's/^metalink=.*/&?protocol=https/g' /etc/yum.repos.d/divested-release.repo
     sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware
-    sudo dnf install real-ucode -y
+    sudo dnf install -y real-ucode
     sudo dracut -f
-  elif [ "$virtualization" != 'none' ]; then
-    sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,hardened_malloc
-    sudo dnf install hardened_malloc -y
-  else
-    sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware,hardened_malloc
-    sudo dnf install real-ucode hardened_malloc -y
-    echo 'libhardened_malloc.so' | sudo tee /etc/ld.so.preload
-    sudo dracut -f
-  fi
-elif [ "${MACHINE_TYPE}" == 'aarch64' ]; then
-  sudo dnf copr enable secureblue/hardened_malloc -y
-  sudo dnf install hardened_malloc -y
 fi
 
 # Setup networking
