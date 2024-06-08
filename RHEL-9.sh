@@ -130,7 +130,7 @@ forward-zone:
 
 sudo chmod 644 /etc/unbound/unbound.conf
 
-mkdir -p /etc/systemd/system/unbound.service.d
+sudo mkdir -p /etc/systemd/system/unbound.service.d
 echo $'[Service]
 MemoryDenyWriteExecute=true
 PrivateDevices=true
