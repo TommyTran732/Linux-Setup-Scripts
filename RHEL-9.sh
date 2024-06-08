@@ -155,9 +155,9 @@ sudo chmod 644 /etc/systemd/system/unbound.service.d/override.conf
 sudo systemctl enable --now unbound
 
 # Setup yara
-sudo dnf install -y yara
-sudo insights-client --collector malware-detection
-sudo sed -i 's/test_scan: true/test_scan: false/' /etc/insights-client/malware-detection-config.yml
+#sudo dnf install -y yara
+#sudo insights-client --collector malware-detection
+#sudo sed -i 's/test_scan: true/test_scan: false/' /etc/insights-client/malware-detection-config.yml
 
 # Setup fwupd
 if [ "$virtualization" = 'none' ]; then
