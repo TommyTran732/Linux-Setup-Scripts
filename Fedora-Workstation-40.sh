@@ -239,7 +239,7 @@ else
 fi
 
 # Setup real-ucode
-if [ "$virtualization" = 'none' ] || [ "${MACHINE_TYPE}" == 'x86_64' ]; then
+if [ "$virtualization" = 'none' ] && [ "${MACHINE_TYPE}" == 'x86_64' ]; then
     sudo dnf install -y 'https://divested.dev/rpm/fedora/divested-release-20231210-2.noarch.rpm'
     sudo sed -i 's/^metalink=.*/&?protocol=https/g' /etc/yum.repos.d/divested-release.repo
     sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware
