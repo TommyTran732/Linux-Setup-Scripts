@@ -102,6 +102,7 @@ echo 'server:
   auto-trust-anchor-file: "/var/lib/unbound/root.key"
   trust-anchor-signaling: yes
   root-key-sentinel: yes
+  tls-cert-bundle: "/etc/ssl/cert.pem"
   tls-ciphers: "PROFILE=SYSTEM"
   hide-http-user-agent: yes
   hide-identity: yes
