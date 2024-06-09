@@ -128,6 +128,11 @@ sudo chmod 644 /etc/systemd/system/unbound.service.d/override.conf
 sudo systemctl enable --now unbound
 sudo systemctl disable systemd-resolved
 
+### Differentiating bare metal and virtual installs
+
+# Enable auto TRIM
+sudo systemctl enable fstrim.timer
+
 # Setup fwupd
 if [ "$virtualization" = 'none' ]; then
     sudo dnf install -y fwupd
@@ -140,11 +145,6 @@ if [ "$virtualization" = 'none' ]; then
     sudo systemctl enable --now fwupd-refresh.timer
 fi
 
-# Enable auto TRIM
-sudo systemctl enable fstrim.timer
-
-### Differentiating bare metal and virtual installs
-
 # Setup tuned
 sudo dnf install -y tuned
 sudo systemctl enable --now tuned
@@ -153,17 +153,6 @@ if [ "$virtualization" = 'none' ]; then
     sudo tuned-adm profile latency-performance
 else
     sudo tuned-adm profile virtual-guest
-fi
-
-
-# Setup real-ucode
-MACHINE_TYPE=$(uname -m)
-if [ "$virtualization" = 'none' ] && [ "${MACHINE_TYPE}" == 'x86_64' ]; then
-    sudo dnf install -y 'https://divested.dev/rpm/fedora/divested-release-20231210-2.noarch.rpm'
-    sudo sed -i 's/^metalink=.*/&?protocol=https/g' /etc/yum.repos.d/divested-release.repo
-    sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware
-    sudo dnf install -y real-ucode
-    sudo dracut -f
 fi
 
 # Setup networking

@@ -219,14 +219,14 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc' | sudo tee /etc/yum.re
     sudo chmod 644 /usr/local/share/applications/microsoft-edge.desktop
 fi
 
-# Setup fwupd
-echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
-sudo systemctl restart fwupd
-
 # Enable auto TRIM
 sudo systemctl enable fstrim.timer
 
 ### Differentiating bare metal and virtual installs
+
+# Setup fwupd
+echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
+sudo systemctl restart fwupd
 
 # Setup tuned
 if [ "$virtualization" = 'none' ]; then
@@ -236,15 +236,6 @@ else
     sudo dnf install -y tuned
     sudo systemctl enable --now tuned
     sudo tuned-adm profile virtual-guest
-fi
-
-# Setup real-ucode
-if [ "$virtualization" = 'none' ] && [ "${MACHINE_TYPE}" == 'x86_64' ]; then
-    sudo dnf install -y 'https://divested.dev/rpm/fedora/divested-release-20231210-2.noarch.rpm'
-    sudo sed -i 's/^metalink=.*/&?protocol=https/g' /etc/yum.repos.d/divested-release.repo
-    sudo dnf config-manager --save --setopt=divested.includepkgs=divested-release,real-ucode,microcode_ctl,amd-ucode-firmware
-    sudo dnf install -y real-ucode
-    sudo dracut -f
 fi
 
 # Setup networking
