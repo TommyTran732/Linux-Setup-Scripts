@@ -134,7 +134,11 @@ fi
 
 # Setup unbound
 
-sudo apt install -y unbound
+sudo apt install -y unbound unbound-anchor
+sudo mkdir -p /usr/share/dns
+sudo chmod 755 /usr/share/dns
+sudo unbound-anchor
+sudo chmod 644 /usr/share/dns/root.key
 
 echo 'server:
   trust-anchor-signaling: yes
@@ -170,6 +174,8 @@ forward-zone:
   forward-addr: 2606:4700:4700::1002@853#security.cloudflare-dns.com' | sudo tee /etc/unbound/unbound.conf.d/custom.conf
 
 sudo chmod 644 /etc/unbound/unbound.conf.d/custom.conf
+
+sudo sed -i 's#/var/lib/unbound#/usr/share/dns#g' /etc/unbound/unbound.conf.d/root-auto-trust-anchor-file.conf
 
 mkdir -p /etc/systemd/system/unbound.service.d
 echo $'[Service]
