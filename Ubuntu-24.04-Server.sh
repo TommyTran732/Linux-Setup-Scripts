@@ -164,10 +164,11 @@ echo 'server:
   prefetch: yes
   prefetch-key: yes
 
-  ip-transparent: yes
-  interface: 127.0.0.1
-  interface: 242.242.0.1
-  access-control: 242.242.0.0/16 allow
+#  ip-transparent: yes
+#  interface: 127.0.0.1
+#  interface: ::1
+#  interface: 242.242.0.1
+#  access-control: 242.242.0.0/16 allow
 
 forward-zone:
   name: "."

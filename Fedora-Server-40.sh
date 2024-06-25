@@ -121,6 +121,11 @@ fi
 # Setup unbound
 sudo dnf install unbound -y
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Fedora-CoreOS-Ignition/main/etc/unbound/unbound.conf | sudo tee /etc/unbound/unbound.conf
+sudo sed -i 's;  ip-transparent: yes;#  ip-transparent: yes;g' /etc/unbound/unbound.conf
+sudo sed -i 's;  interface: 127.0.0.1;#  interface: 127.0.0.1;g' /etc/unbound/unbound.conf
+sudo sed -i 's;  interface: ::1;#  interface: ::1;g' /etc/unbound/unbound.conf
+sudo sed -i 's;  interface: 242.242.0.1;#  interface: 242.242.0.1;g' /etc/unbound/unbound.conf
+sudo sed -i 's;  access-control: 242.242.0.0/16 allow;#  access-control: 242.242.0.0/16 allow;g' /etc/unbound/unbound.conf
 sudo chmod 644 /etc/unbound/unbound.conf
 sudo mkdir /etc/systemd/system/unbound.service.d
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Fedora-CoreOS-Ignition/main/etc/systemd/system/unbound.service.d/override.conf | sudo tee /etc/systemd/system/unbound.service.d/override.conf
