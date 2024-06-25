@@ -137,6 +137,7 @@ fi
 sudo apt install -y unbound unbound-anchor
 sudo mkdir -p /usr/share/dns
 sudo chmod 755 /usr/share/dns
+sudo chown unbound:unbound /usr/share/dns
 sudo unbound-anchor
 sudo chmod 644 /usr/share/dns/root.key
 
