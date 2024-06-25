@@ -132,94 +132,87 @@ if [ "$virtualization" = 'none' ]; then
     sudo systemctl enable --now fwupd-refresh.timer
 fi
 
-# # Setup unbound
+# Setup unbound
 
-# sudo apt install -y unbound unbound-anchor
-# sudo mkdir -p /usr/share/dns
-# sudo chmod 755 /usr/share/dns
-# sudo chown unbound:unbound /usr/share/dns
-# sudo unbound-anchor
-# sudo chmod 644 /usr/share/dns/root.key
+sudo apt install -y unbound dns-root-data
 
-# echo 'server:
-#   trust-anchor-signaling: yes
-#   root-key-sentinel: yes
-#   tls-cert-bundle: /etc/ssl/certs/ca-certificates.crt
+echo 'server:
+  trust-anchor-signaling: yes
+  root-key-sentinel: yes
+  tls-cert-bundle: /etc/ssl/certs/ca-certificates.crt
 
-#   hide-identity: yes
-#   hide-trustanchor: yes
-#   hide-version: yes
-#   deny-any: yes
-#   harden-algo-downgrade: yes
-#   harden-large-queries: yes
-#   harden-referral-path: yes
-#   ignore-cd-flag: yes
-#   max-udp-size: 3072
-#   module-config: "validator iterator"
-#   qname-minimisation-strict: yes
-#   unwanted-reply-threshold: 10000000
-#   use-caps-for-id: yes
+  hide-identity: yes
+  hide-trustanchor: yes
+  hide-version: yes
+  deny-any: yes
+  harden-algo-downgrade: yes
+  harden-large-queries: yes
+  harden-referral-path: yes
+  ignore-cd-flag: yes
+  max-udp-size: 3072
+  module-config: "validator iterator"
+  qname-minimisation-strict: yes
+  unwanted-reply-threshold: 10000000
+  use-caps-for-id: yes
 
-#   outgoing-port-permit: 1024-65535
+  outgoing-port-permit: 1024-65535
 
-#   prefetch: yes
-#   prefetch-key: yes
+  prefetch: yes
+  prefetch-key: yes
 
-# #  ip-transparent: yes
-# #  interface: 127.0.0.1
-# #  interface: ::1
-# #  interface: 242.242.0.1
-# #  access-control: 242.242.0.0/16 allow
+#  ip-transparent: yes
+#  interface: 127.0.0.1
+#  interface: ::1
+#  interface: 242.242.0.1
+#  access-control: 242.242.0.0/16 allow
 
-# forward-zone:
-#   name: "."
-#   forward-tls-upstream: yes
-#   forward-addr: 1.1.1.2@853#security.cloudflare-dns.com
-#   forward-addr: 1.0.0.2@853#security.cloudflare-dns.com
-#   forward-addr: 2606:4700:4700::1112@853#security.cloudflare-dns.com
-#   forward-addr: 2606:4700:4700::1002@853#security.cloudflare-dns.com' | sudo tee /etc/unbound/unbound.conf.d/custom.conf
+forward-zone:
+  name: "."
+  forward-tls-upstream: yes
+  forward-addr: 1.1.1.2@853#security.cloudflare-dns.com
+  forward-addr: 1.0.0.2@853#security.cloudflare-dns.com
+  forward-addr: 2606:4700:4700::1112@853#security.cloudflare-dns.com
+  forward-addr: 2606:4700:4700::1002@853#security.cloudflare-dns.com' | sudo tee /etc/unbound/unbound.conf.d/custom.conf
 
-# sudo chmod 644 /etc/unbound/unbound.conf.d/custom.conf
+sudo chmod 644 /etc/unbound/unbound.conf.d/custom.conf
 
-# sudo sed -i 's#/var/lib/unbound#/usr/share/dns#g' /etc/unbound/unbound.conf.d/root-auto-trust-anchor-file.conf
+mkdir -p /etc/systemd/system/unbound.service.d
+echo $'[Service]
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE CAP_SETGID CAP_SETUID CAP_SYS_CHROOT CAP_SYS_RESOURCE CAP_NET_RAW
+MemoryDenyWriteExecute=true
+NoNewPrivileges=true
+PrivateDevices=true
+PrivateTmp=true
+ProtectHome=true
+ProtectClock=true
+ProtectControlGroups=true
+ProtectKernelLogs=true
+ProtectKernelModules=true
+# This breaks using socket options like \'so-rcvbuf\'. Explicitly disable for visibility.
+ProtectKernelTunables=false
+ProtectProc=invisible
+RestrictAddressFamilies=AF_INET AF_INET6 AF_NETLINK AF_UNIX
+RestrictRealtime=true
+SystemCallArchitectures=native
+SystemCallFilter=~@clock @cpu-emulation @debug @keyring @module mount @obsolete @resources
+RestrictNamespaces=yes
+LockPersonality=yes
+RestrictSUIDSGID=yes
+ReadWritePaths=@UNBOUND_RUN_DIR@ @UNBOUND_CHROOT_DIR@
 
-# mkdir -p /etc/systemd/system/unbound.service.d
-# echo $'[Service]
-# CapabilityBoundingSet=CAP_NET_BIND_SERVICE CAP_SETGID CAP_SETUID CAP_SYS_CHROOT CAP_SYS_RESOURCE CAP_NET_RAW
-# MemoryDenyWriteExecute=true
-# NoNewPrivileges=true
-# PrivateDevices=true
-# PrivateTmp=true
-# ProtectHome=true
-# ProtectClock=true
-# ProtectControlGroups=true
-# ProtectKernelLogs=true
-# ProtectKernelModules=true
-# # This breaks using socket options like \'so-rcvbuf\'. Explicitly disable for visibility.
-# ProtectKernelTunables=false
-# ProtectProc=invisible
-# RestrictAddressFamilies=AF_INET AF_INET6 AF_NETLINK AF_UNIX
-# RestrictRealtime=true
-# SystemCallArchitectures=native
-# SystemCallFilter=~@clock @cpu-emulation @debug @keyring @module mount @obsolete @resources
-# RestrictNamespaces=yes
-# LockPersonality=yes
-# RestrictSUIDSGID=yes
-# ReadWritePaths=@UNBOUND_RUN_DIR@ @UNBOUND_CHROOT_DIR@
+# Below rules are needed when chroot is enabled (usually it\'s enabled by default).
+# If chroot is disabled like chroot: "" then they may be safely removed.
+TemporaryFileSystem=@UNBOUND_CHROOT_DIR@/dev:ro
+TemporaryFileSystem=@UNBOUND_CHROOT_DIR@/run:ro
+BindReadOnlyPaths=-/run/systemd/notify:@UNBOUND_CHROOT_DIR@/run/systemd/notify
+BindReadOnlyPaths=-/dev/urandom:@UNBOUND_CHROOT_DIR@/dev/urandom
+BindPaths=-/dev/log:@UNBOUND_CHROOT_DIR@/dev/log' | sudo tee /etc/systemd/system/unbound.service.d/override.conf
 
-# # Below rules are needed when chroot is enabled (usually it\'s enabled by default).
-# # If chroot is disabled like chroot: "" then they may be safely removed.
-# TemporaryFileSystem=@UNBOUND_CHROOT_DIR@/dev:ro
-# TemporaryFileSystem=@UNBOUND_CHROOT_DIR@/run:ro
-# BindReadOnlyPaths=-/run/systemd/notify:@UNBOUND_CHROOT_DIR@/run/systemd/notify
-# BindReadOnlyPaths=-/dev/urandom:@UNBOUND_CHROOT_DIR@/dev/urandom
-# BindPaths=-/dev/log:@UNBOUND_CHROOT_DIR@/dev/log' | sudo tee /etc/systemd/system/unbound.service.d/override.conf
+sudo chmod 644 /etc/systemd/system/unbound.service.d/override.conf
 
-# sudo chmod 644 /etc/systemd/system/unbound.service.d/override.conf
-
-# sudo systemctl daemon-reload
-# sudo systemctl restart unbound
-# sudo systemctl disable systemd-resolved
+sudo systemctl daemon-reload
+sudo systemctl restart unbound
+sudo systemctl disable systemd-resolved
 
 # Setup networking
 
