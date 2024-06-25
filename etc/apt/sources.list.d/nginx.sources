@@ -1,0 +1,5 @@
+Types: deb
+URIs: http://nginx.org/packages/mainline/ubuntu
+Suites: noble
+Components: nginx
+Signed-By: /usr/share/keyrings/nginx-archive-keyring.gpg
