@@ -1,0 +1,6 @@
+Types: deb
+Suites: stable
+URIs: https://packages.microsoft.com/repos/code
+Components: main
+Signed-By: /usr/share/keyrings/microsoft.gpg
+Architectures: amd64 arm64 armhf
