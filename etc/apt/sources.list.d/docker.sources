@@ -3,4 +3,3 @@ Suites: noble
 URIs: https://download.docker.com/linux/ubuntu
 Components: stable
 Signed-By: /usr/share/keyrings/docker.asc
-Architectures: amd64 arm64
