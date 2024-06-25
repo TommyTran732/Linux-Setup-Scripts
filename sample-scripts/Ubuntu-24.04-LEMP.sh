@@ -54,3 +54,59 @@ sudo apt install -y nginx mariadb-server mariadb-client php8.3 php8.3-cli php8.3
 # Install certbot
 sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
+
+# Secure MariaDB
+output "Running mariadb_secure_installation. You should answer yes to everything."
+mariadb_secure_installation
+
+# Port NGINX configs from https://github.com/TommyTran732/NGINX-Configs
+
+## Setup webroot for NGINX
+sudo mkdir -p /srv/nginx
+sudo mkdir -p /srv/nginx/.well-known/acme-challenge
+
+## NGINX hardening
+sudo mkdir -p /etc/systemd/system/nginx.service.d
+unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/nginx.service.d/local.conf | sudo tee /etc/systemd/system/nginx.service.d/override.conf
+sudo systemctl daemon-reload
+
+## Setup certbot-ocsp-fetcher
+unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/certbot-ocsp-fetcher | sudo tee /usr/local/bin/certbot-ocsp-fetcher
+sudo mkdir -p /var/cache/certbot-ocsp-fetcher/
+
+## Setup nginx-create-session-ticket-keys
+unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/nginx-create-session-ticket-keys | sudo tee /usr/local/bin/nginx-create-session-ticket-keys
+
+## Setup nginx-rotate-session-ticket-keys
+unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/nginx-rotate-session-ticket-keys | sudo tee /usr/local/bin/nginx-rotate-session-ticket-keys
+
+## Download the units
+unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/certbot-ocsp-fetcher.service | sudo tee /etc/systemd/system/certbot-ocsp-fetcher.service
+unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/certbot-ocsp-fetcher.timer | sudo tee /etc/systemd/system/certbot-ocsp-fetcher.timer
+unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/nginx-create-session-ticket-keys.service | sudo tee /etc/systemd/system/nginx-create-session-ticket-keys.service
+unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/nginx-rotate-session-ticket-keys.service | sudo tee /etc/systemd/system/nginx-rotate-session-ticket-keys.service
+unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/nginx-rotate-session-ticket-keys.timer | sudo tee /etc/systemd/system/nginx-rotate-session-ticket-keys.timer
+
+## Systemd Hardening
+sudo mkdir -p /etc/systemd/system/nginx.service.d
+unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/systemd/system/nginx.service.d/override.conf | sudo tee /etc/systemd/system/nginx.service.d/override.conf
+sudo systemctl daemon-reload
+
+## Enable the units
+sudo systemctl enable certbot-ocsp-fetcher.timer
+sudo systemctl enable --now nginx-create-session-ticket-keys.service
+sudo systemctl enable --now nginx-rotate-session-ticket-keys.timer
+
+## Download NGINX configs
+
+unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/conf.d/http2.conf | sudo tee /etc/nginx/conf.d/http2.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/conf.d/sites_default.conf | sudo tee /etc/nginx/conf.d/sites_default.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/conf.d/tls.conf | sudo tee /etc/nginx/conf.d/tls.conf
+
+sudo mkdir -p /etc/nginx/snippets
+unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/snippets/tls.conf | sudo tee /etc/nginx/snippets/tls.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/snippets/proxy.conf | sudo tee /etc/nginx/snippets/proxy.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/snippets/quic.conf | sudo tee /etc/nginx/snippets/quic.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/snippets/security.conf | sudo tee /etc/nginx/snippets/security.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/snippets/universal_paths.conf | sudo tee /etc/nginx/snippets/universal_paths.conf
+
