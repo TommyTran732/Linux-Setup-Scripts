@@ -61,6 +61,8 @@ mariadb_secure_installation
 
 # Port NGINX configs from https://github.com/TommyTran732/NGINX-Configs
 
+sudo rm -rf /etc/nginx/conf.d/default.conf
+
 ## Setup webroot for NGINX
 sudo mkdir -p /srv/nginx
 sudo mkdir -p /srv/nginx/.well-known/acme-challenge
@@ -101,6 +103,8 @@ sudo systemctl enable --now nginx-rotate-session-ticket-keys.timer
 
 unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/conf.d/http2.conf | sudo tee /etc/nginx/conf.d/http2.conf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/conf.d/sites_default.conf | sudo tee /etc/nginx/conf.d/sites_default.conf
+sudo sed -i 's/ipv4_1://g' /etc/nginx/conf.d/sites_default.conf
+sudo sed -i 's/ipv6_1/::/g' /etc/nginx/conf.d/sites_default.conf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/conf.d/tls.conf | sudo tee /etc/nginx/conf.d/tls.conf
 
 sudo mkdir -p /etc/nginx/snippets
