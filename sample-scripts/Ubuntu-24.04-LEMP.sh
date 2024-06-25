@@ -30,21 +30,23 @@ sudo ufw allow 443
 
 # Add mainline NGINX repo
 # This is extremely important as Ubuntu keeps shipping outdated NGINX
-sudo curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor \
-    | sudo tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
-
+sudo curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor | sudo tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
 sudo chmod 644 /usr/share/keyrings/nginx-archive-keyring.gpg
-# We use the new repo format here
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Ubuntu-LEMP-Stack-Demo/main/etc/apt/sources.list.d/nginx.sources | sudo tee /etc/apt/sources.list.d/nginx.sources
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/sources.list.d/nginx.sources | sudo tee /etc/apt/sources.list.d/nginx.sources
 chmod 644 /etc/apt/sources.list.d/nginx.sources
 
 # Add the PHP PPA (Ubuntu repos do not have the latest version, and do not handle pinning properly)
 sudo add-apt-repository -y ppa:ondrej/php
 
+# Add upstream MariaDB repo
+curl https://supplychain.mariadb.com/mariadb-keyring-2019.gpg | sudo tee /usr/share/keyrings/mariadb-keyring-2019.gpg
+chmod 644 /usr/share/keyrings/mariadb-keyring-2019.gpg
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/sources.list.d/mariadb.sources | sudo tee /etc/apt/sources.list.d/mariadb.sources
+chmod 644 /etc/apt/sources.list.d/nginx.sources
+
 # Update the VM again
 sudo apt update
-sudo apt upgrade -y
+sudo apt full-upgrade -y
 
 # Install the packages
-# Pinning the latest PHP version available right now
-sudo apt install -y nginx php8.3 php8.3-fpm php8.3-cli php8.3-common php8.3-curl php8.3-gd php8.3-mbstring php8.3-mysql php8.3-opcache php8.3-readline php8.3-sqlite3 php8.3-xml php8.3-zip php8.3-apcu
+sudo apt install -y nginx mariadb-server mariadb-client php8.3 php8.3-cli php8.3-common php8.3-curl php8.3-fpm php8.3-gd php8.3-mbstring php8.3-mysql php8.3-opcache php8.3-readline php8.3-sqlite3 php8.3-xml php8.3-zip php8.3-apcu

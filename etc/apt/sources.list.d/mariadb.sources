@@ -1,0 +1,21 @@
+Types: deb
+URIs: https://dlm.mariadb.com/repo/mariadb-server/11.4/repo/ubuntu
+Suites: noble
+Components: main
+Signed-By: /usr/share/keyrings/mariadb-keyring-2019.gpg
+Architectures: amd64 arm64
+
+# The jammy part is not a typo. They just haven't released it for noble yet.
+Types: deb
+URIs: https://dlm.mariadb.com/repo/maxscale/latest/apt
+Suites: jammy
+Components: main
+Signed-By: /usr/share/keyrings/mariadb-keyring-2019.gpg
+Architectures: amd64 arm64
+
+Types: deb
+URIs: http://downloads.mariadb.com/Tools/ubuntu
+Suites: noble
+Components: main
+Signed-By: /usr/share/keyrings/mariadb-keyring-2019.gpg
+Architectures: amd64
