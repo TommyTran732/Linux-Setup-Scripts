@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Copyright (C) 2024 Thien Tran
 #
@@ -17,7 +17,7 @@
 # Assumes that it is run AFTER https://github.com/TommyTran732/Linux-Setup-Scripts/blob/main/Ubuntu-24.04-Server.sh
 
 output(){
-    echo -e '\e[36m'"$1"'\e[0m';
+    printf '\e[1;34m%-6s\e[m\n' "${@}"
 }
 
 unpriv(){
