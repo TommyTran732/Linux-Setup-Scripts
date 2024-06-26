@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Copyright (C) 2021-2024 Thien Tran
 #
@@ -17,11 +17,11 @@
 #Meant to be run on Ubuntu Pro Minimal
 
 output(){
-  echo -e '\e[36m'"$1"'\e[0m';
+    printf '\e[1;34m%-6s\e[m\n' "${@}"
 }
 
 unpriv(){
-  sudo -u nobody "$@"
+    sudo -u nobody "$@"
 }
 
 virtualization=$(systemd-detect-virt)
@@ -176,38 +176,8 @@ forward-zone:
 
 sudo chmod 644 /etc/unbound/unbound.conf.d/custom.conf
 
-mkdir -p /etc/systemd/system/unbound.service.d
-echo $'[Service]
-CapabilityBoundingSet=CAP_NET_BIND_SERVICE CAP_SETGID CAP_SETUID CAP_SYS_CHROOT CAP_SYS_RESOURCE CAP_NET_RAW
-MemoryDenyWriteExecute=true
-NoNewPrivileges=true
-PrivateDevices=true
-PrivateTmp=true
-ProtectHome=true
-ProtectClock=true
-ProtectControlGroups=true
-ProtectKernelLogs=true
-ProtectKernelModules=true
-# This breaks using socket options like \'so-rcvbuf\'. Explicitly disable for visibility.
-ProtectKernelTunables=false
-ProtectProc=invisible
-RestrictAddressFamilies=AF_INET AF_INET6 AF_NETLINK AF_UNIX
-RestrictRealtime=true
-SystemCallArchitectures=native
-SystemCallFilter=~@clock @cpu-emulation @debug @keyring @module mount @obsolete @resources
-RestrictNamespaces=yes
-LockPersonality=yes
-RestrictSUIDSGID=yes
-ReadWritePaths=@UNBOUND_RUN_DIR@ @UNBOUND_CHROOT_DIR@
-
-# Below rules are needed when chroot is enabled (usually it\'s enabled by default).
-# If chroot is disabled like chroot: "" then they may be safely removed.
-TemporaryFileSystem=@UNBOUND_CHROOT_DIR@/dev:ro
-TemporaryFileSystem=@UNBOUND_CHROOT_DIR@/run:ro
-BindReadOnlyPaths=-/run/systemd/notify:@UNBOUND_CHROOT_DIR@/run/systemd/notify
-BindReadOnlyPaths=-/dev/urandom:@UNBOUND_CHROOT_DIR@/dev/urandom
-BindPaths=-/dev/log:@UNBOUND_CHROOT_DIR@/dev/log' | sudo tee /etc/systemd/system/unbound.service.d/override.conf
-
+sudo mkdir -p /etc/systemd/system/unbound.service.d
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/system/unbound.service.d/override-chroot.conf | sudo tee /etc/systemd/system/unbound.service.d/override.conf
 sudo chmod 644 /etc/systemd/system/unbound.service.d/override.conf
 
 sudo systemctl daemon-reload

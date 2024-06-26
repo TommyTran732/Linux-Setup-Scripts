@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Copyright (C) 2021-2024 Thien Tran
 #
@@ -17,7 +17,7 @@
 #Please note that this is how I PERSONALLY setup my computer - I do some stuff such as not using anything to download GNOME extensions from extensions.gnome.org and installing the extensions as a package instead
 
 output(){
-    echo -e '\e[36m'"$1"'\e[0m';
+    printf '\e[1;34m%-6s\e[m\n' "${@}"
 }
 
 unpriv(){
@@ -198,7 +198,7 @@ flatpak update -y
 
 # Install Microsoft Edge if x86_64
 MACHINE_TYPE=$(uname -m)
-if [ "${MACHINE_TYPE}" == 'x86_64' ]; then
+if [ "${MACHINE_TYPE}" = 'x86_64' ]; then
     output 'x86_64 machine, installing Microsoft Edge.'
     echo '[microsoft-edge]
 name=microsoft-edge

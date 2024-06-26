@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Copyright (C) 2021-2024 Thien Tran
 #
@@ -17,7 +17,7 @@
 #Please note that this is how I PERSONALLY setup my computer - I do some stuff such as not using anything to download GNOME extensions from extensions.gnome.org and installing the extensions as a package instead
 
 output(){
-    echo -e '\e[36m'"$1"'\e[0m';
+    printf '\e[1;34m%-6s\e[m\n' "${@}"
 }
 
 unpriv(){
@@ -128,7 +128,7 @@ sudo sed -i 's;  interface: 242.242.0.1;#  interface: 242.242.0.1;g' /etc/unboun
 sudo sed -i 's;  access-control: 242.242.0.0/16 allow;#  access-control: 242.242.0.0/16 allow;g' /etc/unbound/unbound.conf
 sudo chmod 644 /etc/unbound/unbound.conf
 sudo mkdir /etc/systemd/system/unbound.service.d
-unpriv curl https://raw.githubusercontent.com/TommyTran732/Fedora-CoreOS-Ignition/main/etc/systemd/system/unbound.service.d/override.conf | sudo tee /etc/systemd/system/unbound.service.d/override.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/system/unbound.service.d/override.conf | sudo tee /etc/systemd/system/unbound.service.d/override.conf
 sudo chmod 644 /etc/systemd/system/unbound.service.d/override.conf
 sudo systemctl enable --now unbound
 sudo systemctl disable systemd-resolved

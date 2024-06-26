@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Copyright (C) 2021-2024 Thien Tran
 #
@@ -15,11 +15,11 @@
 # the License.
 
 output(){
-  echo -e '\e[36m'"$1"'\e[0m';
+    printf '\e[1;34m%-6s\e[m\n' "${@}"
 }
 
 unpriv(){
-  sudo -u nobody "$@"
+    sudo -u nobody "$@"
 }
 
 virtualization=$(systemd-detect-virt)
@@ -145,25 +145,7 @@ forward-zone:
 sudo chmod 644 /etc/unbound/unbound.conf
 
 sudo mkdir -p /etc/systemd/system/unbound.service.d
-echo $'[Service]
-MemoryDenyWriteExecute=true
-PrivateDevices=true
-PrivateTmp=true
-ProtectHome=true
-ProtectClock=true
-ProtectControlGroups=true
-ProtectKernelLogs=true
-ProtectKernelModules=true
-# This breaks using socket options like \'so-rcvbuf\'. Explicitly disable for visibility.
-ProtectKernelTunables=true
-ProtectProc=invisible
-RestrictAddressFamilies=AF_INET AF_INET6 AF_NETLINK AF_UNIX
-RestrictRealtime=true
-SystemCallArchitectures=native
-SystemCallFilter=~@clock @cpu-emulation @debug @keyring @module mount @obsolete @resources
-RestrictNamespaces=yes
-LockPersonality=yes' | sudo tee /etc/systemd/system/unbound.service.d/override.conf
-
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/system/unbound.service.d/override.conf | sudo tee /etc/systemd/system/unbound.service.d/override.conf
 sudo chmod 644 /etc/systemd/system/unbound.service.d/override.conf
 
 sudo systemctl enable --now unbound
