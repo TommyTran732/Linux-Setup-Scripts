@@ -42,7 +42,7 @@ sudo add-apt-repository -y ppa:ondrej/php
 curl https://supplychain.mariadb.com/mariadb-keyring-2019.gpg | sudo tee /usr/share/keyrings/mariadb-keyring-2019.gpg
 sudo chmod 644 /usr/share/keyrings/mariadb-keyring-2019.gpg
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/sources.list.d/mariadb.sources | sudo tee /etc/apt/sources.list.d/mariadb.sources
-sudo chmod 644 /etc/apt/sources.list.d/nginx.sources
+sudo chmod 644 /etc/apt/sources.list.d/maridadb.sources
 
 # Update the VM again
 sudo apt update
@@ -74,13 +74,16 @@ sudo systemctl daemon-reload
 
 ## Setup certbot-ocsp-fetcher
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/certbot-ocsp-fetcher | sudo tee /usr/local/bin/certbot-ocsp-fetcher
+sudo chmod u+x /usr/local/bin/certbot-ocsp-fetcher
 sudo mkdir -p /var/cache/certbot-ocsp-fetcher/
 
 ## Setup nginx-create-session-ticket-keys
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/nginx-create-session-ticket-keys | sudo tee /usr/local/bin/nginx-create-session-ticket-keys
+sudo chmod u+x /usr/local/bin/nginx-create-session-ticket-keys 
 
 ## Setup nginx-rotate-session-ticket-keys
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/nginx-rotate-session-ticket-keys | sudo tee /usr/local/bin/nginx-rotate-session-ticket-keys
+sudo chmod u+x /usr/local/bin/nginx-rotate-session-ticket-keys
 
 ## Download the units
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/certbot-ocsp-fetcher.service | sudo tee /etc/systemd/system/certbot-ocsp-fetcher.service
