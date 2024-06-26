@@ -56,8 +56,8 @@ sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
 
 # Secure MariaDB
-output "Running mariadb_secure_installation. You should answer yes to everything."
-sudo mariadb_secure_installation
+output "Running mariadb-secure-installation. You should answer yes to everything."
+sudo mariadb-secure-installation
 
 # Port NGINX configs from https://github.com/TommyTran732/NGINX-Configs
 
