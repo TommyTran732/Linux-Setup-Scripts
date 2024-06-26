@@ -25,12 +25,12 @@ sudo useradd -U -m -s /bin/bash drupal
 # Make drupal directory
 
 sudo mkdir -p /srv/drupal
-sudo chmod 755 /srv/drupal
 sudo chown drupal:drupal /srv/drupal
 
 # Setup ACL
 sudo apt install -y acl
-sudo setfacl -Rdm u:nginx:rwx /srv/drupal
+sudo setfacl -dm u:nginx:rwx /srv/drupal
+sudo setfacl -m u:nginx:rwx /srv/drupal
 ```
 
 ## Install Drupal
@@ -81,34 +81,18 @@ server {
     include snippets/cross-origin-security.conf;
     include snippets/quic.conf;
 
-
     index index.php;
-    client_max_body_size 100M;
     root /srv/drupal/drupal.yourdomain.tld/web;
 
     location / {
         try_files $uri $uri/ /index.php$is_args$args;
     }
 
-    location @rewrite {
-      rewrite ^/(.*)$ /index.php?q=$1;
-    }
-
-    location ~* \.(css|gif|ico|jpeg|jpg|js|png)$ {
-        try_files $uri @rewrite;
-        expires max;
-        log_not_found off;
-    }
-
     location ~ \.php$ {
-       try_files $uri =404;
-        fastcgi_split_path_info ^(.+\.php)(/.+)$;
         fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
         fastcgi_index index.php;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include fastcgi_params;
-        client_max_body_size 100M;
     }
-
 }
 ```
