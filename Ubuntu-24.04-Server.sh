@@ -188,7 +188,7 @@ sudo systemctl disable systemd-resolved
 
 # UFW Snap is strictly confined, unlike its .deb counterpart
 sudo apt purge -y ufw
-sudo apt install -y snap
+sudo apt install -y snapd
 sudo snap install ufw
 sudo ufw enable -y
 sudo ufw allow SSH
