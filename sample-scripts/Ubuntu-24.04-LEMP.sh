@@ -33,16 +33,16 @@ sudo ufw allow 443
 sudo curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor | sudo tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
 sudo chmod 644 /usr/share/keyrings/nginx-archive-keyring.gpg
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/sources.list.d/nginx.sources | sudo tee /etc/apt/sources.list.d/nginx.sources
-chmod 644 /etc/apt/sources.list.d/nginx.sources
+sudo chmod 644 /etc/apt/sources.list.d/nginx.sources
 
 # Add the PHP PPA (Ubuntu repos do not have the latest version, and do not handle pinning properly)
 sudo add-apt-repository -y ppa:ondrej/php
 
 # Add upstream MariaDB repo
 curl https://supplychain.mariadb.com/mariadb-keyring-2019.gpg | sudo tee /usr/share/keyrings/mariadb-keyring-2019.gpg
-chmod 644 /usr/share/keyrings/mariadb-keyring-2019.gpg
+sudo chmod 644 /usr/share/keyrings/mariadb-keyring-2019.gpg
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/sources.list.d/mariadb.sources | sudo tee /etc/apt/sources.list.d/mariadb.sources
-chmod 644 /etc/apt/sources.list.d/nginx.sources
+sudo chmod 644 /etc/apt/sources.list.d/nginx.sources
 
 # Update the VM again
 sudo apt update
@@ -57,7 +57,7 @@ sudo ln -s /snap/bin/certbot /usr/bin/certbot
 
 # Secure MariaDB
 output "Running mariadb_secure_installation. You should answer yes to everything."
-mariadb_secure_installation
+sudo mariadb_secure_installation
 
 # Port NGINX configs from https://github.com/TommyTran732/NGINX-Configs
 
