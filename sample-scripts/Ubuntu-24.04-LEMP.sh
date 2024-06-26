@@ -63,19 +63,17 @@ sudo mariadb-secure-installation
 
 sudo rm -rf /etc/nginx/conf.d/default.conf
 
-## Setup webroot for NGINX
-sudo mkdir -p /srv/nginx
-sudo mkdir -p /srv/nginx/.well-known/acme-challenge
-
 ## NGINX hardening
 sudo mkdir -p /etc/systemd/system/nginx.service.d
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/nginx.service.d/local.conf | sudo tee /etc/systemd/system/nginx.service.d/override.conf
+sudo chmod 644 /etc/systemd/system/nginx.service.d/override.conf
 sudo systemctl daemon-reload
 
 ## Setup certbot-ocsp-fetcher
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/certbot-ocsp-fetcher | sudo tee /usr/local/bin/certbot-ocsp-fetcher
 sudo chmod u+x /usr/local/bin/certbot-ocsp-fetcher
 sudo mkdir -p /var/cache/certbot-ocsp-fetcher/
+sudo chmod 755 /var/cache/certbot-ocsp-fetcher/
 
 ## Setup nginx-create-session-ticket-keys
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/nginx-create-session-ticket-keys | sudo tee /usr/local/bin/nginx-create-session-ticket-keys
@@ -95,6 +93,7 @@ unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/sys
 ## Systemd Hardening
 sudo mkdir -p /etc/systemd/system/nginx.service.d
 unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/systemd/system/nginx.service.d/override.conf | sudo tee /etc/systemd/system/nginx.service.d/override.conf
+sudo chmod 644 /etc/systemd/system/nginx.service.d/override.conf
 sudo systemctl daemon-reload
 
 ## Enable the units
@@ -106,15 +105,18 @@ sudo systemctl enable --now nginx-rotate-session-ticket-keys.timer
 
 unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/conf.d/http2.conf | sudo tee /etc/nginx/conf.d/http2.conf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/conf.d/sites_default.conf | sudo tee /etc/nginx/conf.d/sites_default.conf
+sudo sed -i 's/include snippets/universal_paths.conf;//g' /etc/nginx/conf.d/sites_default.conf
 sudo sed -i 's/ipv4_1://g' /etc/nginx/conf.d/sites_default.conf
 sudo sed -i 's/ipv6_1/::/g' /etc/nginx/conf.d/sites_default.conf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/conf.d/tls.conf | sudo tee /etc/nginx/conf.d/tls.conf
 
 sudo mkdir -p /etc/nginx/snippets
-unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/snippets/tls.conf | sudo tee /etc/nginx/snippets/tls.conf
+unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/snippets/hsts.conf | sudo tee /etc/nginx/snippets/hsts.conf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/snippets/proxy.conf | sudo tee /etc/nginx/snippets/proxy.conf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/snippets/quic.conf | sudo tee /etc/nginx/snippets/quic.conf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/snippets/security.conf | sudo tee /etc/nginx/snippets/security.conf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/snippets/cross-origin-security.conf | sudo tee /etc/nginx/snippets/cross-origin-security.conf
-unpriv curl https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/etc/nginx/snippets/universal_paths.conf | sudo tee /etc/nginx/snippets/universal_paths.conf
 
+# Fix PHP permission
+sudo sed -i 's/www-data/nginx/g' /etc/php/8.3/fpm/pool.d/www.sock
+sudo systemctl restart php8.3-fpm
