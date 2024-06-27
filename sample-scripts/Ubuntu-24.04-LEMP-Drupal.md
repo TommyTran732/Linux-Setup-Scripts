@@ -48,6 +48,11 @@ cd /srv/drupal
 composer create-project drupal/recommended-project drupal.yourdomain.tld
 ```
 
+Exit the drupal user:
+```
+exit
+```
+
 ## Generate an SSL certificate
 
 ```
@@ -60,7 +65,7 @@ certbot certonly --nginx --no-eff-email \
 
 ## NGINX configuration file
 
-Put the following file in `/etc/nginx/conf.d/sites_drupal.conf`:
+As root, put the following file in `/etc/nginx/conf.d/sites_drupal.conf`:
 
 ```
 server {
@@ -81,18 +86,52 @@ server {
     include snippets/cross-origin-security.conf;
     include snippets/quic.conf;
 
+    add_header Content-Security-Policy "default-src 'none'; connect-src 'self'; font-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline'; base-uri 'none'; block-all-mixed-content; form-action 'none'; frame-ancestors 'self'; upgrade-insecure-requests";
+
     index index.php;
     root /srv/drupal/drupal.yourdomain.tld/web;
 
     location / {
-        try_files $uri $uri/ /index.php$is_args$args;
+         try_files $uri $uri/ /index.php?$args;
     }
 
     location ~ \.php$ {
         fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
-        fastcgi_index index.php;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include fastcgi_params;
     }
 }
+```
+
+## Setup the Database for Drupal
+
+As root, log into MariaDB:
+
+```
+mariadb -uroot
+```
+
+Run the following queries:
+```
+CREATE DATABASE drupal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'drupal'@'127.0.0.1' IDENTIFIED BY 'yourPassword';
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES ON drupal.* TO 'drupal'@'127.0.0.1';
+exit
+```
+
+## Install drupal
+
+As root, run:
+
+```
+cp /srv/drupal/drupal.yourdomain.tld/web/sites/default/default.settings.php /srv/drupal/drupal.yourdomain.tld/web/sites/default/settings.php
+```
+
+Go to drupal.yourdomain.tld and follow the prompts.
+
+When you are done, run: 
+
+```
+chmod 444 /srv/drupal/drupal.yourdomain.tld/web/sites/default/settings.php
+chattr +i /srv/drupal/drupal.yourdomain.tld/web/sites/default/settings.php
 ```
