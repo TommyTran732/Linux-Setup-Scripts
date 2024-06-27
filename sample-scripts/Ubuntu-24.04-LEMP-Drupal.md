@@ -66,6 +66,8 @@ certbot certonly --nginx --no-eff-email \
 
 ## NGINX configuration file
 
+As root, download [this file](https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/sample-configurations/snippets/security-drupal-no-proxy.conf) and put it in `/etc/nginx/conf.d/snippets.conf`
+
 As root, put the following file in `/etc/nginx/conf.d/sites_drupal.conf`:
 
 ```
@@ -83,7 +85,7 @@ server {
     ssl_stapling_file  /var/cache/certbot-ocsp-fetcher/drupal.yourdomain.tld.der;
 
     include snippets/hsts.conf;
-    include snippets/security.conf;
+    include snippets/security-drupal-no-proxy.conf;
     include snippets/cross-origin-security.conf;
     include snippets/quic.conf;
 
