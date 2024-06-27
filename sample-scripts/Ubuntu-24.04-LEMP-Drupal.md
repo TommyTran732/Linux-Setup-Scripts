@@ -46,6 +46,7 @@ As the drupal user, run:
 ```
 cd /srv/drupal
 composer create-project drupal/recommended-project drupal.yourdomain.tld
+cp /srv/drupal/drupal.yourdomain.tld/web/sites/default/default.settings.php /srv/drupal/drupal.yourdomain.tld/web/sites/default/settings.php
 ```
 
 Exit the drupal user:
@@ -121,17 +122,17 @@ exit
 
 ## Install drupal
 
-As root, run:
-
-```
-cp /srv/drupal/drupal.yourdomain.tld/web/sites/default/default.settings.php /srv/drupal/drupal.yourdomain.tld/web/sites/default/settings.php
-```
-
 Go to drupal.yourdomain.tld and follow the prompts.
 
-When you are done, run: 
+Switch to the `drupal` user: 
 
 ```
-chmod 444 /srv/drupal/drupal.yourdomain.tld/web/sites/default/settings.php
-chattr +i /srv/drupal/drupal.yourdomain.tld/web/sites/default/settings.php
+sudo su - drupal
+```
+
+As the drupal user, run:
+
+```
+chmod 400 /srv/drupal/drupal.yourdomain.tld/web/sites/default/settings.php
+setfacl -m u:nginx:r /srv/drupal/drupal.yourdomain.tld/web/sites/default/settings.php
 ```
