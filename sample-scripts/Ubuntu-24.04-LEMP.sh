@@ -72,7 +72,7 @@ sudo chmod 644 /etc/systemd/system/nginx.service.d/override.conf
 sudo systemctl daemon-reload
 
 ## Setup certbot-ocsp-fetcher
-unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/certbot-ocsp-fetcher | sudo tee /usr/local/bin/certbot-ocsp-fetcher
+unpriv curl https://raw.githubusercontent.com/tomwassenberg/certbot-ocsp-fetcher/main/certbot-ocsp-fetcher | sudo tee /usr/local/bin/certbot-ocsp-fetcher
 sudo chmod u+x /usr/local/bin/certbot-ocsp-fetcher
 sudo mkdir -p /var/cache/certbot-ocsp-fetcher/
 sudo chmod 755 /var/cache/certbot-ocsp-fetcher/
