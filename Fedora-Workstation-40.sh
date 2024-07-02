@@ -65,10 +65,8 @@ sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 # Security kernel settings
 if [ "${virtualization}" = 'parallels' ]; then
     unpriv curl https://raw.githubusercontent.com/TommyTran732/Kernel-Module-Blacklist/main/etc/modprobe.d/workstation-blacklist.conf | sudo tee /etc/modprobe.d/workstation-blacklist.conf
-    sudo chmod 644 /etc/modprobe.d/workstation-blacklist.conf
 else
     unpriv curl https://raw.githubusercontent.com/secureblue/secureblue/live/config/files/usr/etc/modprobe.d/blacklist.conf | sudo tee /etc/modprobe.d/workstation-blacklist.conf
-    sudo chmod 644 /etc/modprobe.d/workstation-blacklist.conf
 fi
 sudo chmod 644 /etc/modprobe.d/workstation-blacklist.conf
 unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysctl.d/99-workstation.conf | sudo tee /etc/sysctl.d/99-workstation.conf
