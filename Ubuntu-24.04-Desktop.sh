@@ -16,6 +16,8 @@
 
 #Please note that this is how I PERSONALLY setup my computer - I do some stuff such as not using anything to download GNOME extensions from extensions.gnome.org and installing the extensions as a package instead
 
+set -e
+
 output(){
     printf '\e[1;34m%-6s\e[m\n' "${@}"
 }
