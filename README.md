@@ -19,6 +19,9 @@ For server installations (except Proxmox), Unbound will be configured to handle 
 - If both Unbound and systemd-resolved are preset on the system, whichever one get used depends entirely depends on whether systemd-resolved is running and controlling `/etc/resolv.conf` or not. My scripts set Unbound to enabled and systemd-resolved whenever possible.
 - If systemd-resolved is not present on the system, NetworkManager will take control of `/etc/resolv.conf`. RHEL does not ship with systemd-resolved, so manual configuration to set NetworkManager to use the local DNS forwarder is needed.
 
+## Notes on io_uring
+io_uring is disabled. On Proxmox, use aio=ative for drives. You will need to manually edit the config for cdrom. Alternatively, if you do not want to deal with this, comment out the io_uring line in `/etc/sysctl.d/99-server.conf`
+
 # Arch Linux
 Check out this repository: https://github.com/tommytran732/Arch-Setup-Script <br />
 
