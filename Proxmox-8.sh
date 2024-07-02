@@ -72,7 +72,6 @@ proxmox-boot-tool refresh
 
 # Kernel hardening
 curl https://raw.githubusercontent.com/secureblue/secureblue/live/config/files/usr/etc/modprobe.d/blacklist.conf | tee /etc/modprobe.d/server-blacklist.conf
-sed -i 's/kernel_io_uring_disable = 2/#ernel_io_uring_disable = 2/g'
 curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysctl.d/99-server.conf | tee /etc/sysctl.d/99-server.conf
 sysctl -p
 
