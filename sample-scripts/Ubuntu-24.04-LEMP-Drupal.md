@@ -106,6 +106,8 @@ server {
 }
 ```
 
+**Notes**: `listen 443 quic reuseport;` is only needed once. If you plan to have multiple vhosts on this setup with SSL, consider making a dedicated vhost for this config so that it is nicer and easier to manage. An example can be found [here](https://github.com/TommyTran732/NGINX-Configs/blob/main/etc/nginx/conf.d/sites_default_quic.conf).
+
 ## Setup the Database for Drupal
 
 As root, log into MariaDB:
@@ -122,7 +124,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORA
 exit
 ```
 
-## Install drupal
+## Configure Drupal
 
 Go to drupal.yourdomain.tld and follow the prompts.
 
