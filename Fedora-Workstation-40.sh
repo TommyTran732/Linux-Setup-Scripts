@@ -134,6 +134,9 @@ unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script
 sudo chmod 644 /etc/dnf/dnf.conf
 sudo sed -i 's/^metalink=.*/&\&protocol=https/g' /etc/yum.repos.d/*
 
+# Remove unwanted groups
+sudo dnf -y group remove 'Container Management' 'Desktop accessibility' 'Firefox Web Browser' 'Guest Desktop Agents' 'LibreOffice' 'Printing Support'
+
 # Remove firefox packages
 sudo dnf -y remove fedora-bookmarks fedora-chromium-config firefox mozilla-filesystem
 
