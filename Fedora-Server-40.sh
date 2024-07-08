@@ -182,7 +182,7 @@ sudo systemctl restart irqbalance
 
 # Setup notices
 unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/issue | sudo tee /etc/issue > /dev/null
-sudo chmod 644 https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/issue
+sudo chmod 644 /etc/issue
 unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/issue | sudo tee /etc/issue.net > /dev/null
 sudo chmod 644 /etc/issue.net
 
