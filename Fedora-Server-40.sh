@@ -48,7 +48,7 @@ sudo chmod 700 /home/*
 # Setup NTS
 sudo rm -rf /etc/chrony.conf
 unpriv curl -s https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony.conf > /dev/null
-sudp chmod 644 /etc/chrony.conf
+sudo chmod 644 /etc/chrony.conf
 unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysconfig/chronyd | sudo tee /etc/sysconfig/chronyd > /dev/null
 sudo chmod 544 /etc/sysconfig/chronyd
 
@@ -182,7 +182,7 @@ sudo systemctl restart irqbalance
 
 # Setup notices
 unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/issue | sudo tee /etc/issue > /dev/null
-sudo chmod 644 https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/issue
+sudo chmod 644 /etc/issue
 unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/issue | sudo tee /etc/issue.net > /dev/null
 sudo chmod 644 /etc/issue.net
 
