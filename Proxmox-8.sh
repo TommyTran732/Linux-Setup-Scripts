@@ -85,9 +85,6 @@ curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/
 mkdir -p /etc/systemd/coredump.conf.d
 curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/coredump.conf.d/disable.conf | tee /etc/systemd/coredump.conf.d/disable.conf > /dev/null
 
-# Harden SSH
-sed -i 's/#GSSAPIAuthentication no/GSSAPIAuthentication no/g' /etc/ssh/sshd_config
-
 # Setup automatic updates
 
 mkdir -p /etc/systemd/system/pve-daily-update.service.d
