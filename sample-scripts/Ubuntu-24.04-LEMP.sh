@@ -16,7 +16,7 @@
 
 # Assumes that it is run AFTER https://github.com/TommyTran732/Linux-Setup-Scripts/blob/main/Ubuntu-24.04-Server.sh
 
-set -e
+set -eu
 
 output(){
     printf '\e[1;34m%-6s\e[m\n' "${@}"

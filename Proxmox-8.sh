@@ -16,7 +16,7 @@
 
 # You need to add either the non-subscription repo or the testing repo from the Proxmox WebUI after running this script.
 
-set -e
+set -eu
 
 output(){
     printf '\e[1;34m%-6s\e[m\n' "${@}"
