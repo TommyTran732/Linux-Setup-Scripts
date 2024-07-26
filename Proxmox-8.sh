@@ -37,7 +37,8 @@ systemctl restart chronyd
 curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/ssh/sshd_config.d/10-custom.conf | tee /etc/ssh/sshd_config.d/10-custom.conf > /dev/null
 sed -i 's/PermitRootLogin no/PermitRootLogin yes/g' /etc/ssh/sshd_config.d/10-custom.conf
 curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/ssh/ssh_config.d/10-custom.conf | tee /etc/ssh/ssh_config.d/10-custom.conf > /dev/null
-mkdir -p /etc/systemd/system/ssh.service.d
+sudo mkdir -p /etc/systemd/system/sshd.service.d/
+sudo chmod 755 /etc/systemd/system/sshd.service.d/
 curl -s https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/local.conf | tee /etc/systemd/system/ssh.service.d/override.conf > /dev/null
 systemctl daemon-reload
 systemctl restart sshd
@@ -73,7 +74,7 @@ proxmox-boot-tool refresh
 ###
 
 # Kernel hardening
-curl -s https://raw.githubusercontent.com/secureblue/secureblue/live/config/files/usr/etc/modprobe.d/blacklist.conf | tee /etc/modprobe.d/server-blacklist.conf > /dev/null
+curl -s https://raw.githubusercontent.com/secureblue/secureblue/live/files/system/usr/etc/modprobe.d/blacklist.conf | tee /etc/modprobe.d/server-blacklist.conf > /dev/null
 curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysctl.d/99-server.conf | tee /etc/sysctl.d/99-server.conf > /dev/null
 sysctl -p
 

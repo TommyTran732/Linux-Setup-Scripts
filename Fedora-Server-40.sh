@@ -62,13 +62,14 @@ sudo chmod 644 /etc/ssh/sshd_config.d/10-custom.conf
 unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/ssh/ssh_config.d/10-custom.conf | sudo tee /etc/ssh/ssh_config.d/10-custom.conf > /dev/null
 sudo chmod 644 /etc/ssh/ssh_config.d/10-custom.conf
 sudo mkdir -p /etc/systemd/system/sshd.service.d/
+sudo chmod 755 /etc/systemd/system/sshd.service.d/
 unpriv curl -s https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/sshd.service.d/local.conf | sudo tee /etc/systemd/system/sshd.service.d/override.conf > /dev/null
 sudo chmod 644 /etc/systemd/system/sshd.service.d/override.conf
 sudo systemctl daemon-reload
 sudo systemctl restart sshd
 
 # Security kernel settings
-unpriv curl -s https://raw.githubusercontent.com/secureblue/secureblue/live/config/files/usr/etc/modprobe.d/blacklist.conf | sudo tee /etc/modprobe.d/server-blacklist.conf > /dev/null
+unpriv curl -s https://raw.githubusercontent.com/secureblue/secureblue/live/files/system/usr/etc/modprobe.d/blacklist.conf | sudo tee /etc/modprobe.d/server-blacklist.conf > /dev/null
 sudo chmod 644 /etc/modprobe.d/server-blacklist.conf
 unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysctl.d/99-server.conf | sudo tee /etc/sysctl.d/99-server.conf > /dev/null
 sudo chmod 644 /etc/sysctl.d/99-server.conf
@@ -162,6 +163,7 @@ else
 fi
 
 # Setup networking
+sudo systemctl enable --now firewalld
 sudo firewall-cmd --permanent --remove-service=cockpit
 sudo firewall-cmd --reload
 sudo firewall-cmd --lockdown-on
