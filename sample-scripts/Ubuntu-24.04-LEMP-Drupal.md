@@ -58,8 +58,7 @@ exit
 
 ```
 certbot certonly --nginx --no-eff-email \
-    --key-type ecdsa --must-staple \
-    --deploy-hook "certbot-ocsp-fetcher -o /var/cache/certbot-ocsp-fetcher" \
+    --key-type ecdsa
     --cert-name drupal.yourdomain.tld \
     -d drupal.yourdomain.tld
 ```
