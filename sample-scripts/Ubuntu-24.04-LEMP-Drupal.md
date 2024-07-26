@@ -82,7 +82,6 @@ server {
     ssl_certificate /etc/letsencrypt/live/drupal.yourdomain.tld/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/drupal.yourdomain.tld/privkey.pem;
     ssl_trusted_certificate /etc/letsencrypt/live/drupal.yourdomain.tld/chain.pem;
-    ssl_stapling_file  /var/cache/certbot-ocsp-fetcher/drupal.yourdomain.tld.der;
 
     include snippets/hsts.conf;
     include snippets/security-drupal-no-proxy.conf;
