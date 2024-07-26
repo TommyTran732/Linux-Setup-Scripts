@@ -82,8 +82,6 @@ unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/ngi
 sudo chmod u+x /usr/local/bin/nginx-rotate-session-ticket-keys
 
 ## Download the units
-unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/certbot-ocsp-fetcher.service | sudo tee /etc/systemd/system/certbot-ocsp-fetcher.service
-unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/certbot-ocsp-fetcher.timer | sudo tee /etc/systemd/system/certbot-ocsp-fetcher.timer
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/nginx-create-session-ticket-keys.service | sudo tee /etc/systemd/system/nginx-create-session-ticket-keys.service
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/nginx-rotate-session-ticket-keys.service | sudo tee /etc/systemd/system/nginx-rotate-session-ticket-keys.service
 unpriv curl https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/systemd/system/nginx-rotate-session-ticket-keys.timer | sudo tee /etc/systemd/system/nginx-rotate-session-ticket-keys.timer
@@ -95,7 +93,6 @@ sudo chmod 644 /etc/systemd/system/nginx.service.d/override.conf
 sudo systemctl daemon-reload
 
 ## Enable the units
-sudo systemctl enable certbot-ocsp-fetcher.timer
 sudo systemctl enable --now nginx-create-session-ticket-keys.service
 sudo systemctl enable --now nginx-rotate-session-ticket-keys.timer
 
