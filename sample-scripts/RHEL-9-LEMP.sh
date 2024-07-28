@@ -49,6 +49,12 @@ unpriv curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | sudo bash
 sudo dnf install -y MariaDB-server
 sudo systemctl enable --now mariadb
 
+# Secure MariaDB
+output "Running mariadb-secure-installation." 
+output "You should answer yes to everything except setting the root password."
+output "This is already done via the UNIX socket if you switch it with the prompts so you should be okay."
+sudo mariadb-secure-installation
+
 # Run NGINX Setup script
 unpriv curl -LsS https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/setup.sh | sudo bash
 
