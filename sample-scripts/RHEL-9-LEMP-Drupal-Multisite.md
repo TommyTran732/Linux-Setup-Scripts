@@ -14,7 +14,7 @@ sudo dnf install -y composer
 ## Install other necessary packages
 
 ```
-sudo dnf install -y php-gd php-pdo unzip
+sudo dnf install -y php-gd php-opcache php-pdo unzip
 ```
 
 ## Setup Directory Structure
