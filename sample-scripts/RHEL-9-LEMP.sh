@@ -47,6 +47,7 @@ sudo systemctl enable --now php-fpm
 # Install MariaDB
 unpriv curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | sudo bash
 sudo dnf install -y MariaDB-server
+sudo systemctl enable --now mariadb
 
 # Run NGINX Setup script
 unpriv curl -LsS https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/main/setup.sh | sudo bash
@@ -55,4 +56,4 @@ unpriv curl -LsS https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/ma
 sudo sed -i 's/user = apache/user = nginx/g' /etc/php-fpm.d/www.conf
 sudo sed -i 's/group = apache/group = nginx/g' /etc/php-fpm.d/www.conf
 sudo chgrp nginx /var/lib/php/opcache /var/lib/php/session /var/lib/php/wsdlcache
-sudo systemctl restart php-fpm
+sudo systemctl enable --now php-fpm
