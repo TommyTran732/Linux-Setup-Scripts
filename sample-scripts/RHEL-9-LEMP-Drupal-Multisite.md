@@ -123,8 +123,8 @@ mariadb -uroot
 
 Run the following queries:
 ```
-CREATE DATABASE drupal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'drupal'@'127.0.0.1' IDENTIFIED BY 'yourPassword';
+CREATE DATABASE drupal_default CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'drupal_default'@'127.0.0.1' IDENTIFIED BY 'yourPassword';
 GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES ON drupal.* TO 'drupal'@'127.0.0.1';
 exit
 ```
