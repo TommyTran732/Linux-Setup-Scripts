@@ -1,25 +1,20 @@
-# Ubuntu 24.04 LEMP Drupal
+# RHEL 9 LEMP Drupal Multisite
 
 First you need to run the following scripts:
 
-- https://github.com/TommyTran732/Linux-Setup-Scripts/blob/main/Ubuntu-24.04-Server.sh
-- https://github.com/TommyTran732/Linux-Setup-Scripts/blob/main/sample-scripts/Ubuntu-24.04-LEMP.sh
+- https://github.com/TommyTran732/Linux-Setup-Scripts/blob/main/RHEL-9.sh
+- https://github.com/TommyTran732/Linux-Setup-Scripts/blob/main/sample-scripts/RHEL-9-LEMP.sh
 
 ## Install composer
 
 ```
-php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-php composer-setup.php
-php -r "unlink('composer-setup.php');"
-
-sudo chown root:root composer.phar
-sudo mv composer.phar /usr/local/bin
+sudo dnf install -y composer
 ```
 
 ## Install other necessary packages
 
 ```
-sudo apt install -y unzip
+sudo dnf install -y php-gd php-pdo unzip
 ```
 
 ## Setup Directory Structure
@@ -34,9 +29,12 @@ sudo mkdir -p /srv/drupal
 sudo chown drupal:drupal /srv/drupal
 
 # Setup ACL
-sudo apt install -y acl
 sudo setfacl -dm u:nginx:rwx /srv/drupal
 sudo setfacl -m u:nginx:rwx /srv/drupal
+
+# Setup SELinux context
+sudo semanage fcontext -a -t httpd_sys_content_t "$(realpath /srv/drupal)(/.*)?"
+sudo restorecon -Rv /srv/drupal
 ```
 
 ## Install Drupal
@@ -50,9 +48,12 @@ sudo su - drupal
 As the drupal user, run:
 
 ```
+# This is only needed on RHEL, for some reason upstream composer on Ubuntu sets the correct permission regardless of umask
+umask 022
+
 cd /srv/drupal
 composer create-project drupal/recommended-project drupal.yourdomain.tld
-cp /srv/drupal/drupal.yourdomain.tld/web/sites/default/default.settings.php /srv/drupal/drupal.yourdomain.tld/web/sites/default/settings.php
+cp /srv/drupal/drupal.yourdomain.tld/web/sites/default/default.settings.php /srv/drupal/drupal.yourdomain.tld./web/sites/default/settings.php
 ```
 
 Exit the drupal user:
@@ -99,11 +100,11 @@ server {
     root /srv/drupal/drupal.yourdomain.tld/web;
 
     location / {
-         try_files $uri $uri/ /index.php?$args;
+        try_files $uri $uri/ /index.php?$args;
     }
 
     location ~ \.php$ {
-        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+        fastcgi_pass unix:/var/run/php-fpm/www.sock;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include fastcgi_params;
     }
