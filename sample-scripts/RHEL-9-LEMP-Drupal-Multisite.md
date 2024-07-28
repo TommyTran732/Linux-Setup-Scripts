@@ -94,7 +94,7 @@ server {
     include snippets/cross-origin-security.conf;
     include snippets/quic.conf;
 
-    add_header Content-Security-Policy "default-src 'none'; connect-src 'self'; font-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline'; base-uri 'none'; block-all-mixed-content; form-action 'none'; frame-ancestors 'self'; upgrade-insecure-requests";
+    add_header Content-Security-Policy "default-src 'none'; connect-src 'self'; font-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline'; base-uri 'none'; block-all-mixed-content; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests";
 
     index index.php;
     root /srv/drupal/drupal.yourdomain.tld/web;
@@ -125,7 +125,7 @@ Run the following queries:
 ```
 CREATE DATABASE drupal_default CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE USER 'drupal_default'@'127.0.0.1' IDENTIFIED BY 'yourPassword';
-GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES ON drupal.* TO 'drupal'@'127.0.0.1';
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES ON drupal.* TO 'drupal_default'@'127.0.0.1';
 exit
 ```
 

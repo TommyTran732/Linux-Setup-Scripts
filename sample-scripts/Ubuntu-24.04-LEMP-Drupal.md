@@ -93,7 +93,7 @@ server {
     include snippets/cross-origin-security.conf;
     include snippets/quic.conf;
 
-    add_header Content-Security-Policy "default-src 'none'; connect-src 'self'; font-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline'; base-uri 'none'; block-all-mixed-content; form-action 'none'; frame-ancestors 'self'; upgrade-insecure-requests";
+    add_header Content-Security-Policy "default-src 'none'; connect-src 'self'; font-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline'; base-uri 'none'; block-all-mixed-content; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests";
 
     index index.php;
     root /srv/drupal/drupal.yourdomain.tld/web;
