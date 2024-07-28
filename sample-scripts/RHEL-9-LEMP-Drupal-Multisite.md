@@ -14,7 +14,7 @@ sudo dnf install -y composer
 ## Install other necessary packages
 
 ```
-sudo dnf install -y php-gd php-opcache php-pdo unzip
+sudo dnf install -y php-gd php-mysqlnd php-opcache php-pdo unzip
 ```
 
 ## Setup Directory Structure
@@ -34,6 +34,8 @@ sudo setfacl -m u:nginx:rwx /srv/drupal
 
 # Setup SELinux context
 sudo semanage fcontext -a -t httpd_sys_content_t "$(realpath /srv/drupal)(/.*)?"
+sudo semanage fcontext -a -t httpd_sys_rw_content_t "$(realpath /srv/drupal)(/.*)/web/sites(/.*)/files(/.*)?"
+sudo semanage fcontext -a -t httpd_sys_rw_content_t "$(realpath /srv/drupal)(/.*)/web/sites(/.*)/settings.php"
 sudo restorecon -Rv /srv/drupal
 ```
 
@@ -53,7 +55,7 @@ umask 022
 
 cd /srv/drupal
 composer create-project drupal/recommended-project drupal.yourdomain.tld
-cp /srv/drupal/drupal.yourdomain.tld/web/sites/default/default.settings.php /srv/drupal/drupal.yourdomain.tld./web/sites/default/settings.php
+cp /srv/drupal/drupal.yourdomain.tld/web/sites/default/default.settings.php /srv/drupal/drupal.yourdomain.tld/web/sites/default/settings.php
 ```
 
 Exit the drupal user:
