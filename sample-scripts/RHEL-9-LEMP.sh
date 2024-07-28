@@ -62,4 +62,4 @@ unpriv curl -LsS https://raw.githubusercontent.com/TommyTran732/NGINX-Configs/ma
 sudo sed -i 's/user = apache/user = nginx/g' /etc/php-fpm.d/www.conf
 sudo sed -i 's/group = apache/group = nginx/g' /etc/php-fpm.d/www.conf
 sudo chgrp nginx /var/lib/php/opcache /var/lib/php/session /var/lib/php/wsdlcache
-sudo systemctl enable --now php-fpm
+sudo systemctl restart php-fpm
