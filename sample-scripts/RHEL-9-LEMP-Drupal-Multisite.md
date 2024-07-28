@@ -63,6 +63,12 @@ Exit the drupal user:
 exit
 ```
 
+Fix the labels (why mkdir is giving us the wrong label idk, need more investigation):
+
+```
+sudo restorecon -Rv /srv/drupal
+```
+
 ## Generate an SSL certificate
 
 ```
