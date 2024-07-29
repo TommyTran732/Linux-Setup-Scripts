@@ -201,6 +201,10 @@ flatpak --user override com.github.tchx84.Flatseal --filesystem=/var/lib/flatpak
 flatpak --user override org.gnome.Extensions --talk-name=org.gnome.Shell.Extensions
 flatpak update -y
 
+# Enable hardened_malloc for Flatpak
+sudo flatpak override --system --filesystem=host-os:ro --env=LD_PRELOAD=/var/run/host/usr/lib64/libhardened_malloc.so
+flatpak override --user --filesystem=host-os:ro --env=LD_PRELOAD=/var/run/host/usr/lib64/libhardened_malloc.so
+
 # Install Microsoft Edge if x86_64
 MACHINE_TYPE=$(uname -m)
 if [ "${MACHINE_TYPE}" = 'x86_64' ]; then
