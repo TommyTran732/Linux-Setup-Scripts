@@ -104,6 +104,9 @@ sudo chmod 755 /etc/systemd/user/org.gnome.Shell@wayland.service.d
 unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/user/org.gnome.Shell%40wayland.service.d/override.conf | sudo tee /etc/systemd/user/org.gnome.Shell@wayland.service.d/override.conf > /dev/null
 sudo chmod 644 /etc/systemd/user/org.gnome.Shell@wayland.service.d/override.conf
 
+# Disable GJS and WebkitGTK JIT
+unpriv curl https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/environment | sudo tee -a /etc/environment
+
 # Setup dconf
 unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/adw-gtk3-dark | sudo tee /etc/dconf/db/local.d/adw-gtk3-dark > /dev/null
 unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/dconf/db/local.d/automount-disable | sudo tee /etc/dconf/db/local.d/automount-disable > /dev/null
