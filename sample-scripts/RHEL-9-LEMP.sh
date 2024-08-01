@@ -34,12 +34,14 @@ unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Script
 sudo chmod 644 /etc/yum.repos.d/nginx.repo
 sudo dnf install -y nginx
 
+# Install EPEL
+sudo subscription-manager repos --enable "codeready-builder-for-rhel-9-$(arch)-rpms"
+sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+
 # Install certbot
 sudo dnf install -y certbot python3-certbot-nginx
 
 # Install PHP
-sudo subscription-manager repos --enable "codeready-builder-for-rhel-9-$(arch)-rpms"
-sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 sudo dnf install -y https://rpms.remirepo.net/enterprise/remi-release-9.rpm
 sudo dnf module install -y php:remi-8.3/common
 sudo systemctl enable --now php-fpm
