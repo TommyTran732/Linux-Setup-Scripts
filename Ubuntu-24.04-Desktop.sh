@@ -60,7 +60,7 @@ if [ "${virtualization}" = 'parallels' ]; then
     unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Kernel-Module-Blacklist/main/etc/modprobe.d/workstation-blacklist.conf | sudo tee /etc/modprobe.d/workstation-blacklist.conf > /dev/null
     sudo chmod 644 /etc/modprobe.d/workstation-blacklist.conf
 else
-    unpriv curl -s https://raw.githubusercontent.com/secureblue/secureblue/live/files/system/usr/etc/modprobe.d/blacklist.conf | sudo tee /etc/modprobe.d/workstation-blacklist.conf > /dev/null
+    unpriv curl -s https://raw.githubusercontent.com/secureblue/secureblue/live/files/system/etc/modprobe.d/blacklist.conf | sudo tee /etc/modprobe.d/workstation-blacklist.conf > /dev/null
     sudo chmod 644 /etc/modprobe.d/workstation-blacklist.conf
 fi
 sudo chmod 644 /etc/modprobe.d/workstation-blacklist.conf

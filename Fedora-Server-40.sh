@@ -69,7 +69,7 @@ sudo systemctl daemon-reload
 sudo systemctl restart sshd
 
 # Security kernel settings
-unpriv curl -s https://raw.githubusercontent.com/secureblue/secureblue/live/files/system/usr/etc/modprobe.d/blacklist.conf | sudo tee /etc/modprobe.d/server-blacklist.conf > /dev/null
+unpriv curl -s https://raw.githubusercontent.com/secureblue/secureblue/live/files/system/etc/modprobe.d/blacklist.conf | sudo tee /etc/modprobe.d/server-blacklist.conf > /dev/null
 sudo chmod 644 /etc/modprobe.d/server-blacklist.conf
 unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysctl.d/99-server.conf | sudo tee /etc/sysctl.d/99-server.conf > /dev/null
 sudo chmod 644 /etc/sysctl.d/99-server.conf
