@@ -133,6 +133,8 @@ if [ "$virtualization" = 'none' ]; then
     sudo chmod 644 /etc/systemd/system/fwupd-refresh.service.d/override.conf
     sudo systemctl daemon-reload
     sudo systemctl enable --now fwupd-refresh.timer
+else
+    sudo apt purge -y fwupd
 fi
 
 # Setup unbound
