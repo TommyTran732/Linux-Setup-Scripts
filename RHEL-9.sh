@@ -164,7 +164,7 @@ sudo systemctl enable fstrim.timer
 ### Differentiating bare metal and virtual installs
 
 # Setup fwupd
-if [ "$virtualization" = 'none' ]; then
+#if [ "$virtualization" = 'none' ]; then
     sudo dnf install -y fwupd
     echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
     sudo systemctl restart fwupd
@@ -173,9 +173,9 @@ if [ "$virtualization" = 'none' ]; then
     sudo chmod 644 /etc/systemd/system/fwupd-refresh.service.d/override.conf
     sudo systemctl daemon-reload
     sudo systemctl enable --now fwupd-refresh.timer
-else
-    sudo dnf remove -y fwupd
-fi
+#else
+#    sudo dnf remove -y fwupd
+#fi
 
 # Setup tuned
 sudo dnf install -y tuned
