@@ -195,7 +195,7 @@ sudo systemctl disable systemd-resolved
 sudo apt purge -y ufw
 sudo apt install -y snapd
 sudo snap install ufw
-sudo ufw enable -y
+echo 'y' | sudo ufw enable
 sudo ufw allow SSH
 
 sudo reboot

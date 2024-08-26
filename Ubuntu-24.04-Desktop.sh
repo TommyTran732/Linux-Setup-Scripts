@@ -231,7 +231,7 @@ sudo systemctl restart fwupd
 # UFW Snap is strictly confined, unlike its .deb counterpart
 sudo apt purge -y ufw
 sudo snap install ufw
-echo y | sudo ufw enable
+echo 'y' | sudo ufw enable
 
 unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/NetworkManager/conf.d/00-macrandomize.conf | sudo tee /etc/NetworkManager/conf.d/00-macrandomize.conf > /dev/null
 sudo chmod 644 /etc/NetworkManager/conf.d/00-macrandomize.conf
