@@ -27,6 +27,7 @@ unpriv(){
 }
 
 # Remove hardened_malloc (It breaks php-fpm)
+sudo rm -rf /etc/ld.so.preload
 sudo dnf remove -y hardened_malloc
 
 # Install NGINX
