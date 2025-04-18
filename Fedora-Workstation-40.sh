@@ -49,7 +49,7 @@ if [ "${virtualization}" = 'parallels' ]; then
     sudo dnf -y remove chrony
 else
     sudo rm -rf /etc/chrony.conf
-    unpriv curl -s https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | sudo tee /etc/chrony.conf > /dev/null
+    unpriv curl -s https://raw.githubusercontent.com/GrapheneOS/infrastructure/refs/heads/main/etc/chrony.conf | sudo tee /etc/chrony.conf > /dev/null
     sudo chmod 644 /etc/chrony.conf
     unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysconfig/chronyd | sudo tee /etc/sysconfig/chronyd > /dev/null
     sudo chmod 644 /etc/sysconfig/chronyd

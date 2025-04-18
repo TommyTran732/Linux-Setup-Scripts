@@ -30,7 +30,7 @@ curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/
 
 # Setup NTS
 rm -rf /etc/chrony/chrony.conf
-curl -s https://raw.githubusercontent.com/GrapheneOS/infrastructure/main/chrony.conf | tee /etc/chrony/chrony.conf > /dev/null
+curl -s https://raw.githubusercontent.com/GrapheneOS/infrastructure/refs/heads/main/etc/chrony.conf | tee /etc/chrony/chrony.conf > /dev/null
 systemctl restart chronyd
 
 # Harden SSH
