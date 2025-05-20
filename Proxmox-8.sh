@@ -66,7 +66,7 @@ apt full-upgrade -y
 apt autoremove -y
 
 # Install packages
-apt install -y intel-microcode tuned fwupd dropbear-initramfs
+apt install -y intel-microcode tuned
 
 ### This part assumes that you are using systemd-boot
 echo "mitigations=auto,nosmt spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on tsx=off kvm.nx_huge_pages=force nosmt=force l1d_flush=on spec_rstack_overflow=safe-ret gather_data_sampling=force reg_file_data_sampling=on random.trust_bootloader=off random.trust_cpu=off intel_iommu=on amd_iommu=force_isolation efi=disable_early_pci_dma iommu=force iommu.passthrough=0 iommu.strict=1 slab_nomerge init_on_alloc=1 init_on_free=1 pti=on vsyscall=none ia32_emulation=0 page_alloc.shuffle=1 randomize_kstack_offset=on debugfs=off $(cat /etc/kernel/cmdline)" > /etc/kernel/cmdline
@@ -85,20 +85,6 @@ update-initramfs -u
 curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/security/limits.d/30-disable-coredump.conf | tee /etc/security/limits.d/30-disable-coredump.conf > /dev/null
 mkdir -p /etc/systemd/coredump.conf.d
 curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/coredump.conf.d/disable.conf | tee /etc/systemd/coredump.conf.d/disable.conf > /dev/null
-
-# Setup automatic updates
-
-mkdir -p /etc/systemd/system/pve-daily-update.service.d
-echo '[Service]
-ExecStart=/usr/bin/pveupgrade' | tee /etc/systemd/system/pve-daily-update.service.d/override.conf
-systemctl daemon-reload
-systemctl enable --now pve-daily-update.timer
-
-mkdir -p /etc/systemd/system/fwupd-refresh.service.d
-echo '[Service]
-ExecStart=/usr/bin/fwupdmgr update' | tee /etc/systemd/system/fwupd-refresh.service.d/override.conf
-systemctl daemon-reload
-systemctl enable --now fwupd-refresh.timer
 
 # Disable Nagging
 sed -Ezi.bak "s/(Ext.Msg.show\(\{\s+title: gettext\('No valid sub)/void\(\{ \/\/\1/g" /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js
