@@ -57,9 +57,6 @@ deb https://deb.debian.org/debian/ bookworm-backports main contrib non-free non-
 
 deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription' | tee /etc/apt/sources.list
 
-echo 'deb http://download.proxmox.com/debian/ceph-quincy bookworm no-subscription' | tee -a /etc/apt/sources.list.d/ceph.list
-
-
 # Update packages
 apt update
 apt full-upgrade -y
