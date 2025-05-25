@@ -49,7 +49,7 @@ sed -i '1 {s/^/# /}' /etc/apt/sources.list.d/ceph.list
 
 echo 'deb https://deb.debian.org/debian/ bookworm main contrib non-free non-free-firmware
 
-deb https://deb.debian.org/debian-security/ bookworm-security main contrib non-free non-free-firmware
+deb https://security.debian.org/debian-security/ bookworm-security main contrib non-free non-free-firmware
 
 deb https://deb.debian.org/debian/ bookworm-updates main contrib non-free non-free-firmware
 
