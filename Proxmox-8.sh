@@ -98,7 +98,7 @@ sed -Ezi.bak "s/(Ext.Msg.show\(\{\s+title: gettext\('No valid sub)/void\(\{ \/\/
 systemctl restart pveproxy.service
 
 # Configure automatic updates
-curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/refs/heads/main/etc/apt/apt.conf.d/52unattended-upgrades-local-proxmox | tee /etc/apt/apt.conf.d/52unattended-upgrades-local > /dev/null
+curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/refs/heads/main/etc/apt/apt.conf.d/52unattended-upgrades-local | tee /etc/apt/apt.conf.d/52unattended-upgrades-local > /dev/null
 
 # Setup tuned
 tuned-adm profile virtual-host

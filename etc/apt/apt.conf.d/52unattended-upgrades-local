@@ -1,8 +1,5 @@
 Unattended-Upgrade::Origins-Pattern {
-        "origin=Debian";
-        "origin=Debian Backports";
-        "origin=Proxmox";
-        "origin=OpenManage";
+        "origin=*";
 };
 
 Unattended-Upgrade::AutoFixInterruptedDpkg "true";
