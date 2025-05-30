@@ -45,7 +45,7 @@ sudo systemctl disable --now systemd-timesyncd
 sudo systemctl mask systemd-timesyncd
 
 if [ "${virtualization}" = "parallels" ]; then
-    sudo apt install -y chrony
+    sudo apt-get install -y chrony
     unpriv curl -s https://raw.githubusercontent.com/GrapheneOS/infrastructure/refs/heads/main/etc/chrony.conf | sudo tee /etc/chrony/chrony.conf > /dev/null
     sudo chmod 644 /etc/chrony/chrony.conf
     sudo systemctl restart chronyd
@@ -130,33 +130,33 @@ sudo systemctl disable --now whoopsie.path
 sudo systemctl mask whoopsie.path
 
 # Update packages
-sudo apt update -y
-sudo apt full-upgrade -y
+sudo apt-get update -y
+sudo apt-get full-upgrade -y
 
 ## Avoid phased updates
-sudo apt install -y curl 
+sudo apt-get install -y curl 
 unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/apt.conf.d/99sane-upgrades | sudo tee /etc/apt/apt.conf.d/99sane-upgrades > /dev/null
 sudo chmod 644 /etc/apt/apt.conf.d/99sane-upgrades
 
 # Update system
-sudo apt update -y
-sudo apt full-upgrade -y
-sudo apt autoremove -y
+sudo apt-get update -y
+sudo apt-get full-upgrade -y
+sudo apt-get autoremove -y
 
 # Remove unneeded packages
-sudo apt purge -y apport baobab cups* eog evince* gedit firefox* gnome-calculator gnome-characters* gnome-clocks gnome-font-viewer gnome-logs gnome-power-manager gnome-shell-extension-prefs gnome-system-monitor gnome-text-editor libreoffice* seahorse tcpdump whoopsie
-sudo apt autoremove -y
+sudo apt-get purge -y apport baobab cups* eog evince* gedit firefox* gnome-calculator gnome-characters* gnome-clocks gnome-font-viewer gnome-logs gnome-power-manager gnome-shell-extension-prefs gnome-system-monitor gnome-text-editor libreoffice* seahorse tcpdump whoopsie
+sudo apt-get autoremove -y
 sudo snap remove firefox gnome-text-editor snap-store
 
 sudo rm -rf /usr/share/hplip
 
 # Install packages that I use
-sudo apt install -y gnome-console gnome-software-plugin-flatpak
+sudo apt-get install -y gnome-console gnome-software-plugin-flatpak
 sudo snap install gnome-text-editor
 
 # Install appropriate virtualization drivers
 if [ "$virtualization" = 'kvm' ]; then
-    sudo apt install -y qemu-guest-agent spice-vdagent
+    sudo apt-get install -y qemu-guest-agent spice-vdagent
 fi
 
 # Setup Flatpak
@@ -177,8 +177,8 @@ if [ -f /media/psf/RosettaLinux/rosetta ] || [ -f /media/rosetta/rosetta ]; then
     unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/sources.list.d/rosetta.sources | sudo tee /etc/apt/sources.list.d/ubuntu.sources > /dev/null
     sudo chmod 644 /etc/apt/sources.list.d/ubuntu.sources
     sudo dpkg --add-architecture amd64
-    sudo apt update
-    sudo apt full-upgrade -y
+    sudo apt-get update
+    sudo apt-get full-upgrade -y
 fi
 
 # Install Microsoft Edge if x86_64
@@ -189,9 +189,9 @@ if [ "${MACHINE_TYPE}" = 'x86_64' ] || [ -f /media/psf/RosettaLinux/rosetta ] ||
     chmod 644  /usr/share/keyrings/microsoft.gpg
     unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/sources.list.d/microsoft-edge.sources | sudo tee /etc/apt/sources.list.d/microsoft-edge.sources > /dev/null
     sudo chmod 644 /etc/apt/sources.list.d/microsoft-edge.sources
-    sudo apt update
-    sudo apt full-upgrade -y
-    sudo apt install -y microsoft-edge-stable
+    sudo apt-get update
+    sudo apt-get full-upgrade -y
+    sudo apt-get install -y microsoft-edge-stable
     sudo mkdir -p /etc/opt/edge/policies/managed/ /etc/opt/edge/policies/recommended/
     sudo chmod -R 755 /etc/opt
     unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Microsoft-Edge-Policies/main/Linux/managed.json | sudo tee /etc/opt/edge/policies/managed/managed.json > /dev/null
@@ -217,8 +217,8 @@ sudo systemctl enable --now fstrim.timer
 if [ "$virtualization" = 'none' ]; then
     output "Bare Metal installation. Tuned will not be set up here - PPD should take care of it."
 else
-    sudo apt purge -y power-profiles-daemon
-    sudo apt install -y tuned
+    sudo apt-get purge -y power-profiles-daemon
+    sudo apt-get install -y tuned
     systemctl enable --now tuned
     sudo tuned-adm profile virtual-guest
 fi
@@ -230,7 +230,7 @@ sudo systemctl restart fwupd
 # Setup networking
 
 # UFW Snap is strictly confined, unlike its .deb counterpart
-sudo apt purge -y ufw
+sudo apt-get purge -y ufw
 sudo snap install ufw
 echo 'y' | sudo ufw enable
 

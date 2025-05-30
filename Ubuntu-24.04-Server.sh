@@ -45,7 +45,7 @@ sudo chmod 700 /home/*
 # Setup NTS
 sudo systemctl disable --now systemd-timesyncd
 sudo systemctl mask systemd-timesyncd
-sudo apt install -y chrony
+sudo apt-get install -y chrony
 unpriv curl -s https://raw.githubusercontent.com/GrapheneOS/infrastructure/refs/heads/main/etc/chrony.conf | sudo tee /etc/chrony/chrony.conf > /dev/null
 sudo chmod 644 /etc/chrony/chrony.conf
 sudo systemctl restart chronyd
@@ -93,20 +93,20 @@ sudo systemctl disable --now apport.service
 sudo systemctl mask apport.service
 
 ## Avoid phased updates
-sudo apt install -y curl
+sudo apt-get install -y curl
 unpriv curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/apt.conf.d/99sane-upgrades | sudo tee /etc/apt/apt.conf.d/99sane-upgrades > /dev/null
 sudo chmod 644 /etc/apt/apt.conf.d/99sane-upgrades
 
-sudo apt update -y
-sudo apt full-upgrade -y
-sudo apt autoremove -y
+sudo apt-get update -y
+sudo apt-get full-upgrade -y
+sudo apt-get autoremove -y
 
 ## Install basic sysadmin tools
-sudo apt install -y nano iputils-ping
+sudo apt-get install -y nano iputils-ping
 
 # Install appropriate virtualization drivers
 if [ "$virtualization" = 'kvm' ]; then
-    sudo apt install -y qemu-guest-agent
+    sudo apt-get install -y qemu-guest-agent
 fi
 
 # Enable fstrim.timer
@@ -115,7 +115,7 @@ sudo systemctl enable --now fstrim.timer
 ### Differentiating bare metal and virtual installs
 
 # Setup tuned
-sudo apt install -y tuned
+sudo apt-get install -y tuned
 sudo systemctl enable --now tuned
 
 if [ "$virtualization" = 'none' ]; then
@@ -126,7 +126,7 @@ fi
 
 # Setup fwupd
 if [ "$virtualization" = 'none' ]; then
-    sudo apt install -y fwupd
+    sudo apt-get install -y fwupd
     echo 'UriSchemes=file;https' | sudo tee -a /etc/fwupd/fwupd.conf
     sudo systemctl restart fwupd
     mkdir -p /etc/systemd/system/fwupd-refresh.service.d
@@ -135,12 +135,12 @@ if [ "$virtualization" = 'none' ]; then
     sudo systemctl daemon-reload
     sudo systemctl enable --now fwupd-refresh.timer
 else
-    sudo apt purge -y fwupd
+    sudo apt-get purge -y fwupd
 fi
 
 # Setup unbound
 
-sudo apt install -y unbound dns-root-data
+sudo apt-get install -y unbound dns-root-data
 
 echo 'server:
   trust-anchor-signaling: yes
@@ -193,8 +193,8 @@ sudo systemctl disable systemd-resolved
 # Setup networking
 
 # UFW Snap is strictly confined, unlike its .deb counterpart
-sudo apt purge -y ufw
-sudo apt install -y snapd
+sudo apt-get purge -y ufw
+sudo apt-get install -y snapd
 sudo snap install ufw
 echo 'y' | sudo ufw enable
 sudo ufw allow SSH
