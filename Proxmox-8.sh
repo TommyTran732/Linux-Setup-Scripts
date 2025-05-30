@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Copyright (C) 2021-2025 Thien Tran
 #
@@ -62,7 +62,7 @@ apt-get full-upgrade -y
 apt-get autoremove -y
 
 CPU=$(grep vendor_id /proc/cpuinfo)
-if [[ "${CPU}" == *"AuthenticAMD"* ]]; then
+if [ "${CPU}" = "*AuthenticAMD*" ]; then
     microcode=amd64-microcode
 else
     microcode=intel-microcode
