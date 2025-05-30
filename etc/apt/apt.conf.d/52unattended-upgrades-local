@@ -1,0 +1,16 @@
+Unattended-Upgrade::Origins-Pattern {
+        "origin=Debian";
+        "origin=Debian Backports";
+        "origin=Proxmox";
+        "origin=OpenManage";
+};
+
+Unattended-Upgrade::AutoFixInterruptedDpkg "true";
+Unattended-Upgrade::MinimalSteps "true";
+Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
+Unattended-Upgrade::Remove-New-Unused-Dependencies "true";
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
+Unattended-Upgrade::Automatic-Reboot "false";
+Unattended-Upgrade::Skip-Updates-On-Metered-Connections "false";
+Unattended-Upgrade::Allow-downgrade "false";
+Unattended-Upgrade::Allow-APT-Mark-Fallback "true";
