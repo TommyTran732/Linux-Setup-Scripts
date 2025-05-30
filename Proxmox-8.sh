@@ -29,8 +29,7 @@ systemctl mask debug-shell.service
 curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/apt.conf.d/99sane-upgrades | tee /etc/apt/apt.conf.d/99sane-upgrades > /dev/null
 
 # Setup NTS
-curl -s https://raw.githubusercontent.com/GrapheneOS/infrastructure/refs/heads/main/etc/chrony.conf | tee /etc/chrony/chrony.conf > /dev/null
-sed -i 's/leapseclist/#leapseclist/' /etc/chrony/chrony.conf
+curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/refs/heads/main/etc/chrony/conf.d/10-custom.conf | tee /etc/chrony/conf.d/10-custom.conf > /dev/null
 systemctl restart chronyd
 
 # Harden SSH
