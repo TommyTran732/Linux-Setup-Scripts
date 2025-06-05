@@ -72,7 +72,7 @@ fi
 apt-get install -y "${microcode}" proxmox-kernel-6.14 unattended-upgrades systemd-zram-generator tuned
 
 ### This part assumes that you are using systemd-boot
-echo "mitigations=auto,nosmt spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on tsx=off kvm.nx_huge_pages=force nosmt=force l1d_flush=on l1tf=full,force kvm-intel.vmentry_l1d_flush=always spec_rstack_overflow=safe-ret gather_data_sampling=force reg_file_data_sampling=on random.trust_bootloader=off random.trust_cpu=off intel_iommu=on amd_iommu=force_isolation efi=disable_early_pci_dma iommu=force iommu.passthrough=0 iommu.strict=1 slab_nomerge init_on_alloc=1 init_on_free=1 pti=on vsyscall=none ia32_emulation=0 page_alloc.shuffle=1 randomize_kstack_offset=on debugfs=off lockdown=confidentiality module.sig_enforce=1 nomodeset $(cat /etc/kernel/cmdline)" > /etc/kernel/cmdline
+echo "mitigations=auto,nosmt nosmt=force spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on tsx=off l1d_flush=on l1tf=full,force kvm-intel.vmentry_l1d_flush=always spec_rstack_overflow=safe-ret gather_data_sampling=force reg_file_data_sampling=on kvm.nx_huge_pages=force amd_iommu=force_isolation intel_iommu=on iommu=force iommu.strict=1 iommu.passthrough=0 efi=disable_early_pci_dma slab_nomerge init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 pti=on randomize_kstack_offset=on lockdown=confidentiality module.sig_enforce=1 oops=panic vsyscall=none ia32_emulation=0 debugfs=off random.trust_bootloader=off random.trust_cpu=off nomodeset $(cat /etc/kernel/cmdline)" > /etc/kernel/cmdline
 proxmox-boot-tool refresh
 ###
 
