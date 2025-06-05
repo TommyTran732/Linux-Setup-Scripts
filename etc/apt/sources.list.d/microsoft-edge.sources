@@ -1,6 +1,0 @@
-Types: deb
-URIs: https://packages.microsoft.com/repos/edge
-Suites: stable
-Components: main
-Signed-By: /usr/share/keyrings/microsoft.gpg
-Architectures: amd64

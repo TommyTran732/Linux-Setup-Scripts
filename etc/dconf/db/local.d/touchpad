@@ -1,5 +1,0 @@
-[org/gnome/desktop/peripherals/touchpad]
-click-method='areas'
-disable-while-typing=false
-tap-to-click=true
-to-finger-scrolling-enabled=false
