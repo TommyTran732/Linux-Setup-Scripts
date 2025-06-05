@@ -26,19 +26,19 @@ output(){
 systemctl mask debug-shell.service
 
 ## Avoid phased updates
-curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/apt/apt.conf.d/99sane-upgrades | tee /etc/apt/apt.conf.d/99sane-upgrades > /dev/null
+curl -s https://raw.githubusercontent.com/Metropolis-nexus/Common-Files/main/etc/apt/apt.conf.d/99sane-upgrades | tee /etc/apt/apt.conf.d/99sane-upgrades > /dev/null
 
 # Setup NTS
-curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/refs/heads/main/etc/chrony/conf.d/10-custom.conf | tee /etc/chrony/conf.d/10-custom.conf > /dev/null
+curl -s https://raw.githubusercontent.com/Metropolis-nexus/Common-Files/refs/heads/main/etc/chrony/conf.d/10-custom.conf | tee /etc/chrony/conf.d/10-custom.conf > /dev/null
 systemctl restart chronyd
 
 # Harden SSH
-curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/ssh/sshd_config.d/10-custom.conf | tee /etc/ssh/sshd_config.d/10-custom.conf > /dev/null
+curl -s https://raw.githubusercontent.com/Metropolis-nexus/Common-Files/main/etc/ssh/sshd_config.d/10-custom.conf | tee /etc/ssh/sshd_config.d/10-custom.conf > /dev/null
 sed -i 's/PermitRootLogin no/PermitRootLogin yes/g' /etc/ssh/sshd_config.d/10-custom.conf
-curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/ssh/ssh_config.d/10-custom.conf | tee /etc/ssh/ssh_config.d/10-custom.conf > /dev/null
+curl -s https://raw.githubusercontent.com/Metropolis-nexus/Common-Files/main/etc/ssh/ssh_config.d/10-custom.conf | tee /etc/ssh/ssh_config.d/10-custom.conf > /dev/null
 mkdir -p /etc/systemd/system/sshd.service.d/
 chmod 755 /etc/systemd/system/sshd.service.d/
-curl -s https://raw.githubusercontent.com/GrapheneOS/infrastructure/refs/heads/main/etc/systemd/system/sshd.service.d/override.conf | tee /etc/systemd/system/sshd.service.d/override.conf > /dev/null
+curl -s https://raw.githubusercontent.com/Metropolis-nexus/Common-Files/main/etc/systemd/system/sshd.service.d/override.conf | tee /etc/systemd/system/sshd.service.d/override.conf > /dev/null
 systemctl daemon-reload
 systemctl restart sshd
 
@@ -77,20 +77,20 @@ proxmox-boot-tool refresh
 ###
 
 # Kernel hardening
-curl -s https://raw.githubusercontent.com/secureblue/secureblue/live/files/system/etc/modprobe.d/blacklist.conf | tee /etc/modprobe.d/server-blacklist.conf > /dev/null
-curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/sysctl.d/99-server.conf | tee /etc/sysctl.d/99-server.conf > /dev/null
+curl -s https://raw.githubusercontent.com/Metropolis-nexus/Common-Files/main/etc/modprobe.d/server-blacklist.conf | tee /etc/modprobe.d/server-blacklist.conf > /dev/null
+curl -s https://raw.githubusercontent.com/Metropolis-nexus/Common-Files/main/etc/sysctl.d/99-server.conf | tee /etc/sysctl.d/99-server.conf > /dev/null
 sysctl -p
 
 # Rebuild initramfs
 update-initramfs -u
 
 # Disable coredump
-curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/security/limits.d/30-disable-coredump.conf | tee /etc/security/limits.d/30-disable-coredump.conf > /dev/null
+curl -s https://raw.githubusercontent.com/Metropolis-nexus/Common-Files/main/etc/security/limits.d/30-disable-coredump.conf | tee /etc/security/limits.d/30-disable-coredump.conf > /dev/null
 mkdir -p /etc/systemd/coredump.conf.d
-curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/coredump.conf.d/disable.conf | tee /etc/systemd/coredump.conf.d/disable.conf > /dev/null
+curl -s https://raw.githubusercontent.com/Metropolis-nexus/Common-Files/main/etc/systemd/coredump.conf.d/disable.conf | tee /etc/systemd/coredump.conf.d/disable.conf > /dev/null
 
 # Setup ZRAM
-curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/main/etc/systemd/zram-generator.conf | tee /etc/systemd/zram-generator.conf > /dev/null
+curl -s https://raw.githubusercontent.com/Metropolis-nexus/Common-Files/main/etc/systemd/zram-generator.conf | tee /etc/systemd/zram-generator.conf > /dev/null
 
 # Disable Nagging
 sed -Ezi.bak "s/(Ext.Msg.show\(\{\s+title: gettext\('No valid sub)/void\(\{ \/\/\1/g" /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js
@@ -98,7 +98,7 @@ sed -Ezi.bak "s/(Ext.Msg.show\(\{\s+title: gettext\('No valid sub)/void\(\{ \/\/
 systemctl restart pveproxy.service
 
 # Configure automatic updates
-curl -s https://raw.githubusercontent.com/TommyTran732/Linux-Setup-Scripts/refs/heads/main/etc/apt/apt.conf.d/52unattended-upgrades-local | tee /etc/apt/apt.conf.d/52unattended-upgrades-local > /dev/null
+curl -s https://raw.githubusercontent.com/Metropolis-nexus/Common-Files/refs/heads/main/etc/apt/apt.conf.d/52unattended-upgrades-local | tee /etc/apt/apt.conf.d/52unattended-upgrades-local > /dev/null
 
 # Setup tuned
 tuned-adm profile virtual-host

@@ -1,6 +1,6 @@
 # Linux Setup Scripts
 
-[![ShellCheck](https://github.com/TommyTran732/Linux-Setup-Scripts/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/TommyTran732/Linux-Setup-Scripts/actions/workflows/shellcheck.yml)
+![ShellCheck](https://github.com/Metropolis-nexus/Linux-Setup-Scripts/actions/workflows/shellcheck.yml/badge.svg)
 
 Generic Linux setup scripts. Edit them to your liking before running them.
 
